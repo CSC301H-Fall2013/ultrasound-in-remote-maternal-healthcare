@@ -1,9 +1,9 @@
-package com.utoronto.csc301.ultrasound;
+package csc301.ultrasound.global;
 
 import java.io.*;
 import java.util.zip.*;
 
-import javax.crypto.*;
+//import javax.crypto.*;
 
 public class Transmission
 {
