@@ -1,9 +1,16 @@
 package csc301.ultrasound.global;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
-//import javax.crypto.*;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterOutputStream;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Transmission
 {
@@ -73,11 +80,43 @@ public class Transmission
 		return null;
 	}
 	
-	public void encrypt(byte toEncrypt[])
+	public byte[] encrypt(byte toEncrypt[], byte key[])
 	{
+		try 
+		{
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			
+			SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+			
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			
+			return cipher.doFinal(toEncrypt);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
-	public void decrypt(byte toDecrypt[])
+	public byte[] decrypt(byte toDecrypt[], byte key[])
 	{
+		try
+		{
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		
+			SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+		
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		
+			return cipher.doFinal(toDecrypt);
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }
