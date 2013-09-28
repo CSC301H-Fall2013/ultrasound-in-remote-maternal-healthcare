@@ -12,6 +12,8 @@ import java.util.zip.InflaterOutputStream;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.codec.binary.*;
+
 public class Transmission
 {
 	public byte[] compress(byte toCompress[])
@@ -89,6 +91,8 @@ public class Transmission
 			SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
 			
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			
+			System.out.println(Base64.encodeBase64(cipher.doFinal(toEncrypt)));
 			
 			return cipher.doFinal(toEncrypt);
 		} 
