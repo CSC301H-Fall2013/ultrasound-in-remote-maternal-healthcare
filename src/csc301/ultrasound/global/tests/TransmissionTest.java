@@ -1,9 +1,10 @@
 package csc301.ultrasound.global.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.UnsupportedEncodingException;
+
+import java.sql.Connection;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -109,5 +110,27 @@ public class TransmissionTest
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void connectToDB()
+	{
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		assertNotNull(connection);
+	}
+	
+	@Test
+	public void disconnectFromDB()
+	{
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		boolean successful = t.disconnectFromDB(connection);
+		
+		assertTrue(successful);
 	}
 }

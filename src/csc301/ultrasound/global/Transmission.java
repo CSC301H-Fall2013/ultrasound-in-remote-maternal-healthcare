@@ -1,18 +1,15 @@
 package csc301.ultrasound.global;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterOutputStream;
+import java.util.zip.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.codec.binary.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Transmission
 {
@@ -30,19 +27,11 @@ public class Transmission
 			
 			stream.flush();
 			
-			float ratio = (float)compressor.getBytesWritten() / (float)compressor.getBytesRead();
-			
-			System.out.format("Compressed %d bytes to %d bytes. Ratio: %.2f\n", compressor.getBytesRead(), compressor.getBytesWritten(), ratio);
-			
 			compressor.end();
 			
 			return stream.toByteArray();
 		} 
-		catch (UnsupportedEncodingException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -64,17 +53,9 @@ public class Transmission
 			
 			stream.flush();
 			
-			float ratio = (float)decompressor.getBytesWritten() / (float)decompressor.getBytesRead();
-			
-			System.out.format("Decompressed %d bytes to %d bytes. Ratio: %.2f\n", decompressor.getBytesRead(), decompressor.getBytesWritten(), ratio);
-			
 			return stream.toByteArray();
-		} 
-		catch (UnsupportedEncodingException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
+		}
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -91,8 +72,6 @@ public class Transmission
 			SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
 			
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-			
-			System.out.println(Base64.encodeBase64(cipher.doFinal(toEncrypt)));
 			
 			return cipher.doFinal(toEncrypt);
 		} 
@@ -122,5 +101,56 @@ public class Transmission
 		}
 		
 		return null;
+	}
+	
+	public Connection connectToDB()
+	{
+		try 
+		{
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		} 
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+			
+			return null;
+		}
+		
+		String connectionUrl = "jdbc:sqlserver://ul4h2kjyow.database.windows.net:1433;database=Ultrasound;user=ultrasound@ul4h2kjyow;password=*REPLACE_ME*;encrypt=true;hostNameInCertificate=data.ch1-3.database.windows.net;loginTimeout=30;";
+		
+		Connection connection = null;
+		
+		try 
+		{
+			connection = DriverManager.getConnection(connectionUrl);
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			
+			return null;
+		}
+		
+		System.out.println("Connected!");
+				
+		
+		return connection;
+	}
+	
+	public boolean disconnectFromDB(Connection connection)
+	{
+		try 
+		{
+			if (connection != null && !connection.isClosed())
+				connection.close();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			
+			return false;
+		}
+		
+		return true;
 	}
 }
