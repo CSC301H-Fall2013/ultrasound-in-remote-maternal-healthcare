@@ -1,11 +1,16 @@
 package csc301.ultrasound.global.tests;
 
-import static org.junit.Assert.*;
-
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 
+import javax.imageio.ImageIO;
+
+import static org.junit.Assert.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -120,6 +125,42 @@ public class TransmissionTest
 		Connection connection = t.connectToDB();
 		
 		assertNotNull(connection);
+		
+		try
+		{
+			byte firstNameBytes[] = new String("Thomas").getBytes("UTF-8");
+			byte lastNameBytes[] = new String("Anderson").getBytes("UTF-8");
+			byte groupByte = 0x0;
+			
+			File fnew=new File("/Users/johnmather/Desktop/ultra.jpg");
+			BufferedImage originalImage=ImageIO.read(fnew);
+			ByteArrayOutputStream baos=new ByteArrayOutputStream();
+			ImageIO.write(originalImage, "jpg", baos );
+			byte[] imageBytes = baos.toByteArray();
+			
+			byte secretKey[] = new String("ThisIsASecretKey").getBytes("UTF-8");
+			
+			byte encFirstNameBytes[] = t.encrypt(firstNameBytes, secretKey);
+			byte encLastNameBytes[] = t.encrypt(lastNameBytes, secretKey);
+
+			byte compImageBytes[] = t.compress(imageBytes);
+			byte encCompImageBytes[] = t.encrypt(compImageBytes, secretKey);
+			
+			String SQLStatement = "INSERT INTO Test(FirstName, LastName, AuthLevel, Image) VALUES (?, ?, ?, ?);";
+			
+			PreparedStatement statement = connection.prepareStatement(SQLStatement);
+			statement.setBytes(1, encFirstNameBytes);
+			statement.setBytes(2, encLastNameBytes);
+			statement.setByte(3, groupByte);
+			statement.setBytes(4, encCompImageBytes);
+			
+			statement.executeUpdate();
+			statement.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
