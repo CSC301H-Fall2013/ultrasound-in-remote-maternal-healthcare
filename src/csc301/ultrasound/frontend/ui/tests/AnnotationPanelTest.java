@@ -30,6 +30,8 @@ public class AnnotationPanelTest
 	@Test
 	public void testAnnotationPanel()
 	{
+		System.out.println("Running testAnnotationPanel()...");
+		
 		// Open a window wrapping the panel, draw in it, then check if the drawing matches the ground-truth.
 		Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension windowSize = new Dimension(640, 480);
@@ -62,7 +64,7 @@ public class AnnotationPanelTest
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 			// load a temporary image
-			BufferedImage image = ImageIO.read(new File("./resources/img/ultrasound.jpg"));
+			BufferedImage image = ImageIO.read(this.getClass().getResource("/img/ultrasound.jpg"));
 			
 			AnnotationPanel ap = new AnnotationPanel(windowSize, image);
 			
@@ -101,7 +103,7 @@ public class AnnotationPanelTest
 			r.mouseRelease(InputEvent.BUTTON1_MASK);
 			
 			BufferedImage an = ap.getAnnotations();
-			BufferedImage gtAn = ImageIO.read(new File("./tests/gtAnnotation.png"));
+			BufferedImage gtAn = ImageIO.read(this.getClass().getResource("/testimg/gtAnnotation.png"));
 			
 			// compare the hashes of both images to ensure that they are the same
 			MessageDigest md = MessageDigest.getInstance("MD5");

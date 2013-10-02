@@ -1,5 +1,6 @@
 package csc301.ultrasound.tests;
 
+import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -10,4 +11,8 @@ import org.junit.runners.Suite;
 public class RunAllTests
 {
 	// do nothing
+	public static void main(String[] args) throws Exception 
+	{
+		JUnitCore.main("csc301.ultrasound.tests.RunAllTests");            
+	}
 }

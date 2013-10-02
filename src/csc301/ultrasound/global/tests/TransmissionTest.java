@@ -59,6 +59,8 @@ public class TransmissionTest
 	@Test
 	public void testCompress() 
 	{
+		System.out.println("Running testCompress()...");
+		
 		Transmission t = new Transmission();
 		
 		byte compressed[] = t.compress(originalData);
@@ -75,6 +77,8 @@ public class TransmissionTest
 	@Test
 	public void testDecompress() 
 	{
+		System.out.println("Running testDecompress()...");
+		
 		Transmission t = new Transmission();
 		
 		byte decompressed[] = t.decompress(gtCompressedData);
@@ -91,6 +95,8 @@ public class TransmissionTest
 	@Test
 	public void testEncrypt() 
 	{
+		System.out.println("Running testEncrypt()...");
+		
 		Transmission t = new Transmission();
 		
 		String key = "ThisIsASecretKey";
@@ -116,6 +122,8 @@ public class TransmissionTest
 	@Test
 	public void testDecrypt() 
 	{
+		System.out.println("Running testDecrypt()...");
+		
 		Transmission t = new Transmission();
 		
 		String key = "ThisIsASecretKey";
@@ -141,6 +149,8 @@ public class TransmissionTest
 	@Test
 	public void connectToDB()
 	{
+		System.out.println("Running connectToDB()...");
+		
 		Transmission t = new Transmission();
 		
 		Connection connection = t.connectToDB();
@@ -154,6 +164,8 @@ public class TransmissionTest
 	@Test
 	public void disconnectFromDB()
 	{
+		System.out.println("Running disconnectFromDB()...");
+		
 		Transmission t = new Transmission();
 		
 		Connection connection = t.connectToDB();
