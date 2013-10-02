@@ -1,11 +1,184 @@
 package csc301.ultrasound.frontend.ui;
 
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 
+import javax.swing.*;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+
+/**
+ * A panel used to annotate an image.
+ */
 public class AnnotationPanel extends JPanel
 {
-	public AnnotationPanel()
+	private static final long serialVersionUID = 1L;
+
+	/** The previously drawn color. */
+	private Color prevColor = Color.RED;
+	
+	/** The previous mouse location. */
+	private Point2D prevLoc;
+	
+	/** The current mouse location. */
+	private Point2D currLoc;
+	
+	/** The graphics context of the annotation image. */
+	private Graphics2D g2dAnnotation = null;
+	
+	/** The annotation image. */
+	private BufferedImage annotationImage = null;
+	
+	/** The original image. */
+	private Image originalImage = null;
+	
+	/** The size of the color button */
+	private static final int colorButtonSize = 20;
+	
+	/**
+	 * Instantiates a new annotation panel.
+	 *
+	 * @param panelSize The panel size.
+	 * @param image The image to be annotated.
+	 */
+	public AnnotationPanel(Dimension panelSize, BufferedImage image)
 	{
-		// TODO Auto-generated constructor stub
+		this.setLayout(new BorderLayout(0, 0));
+		this.setBackground(Color.BLACK);
+		
+		// create the panel used for choosing a color
+		JPanel colorPanel = new JPanel();
+		colorPanel.setBackground(Color.BLACK);
+		colorPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 2));
+		
+		JLabel l = new JLabel("Color: ");
+		l.setForeground(Color.WHITE);
+		colorPanel.add(l);
+		
+		final JButton color = new JButton("");
+		color.setBackground(Color.RED);
+		color.setPreferredSize(new Dimension(colorButtonSize, colorButtonSize));
+		
+		// add the mouse listener to listen for clicks on the color button
+		color.addMouseListener(new MouseAdapter() 
+		{
+			@Override
+			public void mouseClicked(MouseEvent arg0) 
+			{
+				JColorChooser cc = new JColorChooser();
+				
+				// show only the HSB panel. Solution found here:
+				// http://stackoverflow.com/questions/9079807/jcolorchooser-hide-all-default-panels-and-show-hsb-panel-only
+				AbstractColorChooserPanel[] panels = cc.getChooserPanels();
+				
+                for (AbstractColorChooserPanel accp : panels) 
+                {
+                    if (accp.getDisplayName().equals("HSB"))
+                        JOptionPane.showMessageDialog(null, accp);
+                }
+                
+                Color selectedColor = cc.getColor();
+                
+                g2dAnnotation.setColor(selectedColor);
+				color.setBackground(selectedColor);
+				prevColor = selectedColor;
+			}
+		});
+		
+		colorPanel.add(color);
+		
+		this.add(colorPanel, BorderLayout.NORTH);
+		
+		this.setPreferredSize(new Dimension(panelSize.width, panelSize.height + colorButtonSize));
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+		
+		// add the mouse listener for the pen tool
+		MouseListener ml = new MouseListener();
+		this.addMouseListener(ml);
+		this.addMouseMotionListener(ml);
+		
+		// create an image to draw into
+		annotationImage = new BufferedImage(panelSize.width, panelSize.height, BufferedImage.TYPE_INT_ARGB);
+		g2dAnnotation = annotationImage.createGraphics();
+        g2dAnnotation.setColor(prevColor);
+        
+        g2dAnnotation.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2dAnnotation.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        originalImage = image.getScaledInstance(panelSize.width, panelSize.height, Image.SCALE_SMOOTH);;
+    }
+	
+	/**
+	 * The listener interface for receiving mouse events.
+	 * The class that is interested in processing a mouse
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addMouseListener<code> method. When
+	 * the mouse event occurs, that object's appropriate
+	 * method is invoked.
+	 *
+	 * @see MouseEvent
+	 */
+	class MouseListener extends MouseAdapter
+	{
+		/* (non-Javadoc)
+		 * @see java.awt.event.MouseAdapter#mouseDragged(java.awt.event.MouseEvent)
+		 */
+		@Override
+		public void mouseDragged(MouseEvent arg0) 
+		{
+			currLoc = arg0.getPoint();
+			
+			updateCanvas();
+			
+			prevLoc = currLoc;
+		}
+		
+		/* (non-Javadoc)
+		 * @see java.awt.event.MouseAdapter#mousePressed(java.awt.event.MouseEvent)
+		 */
+		@Override
+		public void mousePressed(MouseEvent arg0) 
+		{
+			currLoc = arg0.getPoint();
+			prevLoc = currLoc;
+		}
+	}
+	
+	/**
+	 * Update the canvas.
+	 */
+	private void updateCanvas()
+	{
+		g2dAnnotation.setPaint(prevColor);
+		g2dAnnotation.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+        g2dAnnotation.drawLine((int)prevLoc.getX(), (int)prevLoc.getY() - colorButtonSize, (int)currLoc.getX(), (int)currLoc.getY() - colorButtonSize);
+        
+        repaint();
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
+	public void paintComponent(Graphics g) 
+	{
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D)g;
+
+        // draw both images on top of one another. Since annotationImage is RGBA, it will overlay.
+        g2d.drawImage(originalImage, 0, colorButtonSize, null);
+        g2d.drawImage(annotationImage, null, 0, colorButtonSize);
+	}
+	
+	/**
+	 * Get the annotation image.
+	 *
+	 * @return The annotation image.
+	 */
+	public BufferedImage getAnnotations()
+	{
+		return annotationImage;
 	}
 }
