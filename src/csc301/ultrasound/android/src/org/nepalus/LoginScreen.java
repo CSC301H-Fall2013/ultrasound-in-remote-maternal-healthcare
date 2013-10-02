@@ -11,18 +11,28 @@ import android.widget.EditText;
 public class LoginScreen extends Activity {
 	Context mContext;
 	public static String loginName;
-    /** Called when the activity is first created. */
+	/*
+	 * Method gets called when activity is launched.
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 * @param savedInstanceState: saved instance of this activity to extract previous settings.
+	 */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        //Set the content
         setContentView(R.layout.login);
+        //Set the context
         mContext = this;
         
+        // Handle the on click event for login button
         Button nextButton = (Button) findViewById(R.id.login_submit);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+            	// Store the name entered by the user
             	EditText name = (EditText) findViewById(R.id.nameFill);
             	loginName = name.getText().toString();
+            	// launch the walk through activity
             	Intent i = new Intent(mContext, WalkthroughScreen.class);
             	startActivity(i);
             }

@@ -41,8 +41,10 @@ public class MetadataScreen extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set the display content
         setContentView(R.layout.metadata);
         
+        // Get Editable text fields from display.
         mActivity = this;
         mPatientName = (EditText) findViewById(R.id.patient_name);
         mPatientAge = (EditText) findViewById(R.id.patient_age);
@@ -50,14 +52,17 @@ public class MetadataScreen extends Activity {
         mComments = (EditText) findViewById(R.id.comments);
         
         
-
+        // Get Image object from display
         ImageView thumbnail = (ImageView) findViewById(R.id.ultrasound_thumbnail);
+        // Set the image to be displayed in image box via image object.
         thumbnail.setImageURI(UltrasoundImageScreen.getOutputMediaFileUri(UltrasoundImageScreen.IMAGE_NAME));
         
+        // Handle the on click event of finish button
         Button nextButton = (Button) findViewById(R.id.finish);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
             	//submit();
+            	// Extract Patient information entered by user
             	String name = mPatientName.getText().toString();
                 if(name.length() == 0){
                 	name = "NoName";
@@ -70,9 +75,14 @@ public class MetadataScreen extends Activity {
                 if(comments.length() == 0){
                 	comments = "NoComments";
                 }
+                // Build string data representing patient informaiton.
             	String data = UltrasoundImageScreen.photoID.toString() +" "+ name +":"+ age +":"+ comments +";";
+            	// Write the new patient data to patient record file
             	writeToFile(data,"patientDataU.txt");
+            	// Record the last Patient Id
             	writeToFile2(UltrasoundImageScreen.photoID.toString(),"Totalrecord.txt");
+            	
+            	// Display Progress Dialog of uploading information.
             	final ProgressDialog dialog = ProgressDialog.show(MetadataScreen.this,"Uploading Data", "Please Wait...", true);
                 new Thread(new Runnable(){
                 	public void run(){
@@ -86,6 +96,8 @@ public class MetadataScreen extends Activity {
                 			dialog.dismiss();
                 			//Toast.makeText(MetadataScreen.this, "Data Sent Successfully!", Toast.LENGTH_SHORT).show();
                 			Log.d("alertD", "abt to show Dialog");
+                			
+                			// Display the mock of Response from Radiologist
                 			MetadataScreen.this.runOnUiThread(new Runnable(){
                         		public void run(){
                         			Toast.makeText(mActivity, "Data Sent Successfully!", Toast.LENGTH_LONG).show();
@@ -126,7 +138,11 @@ public class MetadataScreen extends Activity {
         });
     }
     
-    
+    /*
+     * Append data to file
+     * @param data: data that needs to be written to file
+     * @param Filename: name of the file to which data needs to be written to.
+     */
     private void writeToFile(String data, String Filename) {
 	    try {
 	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput(Filename, Context.MODE_APPEND));
@@ -137,7 +153,11 @@ public class MetadataScreen extends Activity {
 	        Log.e("Exception", "File write failed: " + e.toString());
 	    } 
 	}
-    
+    /*
+     * OverWrite data to file
+     * @param data: data that needs to be written to file
+     * @param Filename: name of the file to which data needs to be written to.
+     */
     private void writeToFile2(String data, String Filename) {
 	    try {
 	    	
@@ -150,7 +170,9 @@ public class MetadataScreen extends Activity {
 	    } 
 	}
     
-    private void submit(){    	    	
+    
+    //Below code is not required at the moment.
+   /* private void submit(){    	    	
     	final String patientName = mPatientName.getText().toString();    	
     	final String patientAge = mPatientAge.getText().toString();
     	final String comments = mComments.getText().toString();
@@ -187,5 +209,5 @@ public class MetadataScreen extends Activity {
     		Log.d("loadBitmap", e.getMessage());
     	}
     	
-    }
+    }*/
 }
