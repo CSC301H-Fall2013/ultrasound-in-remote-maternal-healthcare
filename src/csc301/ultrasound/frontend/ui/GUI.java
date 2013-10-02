@@ -2,7 +2,6 @@ package csc301.ultrasound.frontend.ui;
 
 import java.awt.EventQueue;
 
-import java.awt.Toolkit;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.*;
@@ -13,8 +12,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class GUI
 {
-	private static final long serialVersionUID = 1L;
-	
 	private JFrame frmUrmhClient;
 	private JTable table;
 
