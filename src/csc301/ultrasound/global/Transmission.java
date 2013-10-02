@@ -137,7 +137,8 @@ public class Transmission
 	}
 	
 	/**
-	 * Connect to the SQL Server database.
+	 * Connect to the SQL Server database. Note that this will timeout in 30 seconds if your 
+	 * IP address range is not whitelisted in the Windows Azure SQL Firewall.
 	 *
 	 * @return The established connection. null if an error occured.
 	 */
@@ -178,7 +179,7 @@ public class Transmission
 	 * Disconnect from the SQL Server database.
 	 *
 	 * @param connection The established connection.
-	 * @return true, if the connection was successfully closed. false otherwise.
+	 * @return true, if the connection was successfully closed. false otherwise, or an error occured.
 	 */
 	public boolean disconnectFromDB(Connection connection)
 	{
