@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background" >
+
+    <TextView 
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/label_color"
+        android:text="Welcome User!"/>
+    
+    <Button 
+        android:id="@+id/addRecord"
+        android:textColor="@color/button_text_color"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Pateint Record"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/next"
+        android:onClick="onClick"/>
+    
+    <Button 
+        android:id="@+id/accessRecord"
+        android:textColor="@color/button_text_color"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Access Pateint Records"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/next"
+        android:onClick="onClick1"/>
+    <Button 
+        android:id="@+id/clearRecord"
+        android:textColor="@color/button_text_color"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Pateint Records"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/next"
+        android:onClick="onClick2"/>
+
+</LinearLayout>
