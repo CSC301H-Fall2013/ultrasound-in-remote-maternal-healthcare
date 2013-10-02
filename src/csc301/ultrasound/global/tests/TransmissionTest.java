@@ -1,14 +1,8 @@
 package csc301.ultrasound.global.tests;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-
-import javax.imageio.ImageIO;
 
 import static org.junit.Assert.*;
 import org.junit.AfterClass;
@@ -17,8 +11,12 @@ import org.junit.Test;
 
 import csc301.ultrasound.global.Transmission;
 
+/**
+ * Automated unit tests for the Transmission class.
+ */
 public class TransmissionTest 
 {
+	/** The input data to test against. */
 	private static byte originalData[] = { 98, 108, 97, 104, 98, 108, 97, 104, 98, 108, 97, 104, 63, 63, 
 										   98, 108, 97, 104, 98, 108, 97, 104, 98, 108, 97, 104, 63, 63,  
 										   98, 108, 97, 104, 98, 108, 97, 104, 98, 108, 97, 104, 63, 63, 
@@ -26,9 +24,11 @@ public class TransmissionTest
 										   98, 108, 97, 104, 98, 108, 97, 104, 98, 108, 97, 104, 63, 63, 
 										   98, 108, 97, 104, 98, 108, 97, 104, 98, 108, 97, 104, 63, 63};
 	
+	/** The expected compressed value of originalData[] */
 	private static byte gtCompressedData[] = {120, -38, 75, -54, 73, -52, 72, -126, 98, 123, -5, 36, -86, 
 											  -16, 0, 73, 3, 31, -109};
 	
+	/** The expected encrypted value of originalData[] */
 	private static byte gtEncryptedData[] = {-68, 77, -102, 29, -16, -72, -125, -121, -102, -87, 125, -34, -33, 110, 
 											  38, 39, 76, -73, -117, 12, 90, -84, -85, -111, -28, 12, -45, -18,
 											 -107, -89, 101, -37, -118, 108, 76, 35, -113, 36, 44, 11, 34, 125,
@@ -37,19 +37,30 @@ public class TransmissionTest
 											 -5, -31, -13, -109, 82, -74, -113, -83, -47, -109, -99, -27, 65, 111,
 											 -120, -22, -98, -95, 16, 42, -40, 127, -72, -76, 20, -63};
 	
+	/**
+	 * Any initialization needed before the tests begin.
+	 */
 	@BeforeClass
 	public static void testSetup() 
 	{
 	}
 
+	/**
+	 * Any cleanup needed after the tests are run.
+	 */
 	@AfterClass
 	public static void testCleanup() 
 	{
 	}
 	  
+	/**
+	 * Test the compression method.
+	 */
 	@Test
 	public void testCompress() 
 	{
+		System.out.println("Running testCompress()...");
+		
 		Transmission t = new Transmission();
 		
 		byte compressed[] = t.compress(originalData);
@@ -60,9 +71,14 @@ public class TransmissionTest
 			assertTrue("Every byte of the compressed data must equal the ground truth's.", compressed[i] == gtCompressedData[i]);
 	}
 
+	/**
+	 * Test the decompression method.
+	 */
 	@Test
 	public void testDecompress() 
 	{
+		System.out.println("Running testDecompress()...");
+		
 		Transmission t = new Transmission();
 		
 		byte decompressed[] = t.decompress(gtCompressedData);
@@ -73,9 +89,14 @@ public class TransmissionTest
 			assertTrue("Every byte of the decompressed data must equal the ground truth's.", decompressed[i] == originalData[i]);
 	}
 
+	/**
+	 * Test the encryption method.
+	 */
 	@Test
 	public void testEncrypt() 
 	{
+		System.out.println("Running testEncrypt()...");
+		
 		Transmission t = new Transmission();
 		
 		String key = "ThisIsASecretKey";
@@ -95,9 +116,14 @@ public class TransmissionTest
 		}
 	}
 
+	/**
+	 * Test the decryption method.
+	 */
 	@Test
 	public void testDecrypt() 
 	{
+		System.out.println("Running testDecrypt()...");
+		
 		Transmission t = new Transmission();
 		
 		String key = "ThisIsASecretKey";
@@ -117,55 +143,29 @@ public class TransmissionTest
 		}
 	}
 	
+	/**
+	 * Test the database connection method.
+	 */
 	@Test
 	public void connectToDB()
 	{
+		System.out.println("Running connectToDB()...");
+		
 		Transmission t = new Transmission();
 		
 		Connection connection = t.connectToDB();
 		
 		assertNotNull(connection);
-		
-		try
-		{
-			byte firstNameBytes[] = new String("Thomas").getBytes("UTF-8");
-			byte lastNameBytes[] = new String("Anderson").getBytes("UTF-8");
-			byte groupByte = 0x0;
-			
-			File fnew=new File("/Users/johnmather/Desktop/ultra.jpg");
-			BufferedImage originalImage=ImageIO.read(fnew);
-			ByteArrayOutputStream baos=new ByteArrayOutputStream();
-			ImageIO.write(originalImage, "jpg", baos );
-			byte[] imageBytes = baos.toByteArray();
-			
-			byte secretKey[] = new String("ThisIsASecretKey").getBytes("UTF-8");
-			
-			byte encFirstNameBytes[] = t.encrypt(firstNameBytes, secretKey);
-			byte encLastNameBytes[] = t.encrypt(lastNameBytes, secretKey);
-
-			byte compImageBytes[] = t.compress(imageBytes);
-			byte encCompImageBytes[] = t.encrypt(compImageBytes, secretKey);
-			
-			String SQLStatement = "INSERT INTO Test(FirstName, LastName, AuthLevel, Image) VALUES (?, ?, ?, ?);";
-			
-			PreparedStatement statement = connection.prepareStatement(SQLStatement);
-			statement.setBytes(1, encFirstNameBytes);
-			statement.setBytes(2, encLastNameBytes);
-			statement.setByte(3, groupByte);
-			statement.setBytes(4, encCompImageBytes);
-			
-			statement.executeUpdate();
-			statement.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
+	/**
+	 * Test the database disconnection method.
+	 */
 	@Test
 	public void disconnectFromDB()
 	{
+		System.out.println("Running disconnectFromDB()...");
+		
 		Transmission t = new Transmission();
 		
 		Connection connection = t.connectToDB();

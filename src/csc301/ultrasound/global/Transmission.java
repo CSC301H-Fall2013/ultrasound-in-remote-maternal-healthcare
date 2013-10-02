@@ -11,8 +11,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Main class that handles transmitting data to and from the database.
+ */
 public class Transmission
 {
+	/**
+	 * Compress the provided byte array using ZLib. Note that it is not guaranteed that the
+	 * resultant byte array will be smaller than the original.
+	 *
+	 * @param toCompress The byte array to compress
+	 * @return The compressed byte array. null if an error occured.
+	 */
 	public byte[] compress(byte toCompress[])
 	{
 		try 
@@ -39,6 +49,13 @@ public class Transmission
 		return null;
 	}
 	
+	/**
+	 * Decompress the provided byte array using ZLib. Note that x = decompress(compress(x)),
+	 * must hold for any given byte array x.
+	 *
+	 * @param toDecompress The byte array to decompress
+	 * @return The decompressed bytes. null if an error occured.
+	 */
 	public byte[] decompress(byte toDecompress[])
 	{
 		try 
@@ -63,6 +80,13 @@ public class Transmission
 		return null;
 	}
 	
+	/**
+	 * Encrypt the provided byte array using AES-128 encryption with a secret key cipher.
+	 *
+	 * @param toEncrypt The byte array to encrypt
+	 * @param key The secret key to encrypt the data with
+	 * @return The encrypted data. null if an error occured.
+	 */
 	public byte[] encrypt(byte toEncrypt[], byte key[])
 	{
 		try 
@@ -83,6 +107,15 @@ public class Transmission
 		return null;
 	}
 	
+	/**
+	 * Decrypt the provided byte array using AES-128 encryption with a secret key cipher.
+	 * Note that x = decrypt(encrypt(x, k), k), must hold for any given byte array x, and
+	 * a secret key k.
+	 *
+	 * @param toDecrypt The byte array to decrypt
+	 * @param key The secret key used to encrypt the data
+	 * @return The decrypted data. null if an error occured.
+	 */
 	public byte[] decrypt(byte toDecrypt[], byte key[])
 	{
 		try
@@ -103,8 +136,15 @@ public class Transmission
 		return null;
 	}
 	
+	/**
+	 * Connect to the SQL Server database. Note that this will timeout in 30 seconds if your 
+	 * IP address range is not whitelisted in the Windows Azure SQL Firewall.
+	 *
+	 * @return The established connection. null if an error occured.
+	 */
 	public Connection connectToDB()
 	{
+		// try to load the driver
 		try 
 		{
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -116,6 +156,7 @@ public class Transmission
 			return null;
 		}
 		
+		// connection URL provided by Windows Azure
 		String connectionUrl = "jdbc:sqlserver://ul4h2kjyow.database.windows.net:1433;database=Ultrasound;user=ultrasound@ul4h2kjyow;password=csc301-erie;encrypt=true;hostNameInCertificate=data.ch1-3.database.windows.net;loginTimeout=30;";
 		
 		Connection connection = null;
@@ -131,12 +172,15 @@ public class Transmission
 			return null;
 		}
 		
-		System.out.println("Connected!");
-				
-		
 		return connection;
 	}
 	
+	/**
+	 * Disconnect from the SQL Server database.
+	 *
+	 * @param connection The established connection.
+	 * @return true, if the connection was successfully closed. false otherwise, or an error occured.
+	 */
 	public boolean disconnectFromDB(Connection connection)
 	{
 		try 
