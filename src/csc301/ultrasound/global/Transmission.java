@@ -157,7 +157,7 @@ public class Transmission
 		}
 		
 		// connection URL provided by Windows Azure
-		String connectionUrl = "jdbc:sqlserver://ul4h2kjyow.database.windows.net:1433;database=Ultrasound;user=ultrasound@ul4h2kjyow;password=csc301-erie;encrypt=true;hostNameInCertificate=data.ch1-3.database.windows.net;loginTimeout=30;";
+		String connectionUrl = "jdbc:sqlserver://ze7duqnsz2.database.windows.net:1433;database=Ultrasound;user=ultrasound@ze7duqnsz2;password=csc301-erie;encrypt=true;hostNameInCertificate=data.bl2-4.database.windows.net;loginTimeout=30;";
 		
 		Connection connection = null;
 		
