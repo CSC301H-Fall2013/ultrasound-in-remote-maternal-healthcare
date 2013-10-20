@@ -30,9 +30,9 @@ def createUser():
         if (len(phone)     < 9):          sys.exit("Phone number is too short.")
         if (len(location)  < 2):          sys.exit("Location is too short.")
         if not authlevelValid(authlevel): sys.exit("Invalid authlevel.")
-    except:
+    except Exception, e:
         print 'Error with supplied arguments'
-        print traceback.print_exc()
+        sys.exit(e)
 
     accessToken = getAccessToken(clientID, clientSecret)
 
@@ -78,7 +78,7 @@ def getAccessToken(clientID, clientSecret):
     return response_parsed['access_token']
 
 def authlevelValid(authlevel):
-    return (isint(authlevel) and (int(authlevel) >= 0 and int(authlevel) < 3))
+    return (isint(authlevel) and (int(authlevel) >= 1 and int(authlevel) <= 3))
 
 def emailValid(email):
     return (re.compile(r'^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$', re.IGNORECASE|re.DOTALL).search(email) != None)
