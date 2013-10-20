@@ -68,9 +68,6 @@ public class GUI
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 
-		JMenuItem mntmLogIn = new JMenuItem("Log In");
-		mnFile.add(mntmLogIn);
-
 		JMenuItem mntmLogOut = new JMenuItem("Log Out");
 		mnFile.add(mntmLogOut);
 
