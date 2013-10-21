@@ -1,16 +1,10 @@
 package csc301.ultrasound.frontend.ui;
 
 import java.awt.EventQueue;
-import java.awt.Frame;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import com.jgoodies.forms.layout.*;
 import javax.swing.GroupLayout.Alignment;
 import com.jgoodies.forms.factories.FormFactory;
@@ -22,7 +16,6 @@ public class GUI
 	private JFrame frmUrmhClient;
 	private JTable table;
 	private static Login loginFrame;
-	private static User	user;
 
 	/**
 	 * Launch the application.
@@ -39,61 +32,16 @@ public class GUI
 					window.frmUrmhClient.setVisible(true);
 					window.frmUrmhClient
 							.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					
-					final ExecutorService service;
-			        final Future<User> task;
+					loginFrame = new Login();
+					loginFrame.setVisible(true);
+					loginFrame.addWindowListener(new WindowAdapter() {
+						public void windowClosed(WindowEvent e) {
+							System.out.println("Done");
+							User usr = loginFrame.getUser();
+							System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
+						}
+					});
 
-			        service = Executors.newFixedThreadPool(1); 
-			        Login login = new Login();
-			        login.setVisible(true);
-			        task  = service.submit(login);
-
-			        try 
-			        {
-
-			            wait(60000);
-			            user = task.get();
-			            System.out.printf("%s %s %d", user.getName(), user.getCredential(), user.getName());
-			        }
-			        catch(final InterruptedException ex)
-			        {
-			            ex.printStackTrace();
-			        }
-			        catch(final ExecutionException ex)
-			        {
-			            ex.printStackTrace();
-			        }
-
-			        service.shutdownNow();
-					
-//				      Thread t = new Thread(new Runnable()
-//						{
-//							public void run()
-//							{
-//								try
-//								{
-//									Login login = new Login();
-//									login.setVisible(true);
-//								}catch (Exception e)
-//								{
-//									e.printStackTrace();
-//								}}});
-//				      // this will call run() function
-//				      t.start();
-//				      t.
-//				      t.join();
-
-//					do{
-//						continue;
-//					}while(loginFrame.getUser()==null);
-//					user = loginFrame.getUser();
-//					synchronized (window) {
-//						
-//					    window.wait();
-//						window.notify();
-//						user = loginFrame.getUser();
-//						System.out.printf("%s,  %s, %s", user.getName(), user.getType(), user.getCredential());
-//					} 
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -116,12 +64,6 @@ public class GUI
 	private void initialize()
 	{
 		frmUrmhClient = new JFrame();
-		frmUrmhClient.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-				System.out.println("noob");
-			}
-		});
 		frmUrmhClient.setTitle("URMH Client");
 		/*frmUrmhClient
 				.setIconImage(Toolkit

@@ -26,25 +26,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
-public class Login extends JFrame implements Callable<User> {
+public class Login extends JFrame {
 
 	private JPanel contentPane;
-	private static User user;
+	private User user;
 	private String userName;
 	private String userPw;
 	private static List<User> userList;
 	/**
 	 * Launch the application.
-	 * @return 
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Login frame = new Login();
-					
 					frame.setVisible(true);
 
 				} catch (Exception e) {
@@ -87,7 +84,6 @@ public class Login extends JFrame implements Callable<User> {
 	 * Create the frame.
 	 */
 	public Login() {
-		setResizable(false);
 		// Initialize userList.
 		userList = new ArrayList<User>();
 		
@@ -96,8 +92,8 @@ public class Login extends JFrame implements Callable<User> {
 		parseUserlist(file);
 
 		setTitle("Login");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 474, 321);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 474, 343);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -142,6 +138,7 @@ public class Login extends JFrame implements Callable<User> {
     	        	if(userInfo.getName().equals(userName)&& userInfo.getCredential().equals(userPw)){
     	        		user = new User(userName, userPw, userInfo.getType());
     	        		System.out.printf("%s, %s, %s", user.getName(), user.getCredential(), user.getType());
+    	        		dispose();
     	        		return;
     	        	}
     	        }
@@ -149,15 +146,19 @@ public class Login extends JFrame implements Callable<User> {
     	        JOptionPane.showMessageDialog(frame,
     	                "Wrong username or password!",
     	                "Login Failure!",
-    	                JOptionPane.ERROR_MESSAGE);        
-			}	
+    	                JOptionPane.ERROR_MESSAGE);
+
+        	        
+			}
+
+			
 		});
-		
 		contentPane.add(login, "cell 3 8 3 1");
 		
 		JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
 				dispose();
 			}
 		});
@@ -165,13 +166,8 @@ public class Login extends JFrame implements Callable<User> {
 		contentPane.add(cancel, "cell 6 8 2 1");
 	}
 	public User getUser() {
-				return user;
-				
-			}
-
-	@Override
-	public User call() throws Exception {
-		// TODO Auto-generated method stub
 		return user;
+		
 	}
+
 }
