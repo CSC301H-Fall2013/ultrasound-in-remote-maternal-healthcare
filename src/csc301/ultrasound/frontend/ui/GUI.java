@@ -9,11 +9,13 @@ import com.jgoodies.forms.layout.*;
 import javax.swing.GroupLayout.Alignment;
 import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.table.DefaultTableModel;
+import csc301.ultrasound.model.*;
 
 public class GUI
 {
 	private JFrame frmUrmhClient;
 	private JTable table;
+	private static Login loginFrame;
 
 	/**
 	 * Launch the application.
@@ -30,6 +32,8 @@ public class GUI
 					window.frmUrmhClient.setVisible(true);
 					window.frmUrmhClient
 							.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					loginFrame = new Login();
+					loginFrame.setVisible(true);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -72,6 +76,12 @@ public class GUI
 		mnFile.add(mntmLogOut);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        System.exit(0);
+		        frmUrmhClient.dispose();
+			}
+		});
 		mnFile.add(mntmExit);
 
 		JMenu mnView = new JMenu("View");
@@ -95,20 +105,17 @@ public class GUI
 		toolBar.setFloatable(false);
 		frmUrmhClient.getContentPane().add(toolBar, "cell 0 0,grow");
 
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener()
+		JButton updateBtn = new JButton("Update");
+		updateBtn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
 			}
 		});
-		toolBar.add(btnNewButton);
+		toolBar.add(updateBtn);
 
-		JButton btnNewButton_1 = new JButton("New button");
-		toolBar.add(btnNewButton_1);
-
-		JButton btnNewButton_2 = new JButton("New button");
-		toolBar.add(btnNewButton_2);
+		JButton commitBtn = new JButton("Commit changes");
+		toolBar.add(commitBtn);
 
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.2);
@@ -146,14 +153,14 @@ public class GUI
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panel_3.add(tabbedPane, "2, 2, fill, fill");
 
-		JPanel panel_4 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_4, null);
+		JPanel viewPnl = new JPanel();
+		tabbedPane.addTab("View image", null, viewPnl, null);
 
-		JPanel panel_5 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_5, null);
+		JPanel annotatePnl = new JPanel();
+		tabbedPane.addTab("Annotate image", null, annotatePnl, null);
 
-		JPanel panel_6 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_6, null);
+		JPanel msgPnl = new JPanel();
+		tabbedPane.addTab("Leave message", null, msgPnl, null);
 		panel.setLayout(gl_panel);
 
 		JPanel panel_1 = new JPanel();
