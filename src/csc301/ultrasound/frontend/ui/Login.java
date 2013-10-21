@@ -26,22 +26,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-public class Login extends JFrame {
+public class Login extends JFrame implements Callable<User> {
 
 	private JPanel contentPane;
-	private User user;
+	private static User user;
 	private String userName;
 	private String userPw;
 	private static List<User> userList;
 	/**
 	 * Launch the application.
+	 * @return 
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Login frame = new Login();
+					
 					frame.setVisible(true);
 
 				} catch (Exception e) {
@@ -84,6 +87,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setResizable(false);
 		// Initialize userList.
 		userList = new ArrayList<User>();
 		
@@ -92,8 +96,8 @@ public class Login extends JFrame {
 		parseUserlist(file);
 
 		setTitle("Login");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 474, 343);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 474, 321);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -145,27 +149,29 @@ public class Login extends JFrame {
     	        JOptionPane.showMessageDialog(frame,
     	                "Wrong username or password!",
     	                "Login Failure!",
-    	                JOptionPane.ERROR_MESSAGE);
-
-        	        
-			}
-
-			private User getUser() {
-				return user;
-				
-			}
+    	                JOptionPane.ERROR_MESSAGE);        
+			}	
 		});
+		
 		contentPane.add(login, "cell 3 8 3 1");
 		
 		JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
 				dispose();
 			}
 		});
 
 		contentPane.add(cancel, "cell 6 8 2 1");
 	}
+	public User getUser() {
+				return user;
+				
+			}
 
+	@Override
+	public User call() throws Exception {
+		// TODO Auto-generated method stub
+		return user;
+	}
 }
