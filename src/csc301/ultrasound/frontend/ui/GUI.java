@@ -5,17 +5,24 @@ import java.awt.EventQueue;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.Connection;
+
 import com.jgoodies.forms.layout.*;
 import javax.swing.GroupLayout.Alignment;
 import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.table.DefaultTableModel;
+
+import csc301.ultrasound.global.Transmission;
 import csc301.ultrasound.model.*;
+
+import java.sql.*;
 
 public class GUI
 {
 	private JFrame frmUrmhClient;
 	private JTable table;
 	private static Login loginFrame;
+	private static User usr;
 
 	/**
 	 * Launch the application.
@@ -28,20 +35,7 @@ public class GUI
 			{
 				try
 				{
-					GUI window = new GUI();
-					window.frmUrmhClient.setVisible(true);
-					window.frmUrmhClient
-							.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					loginFrame = new Login();
-					loginFrame.setVisible(true);
-					loginFrame.addWindowListener(new WindowAdapter() {
-						public void windowClosed(WindowEvent e) {
-							System.out.println("Done");
-							User usr = loginFrame.getUser();
-							System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
-						}
-					});
-
+					login();
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -49,7 +43,34 @@ public class GUI
 			}
 		});
 	}
-
+	
+	/**
+	 * Display the login window.
+	 */
+	public static void login()
+	{
+		loginFrame = new Login();
+		loginFrame.setVisible(true);
+		loginFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				System.out.println("Done");
+				usr = loginFrame.getUser();
+				System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
+				runApplication();
+			}
+		});
+	}
+	
+	/**
+	 * Run the application.
+	 */
+	public static void runApplication()
+	{
+		GUI window = new GUI();
+		window.frmUrmhClient.setVisible(true);
+		window.frmUrmhClient
+				.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	}
 	/**
 	 * Create the application.
 	 */
@@ -81,6 +102,12 @@ public class GUI
 		menuBar.add(mnFile);
 
 		JMenuItem mntmLogOut = new JMenuItem("Log Out");
+		mntmLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        frmUrmhClient.dispose();
+				login();
+			}
+		});
 		mnFile.add(mntmLogOut);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -116,7 +143,7 @@ public class GUI
 		JButton updateBtn = new JButton("Update");
 		updateBtn.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent e)
 			{
 			}
 		});
