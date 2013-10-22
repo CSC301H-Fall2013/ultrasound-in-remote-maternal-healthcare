@@ -23,6 +23,8 @@ public class GUI
 	private JTable table;
 	private static Login loginFrame;
 	private static User usr;
+	private static Transmission t;
+	private static Connection connection;
 
 	/**
 	 * Launch the application.
@@ -56,6 +58,11 @@ public class GUI
 				System.out.println("Done");
 				usr = loginFrame.getUser();
 				System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
+				
+				// Establish a connection with the database.
+				t = new Transmission();
+				connection = t.connectToDB();
+				
 				runApplication();
 			}
 		});
@@ -104,6 +111,7 @@ public class GUI
 		JMenuItem mntmLogOut = new JMenuItem("Log Out");
 		mntmLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				t.disconnectFromDB(connection);
 		        frmUrmhClient.dispose();
 				login();
 			}
@@ -113,8 +121,9 @@ public class GUI
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				t.disconnectFromDB(connection);
+				frmUrmhClient.dispose();
 		        System.exit(0);
-		        frmUrmhClient.dispose();
 			}
 		});
 		mnFile.add(mntmExit);
@@ -145,6 +154,34 @@ public class GUI
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				if (connection != null) {
+					try {
+						
+						// Query the database for new records.
+						Statement statement = connection.createStatement();
+						String query = "select * from Records where NumTimes < 3";
+						/*
+						String query = "select firstName, lastName, birthday, gender, date, record, status" 
+								+ "from Record natural join Patient natural join Response"
+								+ "where (rID <> " + usr.getName() + ") and not (status like '%C%')";
+						*/
+						
+						// Iterate through the set of results returned from executing the query.
+						ResultSet rs = statement.executeQuery(query);
+						while (rs.next()) {
+							
+							// TODO: Display the results in a JTable.
+							// 		 (So far, it just prints the complications.)
+							String complication = rs.getString("Complication");
+			               	System.out.println(complication);
+			            }
+					} catch (SQLException se)
+		            {
+		                System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
+		            }
+				} else {
+					// TODO: Decide what happens when a connection fails.
+				}
 			}
 		});
 		toolBar.add(updateBtn);
