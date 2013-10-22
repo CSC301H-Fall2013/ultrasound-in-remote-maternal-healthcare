@@ -5,17 +5,26 @@ import java.awt.EventQueue;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.Connection;
+
 import com.jgoodies.forms.layout.*;
 import javax.swing.GroupLayout.Alignment;
 import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.table.DefaultTableModel;
+
+import csc301.ultrasound.global.Transmission;
 import csc301.ultrasound.model.*;
+
+import java.sql.*;
 
 public class GUI
 {
 	private JFrame frmUrmhClient;
 	private JTable table;
 	private static Login loginFrame;
+	private static User usr;
+	private static Transmission t;
+	private static Connection connection;
 
 	/**
 	 * Launch the application.
@@ -28,20 +37,7 @@ public class GUI
 			{
 				try
 				{
-					GUI window = new GUI();
-					window.frmUrmhClient.setVisible(true);
-					window.frmUrmhClient
-							.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					loginFrame = new Login();
-					loginFrame.setVisible(true);
-					loginFrame.addWindowListener(new WindowAdapter() {
-						public void windowClosed(WindowEvent e) {
-							System.out.println("Done");
-							User usr = loginFrame.getUser();
-							System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
-						}
-					});
-
+					login();
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -49,7 +45,39 @@ public class GUI
 			}
 		});
 	}
-
+	
+	/**
+	 * Display the login window.
+	 */
+	public static void login()
+	{
+		loginFrame = new Login();
+		loginFrame.setVisible(true);
+		loginFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				System.out.println("Done");
+				usr = loginFrame.getUser();
+				System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
+				
+				// Establish a connection with the database.
+				t = new Transmission();
+				connection = t.connectToDB();
+				
+				runApplication();
+			}
+		});
+	}
+	
+	/**
+	 * Run the application.
+	 */
+	public static void runApplication()
+	{
+		GUI window = new GUI();
+		window.frmUrmhClient.setVisible(true);
+		window.frmUrmhClient
+				.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	}
 	/**
 	 * Create the application.
 	 */
@@ -81,13 +109,21 @@ public class GUI
 		menuBar.add(mnFile);
 
 		JMenuItem mntmLogOut = new JMenuItem("Log Out");
+		mntmLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				t.disconnectFromDB(connection);
+		        frmUrmhClient.dispose();
+				login();
+			}
+		});
 		mnFile.add(mntmLogOut);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				t.disconnectFromDB(connection);
+				frmUrmhClient.dispose();
 		        System.exit(0);
-		        frmUrmhClient.dispose();
 			}
 		});
 		mnFile.add(mntmExit);
@@ -116,8 +152,36 @@ public class GUI
 		JButton updateBtn = new JButton("Update");
 		updateBtn.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent e)
 			{
+				if (connection != null) {
+					try {
+						
+						// Query the database for new records.
+						Statement statement = connection.createStatement();
+						String query = "select * from Records where NumTimes < 3";
+						/*
+						String query = "select firstName, lastName, birthday, gender, date, record, status" 
+								+ "from Record natural join Patient natural join Response"
+								+ "where (rID <> " + usr.getName() + ") and not (status like '%C%')";
+						*/
+						
+						// Iterate through the set of results returned from executing the query.
+						ResultSet rs = statement.executeQuery(query);
+						while (rs.next()) {
+							
+							// TODO: Display the results in a JTable.
+							// 		 (So far, it just prints the complications.)
+							String complication = rs.getString("Complication");
+			               	System.out.println(complication);
+			            }
+					} catch (SQLException se)
+		            {
+		                System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
+		            }
+				} else {
+					// TODO: Decide what happens when a connection fails.
+				}
 			}
 		});
 		toolBar.add(updateBtn);
