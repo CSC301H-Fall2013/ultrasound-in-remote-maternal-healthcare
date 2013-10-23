@@ -24,8 +24,6 @@ public class Login extends JFrame
 	private static final long serialVersionUID = 1L;
 	
 	private User   user     = null;
-	private String userEmail = "";
-	private String userPassword   = "";
 
 	/**
 	 * Launch the application.
@@ -89,8 +87,8 @@ public class Login extends JFrame
 				Authentication auth = new Authentication();
 				User authedUser = null;
 				
-				userEmail    = userNameTf.getText();
-				userPassword = passwordTf.getText();
+				String userEmail    = userNameTf.getText();
+				String userPassword = passwordTf.getText();
 				
 				authedUser = auth.authenticate(userEmail, userPassword);
 				
