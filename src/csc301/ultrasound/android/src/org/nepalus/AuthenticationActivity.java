@@ -18,6 +18,13 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+
+
+/* THIS AREA OF CODE IS DERIVED FROM AUTH0 FREE AUTHENTICATION SERVICE.
+ * IT IS NOT IMPLEMENTED BY US.*/
+
+/* JAVA DOC AND COMMENTS WILL BE ADDED ONCE WE READ AND UNDERSTAND THE CODE. */
+
 public class AuthenticationActivity extends Activity 
 {
 
