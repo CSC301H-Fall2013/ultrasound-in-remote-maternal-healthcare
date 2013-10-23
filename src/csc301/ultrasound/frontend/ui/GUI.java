@@ -25,6 +25,7 @@ public class GUI
 	private static User usr;
 	private static Transmission t;
 	private static Connection connection;
+	private int maxRecordRows = 20;
 
 	/**
 	 * Launch the application.
@@ -58,14 +59,20 @@ public class GUI
 		{
 			public void windowClosed(WindowEvent e) 
 			{
-				System.out.println("Done");
+
 				usr = loginFrame.getUser();
-				System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
+				System.out.printf("%s has successfully logged in.\n", usr.getName());
 				
 				// Establish a connection with the database.
+				System.out.println("Connecting to the database...");
 				t = new Transmission();
 				connection = t.connectToDB();
 				
+				if (connection != null) {
+					System.out.println("The connection has been established.");
+				} else {
+					System.out.println("The connection has failed.");
+				}
 				runApplication();
 			}
 		});
@@ -110,21 +117,27 @@ public class GUI
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 
+		// Handles when the user logs out.
 		JMenuItem mntmLogOut = new JMenuItem("Log Out");
 		mntmLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				t.disconnectFromDB(connection);
+				System.out.println("The connection has been terminated.");
 		        frmUrmhClient.dispose();
+		        System.out.printf("%s has successfully logged out.\n", usr.getName());
 				login();
 			}
 		});
 		mnFile.add(mntmLogOut);
 
+		// Handles when the user exits the application.
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				t.disconnectFromDB(connection);
-				frmUrmhClient.dispose();
+				System.out.println("The connection has been terminated.");
+		        frmUrmhClient.dispose();
+		        System.out.printf("%s has terminated the application.\n", usr.getName());
 		        System.exit(0);
 			}
 		});
@@ -157,32 +170,28 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				if (connection != null) {
-					try {
-						
-						// Query the database for new records.
-						Statement statement = connection.createStatement();
-						String query = "select * from Records where NumTimes < 3";
-						/*
-						String query = "select firstName, lastName, birthday, gender, date, record, status" 
-								+ "from Record natural join Patient natural join Response"
-								+ "where (rID <> " + usr.getName() + ") and not (status like '%C%')";
-						*/
-						
-						// Iterate through the set of results returned from executing the query.
-						ResultSet rs = statement.executeQuery(query);
-						while (rs.next()) {
-							
-							// TODO: Display the results in a JTable.
-							// 		 (So far, it just prints the complications.)
-							String complication = rs.getString("Complication");
-			               	System.out.println(complication);
-			            }
-					} catch (SQLException se)
-		            {
-		                System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
-		            }
-				} else {
-					// TODO: Decide what happens when a connection fails.
+
+					// Create record table containing records that need attending to.
+					String[] recordTableHeadings = { "Name", "Time", "Status" };
+					Object[][] recordTable = new Object[maxRecordRows][3];
+					int numRecordRows = fillRecordTable(recordTable);
+
+					// Print the records.
+					// NOTE: These records will be displayed using a Jtable in the future.
+					System.out.println("---------------\nRecords:");
+					int m; int n;
+					for (n = 0; n < 3; n++){
+						System.out.print(recordTableHeadings[n] + " - ");
+					}
+					
+					System.out.println("");
+					for (m = 0; m < numRecordRows; m++){
+						for (n=0; n<3; n++){
+							System.out.print(recordTable[m][n] + " - ");
+						}
+						System.out.println("");
+					}
+					System.out.println("---------------");
 				}
 			}
 		});
@@ -261,5 +270,76 @@ public class GUI
 		
 		frmUrmhClient.pack();
 		frmUrmhClient.setVisible(true);
+	}
+	
+	/**
+	 * Fill the given record table with new records.
+	 * Return the number of records added to the table.
+	 */
+	private int fillRecordTable(Object[][] recordTable)
+	{
+		// Keep track of how many records have been added to the table.
+		int numRecords = 0;
+		
+		try {
+			Statement statement = connection.createStatement();
+			String query;
+			ResultSet rs;
+			
+			// Query the database for records that have not yet been responded to.
+			// Fill the record table with these records.
+			query = "select firstName, lastName, time " 
+					+ "from Record, Patient "
+					+ "where (Record.pID = Patient.pID) "
+					+ "and (Record.recID not in (select recID from Response))";
+			rs = statement.executeQuery(query);
+			numRecords = fillRecordTable(rs, recordTable, numRecords, "No Response");
+			
+			// Query the database for records that a different user has responded to,
+			// but have not yet been approved.  Fill the record table with these records.
+			query = "select firstName, lastName, time "
+					+ "from Record, Patient, Response "
+					+ "where (Record.pID = patient.pID) "
+					+ "and (Record.recID = Response.recID) "
+					+ "and (Record.recID not in (select recID from Approve))"
+					+ "and (username not like '%" + usr.getName() + "%')";
+			rs = statement.executeQuery(query);
+			numRecords = fillRecordTable(rs, recordTable, numRecords, "Has Response");
+			return numRecords;
+		} catch (SQLException se) {
+			return numRecords;
+		}
+	}
+	
+	/**
+	 * Fill the given record table with the contents of the result set,
+	 * starting at the row indicated by the given record number,
+	 * setting the last value of each row in the table as the status string.
+	 * Return the number of records the have been added to the table.
+	 */
+	private int fillRecordTable(ResultSet rs, Object[][] recordTable, int numRecords, String status)
+	{
+		try {
+
+			while (rs.next() && (numRecords < recordTable.length)) {
+			
+				// Extract data from the result set.
+				String firstName = rs.getString("firstName");
+				String lastName = rs.getString("lastName");
+				Timestamp time = rs.getTimestamp("time");
+			
+				// Record the data in the record table.
+				recordTable[numRecords][0] = firstName + " " + lastName;
+				recordTable[numRecords][1] = time;
+				recordTable[numRecords][2] = status;
+			
+				numRecords++;
+			}
+			return numRecords;
+		} catch (SQLException se)
+        {
+			System.out.println(status + " records have not been added.");
+            return numRecords;
+        }
 	}
 }
