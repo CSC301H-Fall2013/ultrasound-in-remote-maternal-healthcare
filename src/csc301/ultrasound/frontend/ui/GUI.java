@@ -38,7 +38,8 @@ public class GUI
 				try
 				{
 					login();
-				} catch (Exception e)
+				} 
+				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -52,9 +53,11 @@ public class GUI
 	public static void login()
 	{
 		loginFrame = new Login();
-		loginFrame.setVisible(true);
-		loginFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosed(WindowEvent e) {
+		
+		loginFrame.addWindowListener(new WindowAdapter() 
+		{
+			public void windowClosed(WindowEvent e) 
+			{
 				System.out.println("Done");
 				usr = loginFrame.getUser();
 				System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
@@ -74,10 +77,9 @@ public class GUI
 	public static void runApplication()
 	{
 		GUI window = new GUI();
-		window.frmUrmhClient.setVisible(true);
-		window.frmUrmhClient
-				.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		window.frmUrmhClient.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
+	
 	/**
 	 * Create the application.
 	 */
@@ -256,5 +258,8 @@ public class GUI
 		table.setModel(new DefaultTableModel(new Object[][] { { null, null },
 				{ null, null }, }, new String[] { "New column", "New column" }));
 		panel_1.add(table, "2, 4, 5, 1, fill, fill");
+		
+		frmUrmhClient.pack();
+		frmUrmhClient.setVisible(true);
 	}
 }

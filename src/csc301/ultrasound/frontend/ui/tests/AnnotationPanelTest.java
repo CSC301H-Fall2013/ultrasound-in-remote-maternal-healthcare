@@ -7,7 +7,6 @@ import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.awt.Robot;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 
