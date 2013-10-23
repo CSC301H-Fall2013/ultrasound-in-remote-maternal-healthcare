@@ -77,7 +77,7 @@ public class patientRecords extends Activity implements OnClickListener {
     	
     	
     	/* Iterate over all patient id's and build buttons for each patient
-    	  wiith their name as text. */
+    	  with their name as text. */
     	for(String crse: pList){
     		String[] lki = pData.get(crse);
     		Button tmp = new Button(this);
@@ -172,7 +172,10 @@ public class patientRecords extends Activity implements OnClickListener {
 			// Extract data from tokens and place in hash table.
 			String[] cseDet = crs.split(" ");
 			String[] assigns = cseDet[1].split(":");
+			
 			output.put(cseDet[0], assigns);
+			System.out.println("key: " +cseDet[0]);
+			System.out.println(assigns.length);
 		}
 		}
 		return output;
@@ -200,6 +203,9 @@ public class patientRecords extends Activity implements OnClickListener {
 			load.putExtra("Title", elements[0]);
 			load.putExtra("age", elements[1]);
 			load.putExtra("comments", elements[2]);
+			for(String a: elements){
+				System.out.println(a);
+			}
 			
 			// Launch the intent.
 			startActivity(load);

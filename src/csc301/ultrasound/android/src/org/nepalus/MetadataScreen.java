@@ -1,15 +1,22 @@
 package org.nepalus;
 
+import  com.microsoft.windowsazure.mobileservices.*;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+
+
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 
 
 
@@ -34,6 +41,19 @@ public class MetadataScreen extends Activity {
 	private EditText mPatientAge;
 	private EditText mPatientGestationAge;
 	private EditText mComments;
+	private MobileServiceClient mClient;
+	
+	//Class To represent Patients object to be added to remote database.
+	public class Patients { 
+		
+		public int Id; 
+		
+		public String FirstName;
+		public String LastName;
+		public int Age;
+		public String Gender;
+		}
+	
 	
     private NepalUltrasoundAPI api = new NepalUltrasoundSender();
 	
@@ -51,6 +71,13 @@ public class MetadataScreen extends Activity {
         mPatientGestationAge = (EditText) findViewById(R.id.patient_gestation_age);
         mComments = (EditText) findViewById(R.id.comments);
         
+        try {
+			mClient = new MobileServiceClient( "https://ultrasound.azure-mobile.net/", "uPQqAbRBcGKnSurAaFbXGKkYylpTAK93", this );
+			Toast.makeText(MetadataScreen.this, mClient.getAppKey(), Toast.LENGTH_SHORT).show();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			Toast.makeText(MetadataScreen.this, "No client connection.", Toast.LENGTH_SHORT).show();
+		} 
         
         // Get Image object from display
         ImageView thumbnail = (ImageView) findViewById(R.id.ultrasound_thumbnail);
@@ -63,22 +90,48 @@ public class MetadataScreen extends Activity {
             public void onClick(View view) {
             	//submit();
             	// Extract Patient information entered by user
+            	
+            	final Patients pat = new Patients(); 
+            	pat.FirstName = "";
+            	pat.LastName = "";
+            	pat.Gender = "F";
+    			
             	String name = mPatientName.getText().toString();
                 if(name.length() == 0){
                 	name = "NoName";
+               
+                } else{
+                	String[] tokens =  name.split(" ");
+                	
+                	pat.FirstName = tokens[0];
+                	if(tokens.length > 1){
+                		pat.LastName = name.split(" ")[1];
+                	}
                 }
                 String age = mPatientGestationAge.getText().toString();
                 if(age.length() == 0){
                 	age = "0";
+                } else{
+                	pat.Age = new Integer(age);
                 }
                 String comments = mComments.getText().toString();
                 if(comments.length() == 0){
                 	comments = "NoComments";
                 }
                 // Build string data representing patient informaiton.
-            	String data = UltrasoundImageScreen.photoID.toString() +" "+ name +":"+ age +":"+ comments +";";
+            	String data = UltrasoundImageScreen.photoID.toString() +" "+ pat.FirstName +"."+pat.LastName +":"+ age +":"+ comments +";";
             	// Write the new patient data to patient record file
-            	writeToFile(data,"patientDataU.txt");
+            	File a = getFilesDir();
+            	String path = a.getAbsolutePath();
+        		
+        		
+        		File b = new File(path +"/patientDataU.txt");
+        		if(b.exists()){
+        			writeToFile(data,"patientDataU.txt");
+        		} else{
+        			writeToFile2(data,"patientDataU.txt");
+        		}
+            	
             	// Record the last Patient Id
             	writeToFile2(UltrasoundImageScreen.photoID.toString(),"Totalrecord.txt");
             	
@@ -93,14 +146,33 @@ public class MetadataScreen extends Activity {
                 				cur = System.currentTimeMillis();
                 			}
                 			
+                			
+                			if((pat.FirstName.length() > 0) || (pat.LastName.length() > 0)){
+                				//Insert Patient Details into remote database Patients table
+                				mClient.getTable(Patients.class).insert(pat,
+                					new TableOperationCallback<Patients>() { 
+                						public void onCompleted(Patients entity, Exception exception, ServiceFilterResponse response) {
+                							if (exception == null) { 
+                								// Insertion succeeded.
+                								Toast.makeText(MetadataScreen.this, "Data sent successfully", Toast.LENGTH_SHORT).show();
+                								} else { 
+                									//Insertion Failed.
+                									Toast.makeText(MetadataScreen.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                									} } });
+                			} else{
+                				Toast.makeText(MetadataScreen.this, "Full Details not provided.", Toast.LENGTH_SHORT).show();
+                			}
+                			
                 			dialog.dismiss();
                 			//Toast.makeText(MetadataScreen.this, "Data Sent Successfully!", Toast.LENGTH_SHORT).show();
                 			Log.d("alertD", "abt to show Dialog");
                 			
+                			
+                			/* CODE TO BE USED LATER. */
                 			// Display the mock of Response from Radiologist
-                			MetadataScreen.this.runOnUiThread(new Runnable(){
+                			/*MetadataScreen.this.runOnUiThread(new Runnable(){
                         		public void run(){
-                        			Toast.makeText(mActivity, "Data Sent Successfully!", Toast.LENGTH_LONG).show();
+                        			
                                 	
                                 	AlertDialog.Builder alDialog = new AlertDialog.Builder(mActivity);
                                 	alDialog.setTitle("Response From Radiologist");
@@ -120,17 +192,13 @@ public class MetadataScreen extends Activity {
                                 	alertD.show();
                                 	
                         		}
-                        });
+                        });*/
                 			
                 		} catch (Exception e){
                 			e.printStackTrace();
                 		}
                 	}
                 }).start();
-                
-                
-                	
-                
                 
                // mActivity.moveTaskToBack(true);
                 

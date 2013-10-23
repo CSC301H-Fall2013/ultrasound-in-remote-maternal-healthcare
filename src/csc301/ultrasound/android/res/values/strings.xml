@@ -12,6 +12,9 @@
     <string name="metadata_age_label">Age</string>
     <string name="metadata_gestation_age_label">Gestation Age</string>
     <string name="metadata_comments_label">Comments</string>
+    
+    <string name="action_settings" >Settings </string>
+    
 
     <string name="image_success">Image sent!</string>
     
