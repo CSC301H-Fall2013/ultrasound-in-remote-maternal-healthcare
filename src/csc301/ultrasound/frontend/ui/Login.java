@@ -152,7 +152,7 @@ public class Login extends JFrame
 					{
 						user = new User(userName, userPw, userInfo.getType());
 						
-						System.out.printf("%s, %s, %s", user.getName(), user.getCredential(), user.getType());
+						//System.out.printf("%s, %s, %s", user.getName(), user.getCredential(), user.getType());
 						
 						dispose();
 						
