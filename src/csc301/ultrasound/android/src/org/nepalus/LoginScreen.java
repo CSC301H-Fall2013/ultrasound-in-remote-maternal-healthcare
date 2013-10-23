@@ -30,8 +30,6 @@ public class LoginScreen extends Activity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
             	// Store the name entered by the user
-            	EditText name = (EditText) findViewById(R.id.nameFill);
-            	loginName = name.getText().toString();
             	// launch the walk through activity
             	Intent i = new Intent(mContext, WalkthroughScreen.class);
             	startActivity(i);

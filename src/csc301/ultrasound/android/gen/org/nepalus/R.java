@@ -15,6 +15,10 @@ public final class R {
         public static final int label_color=0x7f050000;
     }
     public static final class dimen {
+        /**  Default screen margins, per the Android Design guidelines. 
+         */
+        public static final int activity_horizontal_margin=0x7f060006;
+        public static final int activity_vertical_margin=0x7f060007;
         public static final int metadata_textview_length=0x7f060001;
         public static final int textview_length=0x7f060000;
         public static final int thumbnail_height=0x7f060005;
@@ -29,44 +33,51 @@ public final class R {
         public static final int next=0x7f020003;
     }
     public static final class id {
-        public static final int accessRecord=0x7f080013;
-        public static final int addRecord=0x7f080012;
-        public static final int clearRecord=0x7f080014;
-        public static final int comments=0x7f080007;
-        public static final int comments2=0x7f08000d;
-        public static final int end_walkthrough=0x7f080010;
-        public static final int finish=0x7f080008;
-        public static final int finish2=0x7f08000e;
-        public static final int login_password=0x7f080001;
-        public static final int login_submit=0x7f080002;
-        public static final int nameFill=0x7f080000;
-        public static final int patient_age=0x7f080005;
-        public static final int patient_age2=0x7f08000b;
-        public static final int patient_gestation_age=0x7f080006;
-        public static final int patient_gestation_age2=0x7f08000c;
-        public static final int patient_name=0x7f080004;
-        public static final int patient_name2=0x7f08000a;
-        public static final int textView1=0x7f080011;
-        public static final int tutorial_video_view=0x7f08000f;
-        public static final int ultrasound_thumbnail=0x7f080003;
-        public static final int ultrasound_thumbnail2=0x7f080009;
+        public static final int accessRecord=0x7f0a0014;
+        public static final int action_settings=0x7f0a0016;
+        public static final int addRecord=0x7f0a0013;
+        public static final int clearRecord=0x7f0a0015;
+        public static final int comments=0x7f0a0008;
+        public static final int comments2=0x7f0a000e;
+        public static final int end_walkthrough=0x7f0a0011;
+        public static final int finish=0x7f0a0009;
+        public static final int finish2=0x7f0a000f;
+        public static final int login=0x7f0a0000;
+        public static final int login_submit=0x7f0a0003;
+        public static final int login_widget=0x7f0a0001;
+        public static final int patient_age=0x7f0a0006;
+        public static final int patient_age2=0x7f0a000c;
+        public static final int patient_gestation_age=0x7f0a0007;
+        public static final int patient_gestation_age2=0x7f0a000d;
+        public static final int patient_name=0x7f0a0005;
+        public static final int patient_name2=0x7f0a000b;
+        public static final int textView1=0x7f0a0012;
+        public static final int tutorial_video_view=0x7f0a0010;
+        public static final int ultrasound_thumbnail=0x7f0a0004;
+        public static final int ultrasound_thumbnail2=0x7f0a000a;
+        public static final int user=0x7f0a0002;
     }
     public static final class layout {
-        public static final int login=0x7f030000;
-        public static final int metadata=0x7f030001;
-        public static final int metadata2=0x7f030002;
-        public static final int ultrasoundimage=0x7f030003;
-        public static final int walkthrough=0x7f030004;
-        public static final int welcome=0x7f030005;
+        public static final int activity_main=0x7f030000;
+        public static final int login=0x7f030001;
+        public static final int metadata=0x7f030002;
+        public static final int metadata2=0x7f030003;
+        public static final int ultrasoundimage=0x7f030004;
+        public static final int walkthrough=0x7f030005;
+        public static final int welcome=0x7f030006;
+    }
+    public static final class menu {
+        public static final int main=0x7f090000;
     }
     public static final class raw {
         public static final int tutorial=0x7f040000;
     }
     public static final class string {
-        public static final int app_name=0x7f07000d;
-        public static final int finish=0x7f07000c;
+        public static final int action_settings=0x7f070009;
+        public static final int app_name=0x7f07000e;
+        public static final int finish=0x7f07000d;
         public static final int ideal_image_label=0x7f070003;
-        public static final int image_success=0x7f070009;
+        public static final int image_success=0x7f07000a;
         public static final int login_password_label=0x7f070001;
         public static final int login_username_label=0x7f070000;
         public static final int metadata_age_label=0x7f070006;
@@ -74,8 +85,25 @@ public final class R {
         public static final int metadata_gestation_age_label=0x7f070007;
         public static final int metadata_image_preview_label=0x7f070004;
         public static final int metadata_patient_name_label=0x7f070005;
-        public static final int next=0x7f07000a;
-        public static final int previous=0x7f07000b;
+        public static final int next=0x7f07000b;
+        public static final int previous=0x7f07000c;
         public static final int usage_instructions_label=0x7f070002;
+    }
+    public static final class style {
+        /** 
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    
+
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        
+         */
+        public static final int AppBaseTheme=0x7f080000;
+        /**  Application theme. 
+ All customizations that are NOT specific to a particular API-level can go here. 
+         */
+        public static final int AppTheme=0x7f080001;
     }
 }

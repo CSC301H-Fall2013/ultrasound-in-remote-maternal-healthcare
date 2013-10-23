@@ -1,5 +1,7 @@
 package org.nepalus;
 
+import  com.microsoft.windowsazure.mobileservices.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 
 
 import android.app.Activity;
@@ -18,9 +21,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 public class WelcomeScreen extends Activity {
 	Context area;
 	String lastID;
+	
+	private MobileServiceClient mClient;
 	/*
 	 * Method gets called when activity is launched.
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -32,12 +39,13 @@ public class WelcomeScreen extends Activity {
 		area = WelcomeScreen.this;
 		// Set display content
 		setContentView(R.layout.welcome);
+		
+		
+		
 		// Display the user name entered at login screen.
 		TextView userName = (TextView) findViewById(R.id.textView1);
 		String name = LoginScreen.loginName;
-		if(LoginScreen.loginName.length() > 0){
-			userName.setText("Welcome " + name + "!");
-		}
+		
 		
 		
 		
@@ -83,6 +91,8 @@ public class WelcomeScreen extends Activity {
 	}
 	
 	
+	
+	
 	 /*
 	  * Handles Access patient record button click event on Welcome menu screen.
 	  * @param View: takes in view of the button that was tapped.
@@ -91,7 +101,11 @@ public class WelcomeScreen extends Activity {
 		//Laucn Pateint record activity
 		Intent i = new Intent(area, patientRecords.class);
 		startActivity(i);
-	}
+		
+						
+					
+		}
+	
 	
 	
 	 /*
@@ -119,6 +133,8 @@ public class WelcomeScreen extends Activity {
 		}
     	
 	}
+	
+	
 	
 	/*
 	 * Read patient data from filename stored locally.
