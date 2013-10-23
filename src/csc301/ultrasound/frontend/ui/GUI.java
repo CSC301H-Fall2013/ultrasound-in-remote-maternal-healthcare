@@ -60,7 +60,7 @@ public class GUI
 			{
 				System.out.println("Done");
 				usr = loginFrame.getUser();
-				System.out.printf("DONE:%s, %s, %s", usr.getName(), usr.getCredential(), usr.getType());
+				System.out.printf("DONE:%s", usr.getName());
 				
 				// Establish a connection with the database.
 				t = new Transmission();

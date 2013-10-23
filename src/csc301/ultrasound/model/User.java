@@ -1,132 +1,82 @@
 package csc301.ultrasound.model;
 
-
 /**
- * Represents a single user. Responsible for high level functions specifically pertaining
- * to one user. Contains an instance of
- * model.Library, which is the user's library.
- * 
- * @author Katie Lo
+ * Container for a single user. Responsible for high level functions specifically pertaining
+ * to a single user.
  */
-public class User {
-	// Constructors
-	/**
-	 *User constructor. Creates a User object when supplied with an email, password and name.
-	 *
-	 * @param email		the desired email to be associated with this user
-	 * @param password	the desired password to be associated with this user
-	 * @param name		the desired name to be associated with this user
-	 */
-//	public User(String email, String password, String name) {
-//		this.email = email;
-//		this.password = password;
-//		this.name = name;
-//	}
-	/**
-	 *User constructor. Creates a User object when supplied with an email, password but no name.
-	 *
-	 * @param email		the desired email to be associated with this user
-	 * @param password	the desired password to be associated with this user
-	 */
-//	public User(String email, String password) {
-//		this.email = email;
-//		this.password = password;
-//	}
-	/**
-	 *User constructor. Creates a User object when supplied with an email, password but no name.
-	 *
-	 * @param email		the desired email to be associated with this user
-	 * @param password	the desired password to be associated with this user
-	 */
-	public User(String name, String password) {
-		this.name = name;
-		this.password = password;
-	}
-	/**
-	 *User constructor. Creates a User object when supplied with an email, password but no name.
-	 *
-	 * @param email		the desired email to be associated with this user
-	 * @param password	the desired password to be associated with this user
-	 * @param type	    the desired type to be associated with this user
-	 */
-	public User(String name, String password, int type) {
-		this.name = name;
-		this.password = password;
-		this.type = type;
-	}
-	/**
-	 *User constructor. Creates a User object when supplied with an email, but no password and name.
-	 *
-	 * @param email		the desired email to be associated with this user
-	 */
-	public User(String email) {
-		this.email = email;
-	}
-	
-	// Interface
-	/**
-	 * Check if two users have same emails associated with their accounts.
-	 * 
-	 * @param other	the other use to compare this user's email with
-	 * @return true	if the users have equal IDs, false otherwise
-	 */
-	public boolean hasEqualIds(User that) {
-		return this.email.equals(that.email);
-	}
-
-	// Getters and setters
-	/**
-	 *Getter method. Returns the email of this user.
-	 *
-	 * @return	the email associated with this user
-	 */
-	public String getId() {
-		return email;
-	}
-	/**
-	 *Getter method. Returns the password of this user.
-	 *
-	 * @return	the password associated with this user.
-	 */
-	public String getCredential() {
-		return password;
-	}
-	/**
-	 *Getter method. Returns the name of the user.
-	 *
-	 * @return	the name associated with the user.
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 *Setter method. Sets the type of the user.
-	 */
-	public void setType(int type) {
-		this.type = type;
-	}
-	
+public class User
+{
+	private String email     = "";
+	private String name      = "";
+	private String location  = "";
+	private int    phone     = -1;
+	private int    authlevel = -1;
 	
 	/**
-	 *Getter method. Gets the type of the user.
+	 * Instantiates a new user.
 	 *
-	 * @return	the type associated with the user.
+	 * @param email The email address of the registered user
+	 * @param name The name of the registered user
+	 * @param location The location of the registered user
+	 * @param phone The phone number of the registered user
+	 * @param authlevel The authentication level of the registered user
 	 */
-	public int getType() {
-		return this.type;
+	public User(String email, String name, String location, int phone, int authlevel) 
+	{
+		this.email     = email;
+		this.name      = name;
+		this.location  = location;
+		this.phone     = phone;
+		this.authlevel = authlevel;
+	}
+
+	/**
+	 * Returns the email address of the registered user.
+	 *
+	 * @return The user's email address
+	 */
+	public String getEmail()
+	{ 
+		return email; 
 	}
 	
-	// Member variables
-	private String email;
-	private String password;
-	private String name;
-	private int type;
-	private static final int SUPERUSER = 0;
-	private static final int MANAGER = 1;
-	private static final int NORMAL = 2;
-
-
-	public static void main(String[] args) {
+	/**
+	 * Returns the name of the registered user.
+	 *
+	 * @return The user's name
+	 */
+	public String getName() 
+	{ 
+		return name; 
 	}
-
+	
+	/**
+	 * Returns the location of the registered user.
+	 *
+	 * @return The user's location
+	 */
+	public String getLocation()  
+	{ 
+		return location; 
+	}
+	
+	/**
+	 * Returns the phone number of the registered user.
+	 *
+	 * @return The user's phone number
+	 */
+	public int getPhone()     
+	{ 
+		return phone; 
+	}
+	
+	/**
+	 * Returns the authorization level of the registered user.
+	 *
+	 * @return The user's authorization level
+	 */
+	public int getAuthlevel()
+	{ 
+		return authlevel; 
+	}
 }

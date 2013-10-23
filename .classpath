@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/jgoodies-common-1.6.0/jgoodies-common-1.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/jgoodies-looks-2.5.3/jgoodies-looks-2.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/jgoodies-validation-2.5.0/jgoodies-validation-2.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/google-gson-2.2.4/gson-2.2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
