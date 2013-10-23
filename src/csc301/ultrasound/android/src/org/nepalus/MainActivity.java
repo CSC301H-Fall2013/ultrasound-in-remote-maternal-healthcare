@@ -22,13 +22,23 @@ public class MainActivity extends Activity {
     static final String Connection = "Username-Password-Authentication"; //any other connection
     Context mcontext;
     public boolean result = false;
+    
+    
+    /*
+	 * Method gets called when activity is launched.
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 * @param savedInstanceState: saved instance of this activity to extract previous settings.
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        //set the content view
         setContentView(R.layout.activity_main);
         mcontext = this;
+        // Get login button from xml
         Button login = (Button) findViewById(R.id.login);
+        //Set event handler for login button
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent authActivity = new Intent(MainActivity.this,
@@ -36,14 +46,16 @@ public class MainActivity extends Activity {
 
                 AuthenticationActivitySetup setup;
                 setup = new AuthenticationActivitySetup(Tenant, ClientID, Callback, Connection);
-
+                
                 authActivity.putExtra(AuthenticationActivity.AUTHENTICATION_SETUP, setup);
-
+                // Launch authentication activity to login.
                 startActivityForResult(authActivity, AuthenticationActivity.AUTH_REQUEST_COMPLETE);
             }
         });
-
+        
+        //Get login widget button from xml.
         Button login_widget = (Button) findViewById(R.id.login_widget);
+        // Set event handler for login wdiget button.
         login_widget.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent authActivity = new Intent(MainActivity.this,
@@ -53,14 +65,21 @@ public class MainActivity extends Activity {
                 setup = new AuthenticationActivitySetup(Tenant, ClientID, Callback);
 
                 authActivity.putExtra(AuthenticationActivity.AUTHENTICATION_SETUP, setup);
-
+                
+                //Launch authentication activity to login.
                 startActivityForResult(authActivity, AuthenticationActivity.AUTH_REQUEST_COMPLETE);
             }
         });
         
         
     }
-
+    
+    /* Called when Authentication activity returns
+     * @param requestCode Flag to represent authentication request from user side.
+     * @param resultCode  Result from authenticating user with server.
+     * @param authActivityResult Resulting intent carrying data passed by authentication activity.
+     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent authActivityResult) 
     {
@@ -71,7 +90,7 @@ public class MainActivity extends Activity {
             case AuthenticationActivity.AUTH_REQUEST_COMPLETE:
                 if (resultCode==RESULT_OK)
                 {
-                	
+                	//Launch the interface on successful login.
                 	Intent i = new Intent(MainActivity.this, org.nepalus.LoginScreen.class);
                 	startActivity(i);
                 	
@@ -113,7 +132,10 @@ public class MainActivity extends Activity {
         }
     }
 
-
+    /*Create and display the menu 
+     * @param menu Instance (base) layer for menu's xml display.
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 
     {

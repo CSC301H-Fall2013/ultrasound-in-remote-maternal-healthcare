@@ -10,11 +10,13 @@ public class AuthenticationActivitySetup implements Serializable
     public String callback;
     public String connection; //Optional
 
+    /* Intialize varaibles to connect to server.*/
     public AuthenticationActivitySetup(String tenant, String clientId, String callback) 
     {
         this(tenant, clientId, callback, null);
     }
-
+    
+    /* Intialize varaibles to connect to server.*/
     public AuthenticationActivitySetup(String tenant, String clientId, String callback, String connection) 
     {
         this.tenant = tenant;
