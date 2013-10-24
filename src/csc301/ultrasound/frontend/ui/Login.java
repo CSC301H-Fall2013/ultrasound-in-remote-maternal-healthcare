@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -74,7 +75,8 @@ public class Login extends JFrame
 		JLabel pWLbl = new JLabel("Password:");
 		contentPane.add(pWLbl, "cell 4 4");
 
-		final JFormattedTextField passwordTf = new JFormattedTextField();
+		final JPasswordField passwordTf = new JPasswordField();
+		passwordTf.setActionCommand("Log in");
 		contentPane.add(passwordTf, "cell 4 5 3 1,growx");
 
 		JButton login = new JButton("Log in");
