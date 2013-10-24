@@ -1,0 +1,225 @@
+John Mather moved 18. As a fieldworker, I would like to be able to check whether or not the patient is new, so that when uploading images, I can append it to their existing history, keeping the records clean, and to gauge their condition over time. from To Do to Planned.
+a minute ago
+
+John Mather moved 9. As a manager, I want an intuitive interface so I can see event logs and information of radiologists and field workers in an organized manner. from To Do to Planned.
+a minute ago
+
+John Mather moved 19. As a fieldworker, I need to be able to receive feedback or treatment recommendations for a specific patient from the radiologists so that I can make proper treatment decisions. from To Do to Planned.
+a minute ago
+
+John Mather moved 16. As a radiologist, I want to be able to see a brief medical history of the patient such as whether or not they have had any complications before, age, weight, etc, so that I can make proper treatment decisions. from To Do to Planned.
+a minute ago
+
+John Mather added Planned to this board.
+a minute ago
+
+John Mather moved 19. As a fieldworker, I need to be able to receive feedback or treatment recommendations for a specific patient from the radiologists so that I can make proper treatment decisions. from Doing to To Do.
+a minute ago
+
+John Mather moved 9. As a manager, I want an intuitive interface so I can see event logs and information of radiologists and field workers in an organized manner. from Doing to To Do.
+a minute ago
+
+John Mather moved 18. As a fieldworker, I would like to be able to check whether or not the patient is new, so that when uploading images, I can append it to their existing history, keeping the records clean, and to gauge their condition over time. from Doing to To Do.
+a minute ago
+
+John Mather moved 16. As a radiologist, I want to be able to see a brief medical history of the patient such as whether or not they have had any complications before, age, weight, etc, so that I can make proper treatment decisions. from Doing to To Do.
+a minute ago
+
+John Mather moved 2. As a superuser, I need to be able to easily change access restrictions for every user so that I can control what information is shown to them. from Doing to Done.
+2 minutes ago
+
+John Mather moved 22. As a fieldworker, I need the patient’s information to be transmitted quickly over the network, so that I don’t have to re-send the information due to connection interruptions, which are quite frequent in remote areas of Nepal. from Doing to Done.
+2 minutes ago
+
+John Mather moved 22. As a fieldworker, I need the patient’s information to be transmitted quickly over the network, so that I don’t have to re-send the information due to connection interruptions, which are quite frequent in remote areas of Nepal. from Done to Doing.
+19 minutes ago
+
+John Mather on 2. As a superuser, I need to be able to easily change access restrictions for every user so that I can control what information is shown to them.
+    moved from Done to Doing
+    joined
+19 minutes ago
+
+Assylay Sainova moved 21. As a fieldworker, I require visual feedback from the mobile interface on my transmissions due to poor network connections in the field, so that I can be confident that the data was sent correctly. from To Do to Done.
+yesterday at 7:21 pm
+
+Assylay Sainova moved 20. As a fieldworker, I require a simple, easy to use interface in order to reduce errors and expedite the communication process. from Doing to Done.
+yesterday at 7:19 pm
+
+Katie Lo added 19. As a fieldworker, I need to be able to receive feedback or treatment recommendations for a specific patient from the radiologists so that I can make proper treatment decisions. to Doing and added g2vinay .
+yesterday at 6:28 pm
+
+Katie Lo added 19. As a fieldworker, I need to be able to receive feedback or treatment recommendations for a specific patient from the radiologists so that I can make proper treatment decisions. to Doing and archived.
+yesterday at 6:28 pm
+
+Katie Lo moved 21. As a fieldworker, I require visual feedback from the mobile interface on my transmissions due to poor network connections in the field, so that I can be confident that the data was sent correctly. from Doing to To Do.
+yesterday at 6:27 pm
+
+John Mather added g2vinay to 20. As a fieldworker, I require a simple, easy to use interface in order to reduce errors and expedite the communication process..
+Oct 18 at 7:51 pm
+
+John Mather added g2vinay to 22. As a fieldworker, I need the patient’s information to be transmitted quickly over the network, so that I don’t have to re-send the information due to connection interruptions, which are quite frequent in remote areas of Nepal..
+Oct 18 at 7:51 pm
+
+John Mather added g2vinay to 17. As a fieldworker, I would like to keep the recorded ultrasound images on the device even after uploading it to the server so that I can have a failsafe in case the data was sent incorrectly..
+Oct 18 at 7:51 pm
+
+John Mather on 2. As a superuser, I need to be able to easily change access restrictions for every user so that I can control what information is shown to them.
+    added lichao chen
+    moved from To Do to Doing
+Oct 18 at 6:43 pm
+
+John Mather on 9. As a manager, I want an intuitive interface so I can see event logs and information of radiologists and field workers in an organized manner.
+added Assylay Sainova
+    joined
+Oct 18 at 6:37 pm
+
+John Mather joined 20. As a fieldworker, I require a simple, easy to use interface in order to reduce errors and expedite the communication process..
+Oct 18 at 6:34 pm
+
+John Mather on 16. As a radiologist, I want to be able to see a brief medical history of the patient such as whether or not they have had any complications before, age, weight, etc, so that I can make proper treatment decisions.
+    added Assylay Sainova
+    added lichao chen
+    moved from To Do to Doing
+Oct 18 at 6:33 pm
+
+John Mather on 18. As a fieldworker, I would like to be able to check whether or not the patient is new, so that when uploading images, I can append it to their existing history, keeping the records clean, and to gauge their condition over time.
+    added lichao chen
+    added Tu-Anh Dinh-Le (tuanh) Tu-Anh Dinh-Le
+    moved from To Do to Doing
+Oct 18 at 6:33 pm
+
+John Mather added Tu-Anh Dinh-Le (tuanh) Tu-Anh Dinh-Le to 9. As a manager, I want an intuitive interface so I can see event logs and information of radiologists and field workers in an organized manner..
+Oct 18 at 6:31 pm
+
+John Mather added lichao chen to this board.
+Oct 18 at 6:29 pm
+
+John Mather on 9. As a manager, I want an intuitive interface so I can see event logs and information of radiologists and field workers in an organized manner.
+    added Katie Lo
+    moved from To Do to Doing
+Oct 18 at 6:24 pm
+
+John Mather on 22. As a fieldworker, I need the patient’s information to be transmitted quickly over the network, so that I don’t have to re-send the information due to connection interruptions, which are quite frequent in remote areas of Nepal.
+    joined
+    moved from To Do to Doing
+Oct 18 at 6:23 pm
+
+John Mather moved 20. As a fieldworker, I require a simple, easy to use interface in order to reduce errors and expedite the communication process. from To Do to Doing.
+Oct 18 at 6:20 pm
+
+John Mather joined 13. As a radiologist, I require a simple method to annotate patient’s ultrasound images with basic imaging tools so that the treatment options specified are unambiguous and clearly visible to the field worker..
+Oct 18 at 6:14 pm
+
+John Mather joined 3. As a superuser, I need a lightweight and fast method of data transfer, so our organization can cut down on costs and increase efficiency..
+Oct 18 at 6:14 pm
+
+John Mather joined 1. As a superuser, I require a secure environment in which data will be transmitted in order to protect patient data from mistakes and prying eyes..
+Oct 18 at 6:13 pm
+
+Katie Lo deleted card #24 from Planning poker.
+Oct 15 at 6:21 pm
+
+Katie Lo added Katie Lo: to Planning poker.
+Oct 15 at 6:19 pm
+
+Katie Lo added Planning poker to this board.
+Oct 15 at 6:19 pm
+
+John Mather added Tu-Anh Dinh-Le (tuanh) Tu-Anh Dinh-Le to this board.
+Oct 13 at 1:29 am
+
+John Mather added Katie Lo to this board.
+Oct 13 at 1:29 am
+
+John Mather added g2vinay to this board.
+Oct 12 at 2:28 pm
+
+John Mather added Assylay Sainova to this board.
+Oct 12 at 2:28 pm
+
+John Mather moved 17. As a fieldworker, I would like to keep the recorded ultrasound images on the device even after uploading it to the server so that I can have a failsafe in case the data was sent incorrectly. from To Do to Done.
+Oct 12 at 9:41 am
+
+John Mather moved 13. As a radiologist, I require a simple method to annotate patient’s ultrasound images with basic imaging tools so that the treatment options specified are unambiguous and clearly visible to the field worker. from To Do to Done.
+Oct 12 at 9:41 am
+
+John Mather moved 3. As a superuser, I need a lightweight and fast method of data transfer, so our organization can cut down on costs and increase efficiency. from To Do to Done.
+Oct 12 at 9:40 am
+
+John Mather moved 1. As a superuser, I require a secure environment in which data will be transmitted in order to protect patient data from mistakes and prying eyes. from To Do to Done.
+Oct 12 at 9:40 am
+
+John Mather added As a fieldworker, I need the patient’s information to be transmitted quickly over the network, so that I don’t have to re-send the information due to connection interruptions, which are quite frequent in remote areas of Nepal. to To Do.
+Oct 12 at 9:36 am
+
+John Mather added As a superuser, I need to be able to easily change access restrictions for every user so that I can control what information is shown to them. to To Do.
+Oct 12 at 9:30 am
+
+John Mather added As a fieldworker, I require visual feedback from the mobile interface on my transmissions due to poor network connections in the field, so that I can be confident that the data was sent correctly. to To Do.
+Oct 12 at 9:35 am
+
+John Mather added As a fieldworker, I require a simple, easy to use interface in order to reduce errors and expedite the communication process. to To Do.
+Oct 12 at 9:35 am
+
+John Mather added As a fieldworker, I need to be able to receive feedback or treatment recommendations for a specific patient from the radiologists so that I can make proper treatment decisions. to To Do.
+Oct 12 at 9:35 am
+
+John Mather added As a fieldworker, I would like to be able to check whether or not the patient is new, so that when uploading images, I can append it to their existing history, keeping the records clean, and to gauge their condition over time. to To Do.
+Oct 12 at 9:35 am
+
+John Mather added As a fieldworker, I would like to keep the recorded ultrasound images on the device even after uploading it to the server so that I can have a failsafe in case the data was sent incorrectly. to To Do.
+Oct 12 at 9:35 am
+
+John Mather added As a radiologist, I want to be able to see a brief medical history of the patient such as whether or not they have had any complications before, age, weight, etc, so that I can make proper treatment decisions. to To Do.
+Oct 12 at 9:34 am
+
+John Mather added As a radiologist, I want to be able to access and list all the diagnosis done by me, so that I can follow up with the patient’s medical condition, if need be. to To Do.
+Oct 12 at 9:34 am
+
+John Mather added As a radiologist, I need to be able to communicate with the field worker, so that any queries, issues or misunderstandings related to patient’s diagnosis can be answered quickly. to To Do.
+Oct 12 at 9:34 am
+
+John Mather added As a radiologist, I require a simple method to annotate patient’s ultrasound images with basic imaging tools so that the treatment options specified are unambiguous and clearly visible to the field worker. to To Do.
+Oct 12 at 9:34 am
+
+John Mather added As a radiologist, I want to be able to filter patient information so that I can quickly find and review patient information. to To Do.
+Oct 12 at 9:34 am
+
+John Mather added As a manager, I require a way to check if the field worker has received the diagnosis, so that we measure the effectiveness of our system. to To Do.
+Oct 12 at 9:33 am
+
+John Mather added As a manager, I want a convenient way to leave messages for other radiologists so I have a way of communicating with them. to To Do.
+Oct 12 at 9:33 am
+
+John Mather added As a manager, I want an intuitive interface so I can see event logs and information of radiologists and field workers in an organized manner. to To Do.
+Oct 12 at 9:33 am
+
+John Mather added As a manager, I require a way to approve diagnosis to be sent to the field, so that every patient case is reviewed by at least two people. to To Do.
+Oct 12 at 9:33 am
+
+John Mather added As a manager, I require a method to be able to track changes in the system in order to asses the effectiveness of the team. to To Do.
+Oct 12 at 9:33 am
+
+John Mather added As a manager, I want to be able to resolve potential conflicting comments of radiologists on a patient’s information so that a clear consensus regarding the patient can be forwarded to the fieldworkers. to To Do.
+Oct 12 at 9:31 am
+
+John Mather added As a manager, I would like to have a way for multiple radiologists to comment on a single patient’s ultrasound, so that there can be a consensus on the treatment options. to To Do.
+Oct 12 at 9:31 am
+
+John Mather added As a superuser, I would like to be able to query the database using SQL so that I can build custom reports, without having to modify the source code. to To Do.
+Oct 12 at 9:31 am
+
+John Mather added As a superuser, I need a lightweight and fast method of data transfer, so our organization can cut down on costs and increase efficiency. to To Do.
+Oct 12 at 9:31 am
+
+John Mather added As a superuser, I need to be able to easily change access restrictions for every user so that I can control what information is shown to them. to To Do.
+Oct 12 at 9:30 am
+
+John Mather added As a superuser, I require a secure environment in which data will be transmitted in order to protect patient data from mistakes and prying eyes. to To Do and moved from To Do to Done.
+Oct 12 at 9:29 am
+
+John Mather added this board to Team Erie.
+Oct 12 at 9:27 am
+
+John Mather created this board.
+Oct 12 at 9:27 am
