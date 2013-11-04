@@ -1,7 +1,0 @@
-*.class
-.project
-.classpath
-bin/
-*.db
-.DS_STORE
-
