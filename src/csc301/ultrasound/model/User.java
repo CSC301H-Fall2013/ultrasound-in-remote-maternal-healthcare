@@ -23,6 +23,7 @@ public class User
 	 */
 	public User(String email, String name, String location, int phone, int authlevel) 
 	{
+		// Todo: Check for valid email, phone number and authlevel
 		this.email     = email;
 		this.name      = name;
 		this.location  = location;

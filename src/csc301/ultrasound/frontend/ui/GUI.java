@@ -1,5 +1,7 @@
 package csc301.ultrasound.frontend.ui;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.awt.EventQueue;
 
 import net.miginfocom.swing.MigLayout;
@@ -12,6 +14,7 @@ import javax.swing.GroupLayout.Alignment;
 import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.table.DefaultTableModel;
 
+import csc301.ultrasound.global.Authentication;
 import csc301.ultrasound.global.Transmission;
 import csc301.ultrasound.model.*;
 
