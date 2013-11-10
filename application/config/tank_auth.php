@@ -40,10 +40,10 @@ $config['phpass_hash_strength'] = 8;
 |--------------------------------------------------------------------------
 */
 $config['allow_registration'] = TRUE;
-$config['captcha_registration'] = TRUE;
-$config['email_activation'] = TRUE;
+$config['captcha_registration'] = FALSE;
+$config['email_activation'] = FALSE;
 $config['email_activation_expire'] = 60*60*24*2;
-$config['email_account_details'] = TRUE;
+$config['email_account_details'] = FALSE;
 $config['use_username'] = TRUE;
 
 $config['username_min_length'] = 4;
@@ -73,7 +73,7 @@ $config['login_by_email'] = FALSE;
 $config['login_record_ip'] = TRUE;
 $config['login_record_time'] = TRUE;
 $config['login_count_attempts'] = TRUE;
-$config['login_max_attempts'] = 5;
+$config['login_max_attempts'] = 3;
 $config['login_attempt_expire'] = 60*60*24;
 
 /*
@@ -116,7 +116,7 @@ $config['captcha_height'] = 50;
 $config['captcha_font_size'] = 14;
 $config['captcha_grid'] = FALSE;
 $config['captcha_expire'] = 180;
-$config['captcha_case_sensitive'] = TRUE;
+$config['captcha_case_sensitive'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
