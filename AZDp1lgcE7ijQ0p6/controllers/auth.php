@@ -99,7 +99,7 @@ class Auth extends CI_Controller {
 			$this->data['password'] = array('name' => 'password',
 				'id' => 'password',
 				'type' => 'password',
-			);*/
+			);
 			
 		
 			$this->load->view('auth/login', $this->data);
