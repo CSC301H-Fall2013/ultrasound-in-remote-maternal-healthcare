@@ -911,6 +911,8 @@ class Ion_auth_model extends CI_Model
 
 			$password = $this->hash_password_db($user->id, $password);
 
+            echo $password;
+            
 			if ($password === TRUE)
 			{
 				if ($user->active == 0)
@@ -941,13 +943,11 @@ class Ion_auth_model extends CI_Model
 
 		//Hash something anyway, just to take up time
 		$this->hash_password($password);
-        
-        echo $this->hash_password($password);
 
-		//$this->increase_login_attempts($identity);
+		$this->increase_login_attempts($identity);
 
-		//$this->trigger_events('post_login_unsuccessful');
-		//$this->set_error('login_unsuccessful');
+		$this->trigger_events('post_login_unsuccessful');
+		$this->set_error('login_unsuccessful');
 
 		return FALSE;
 	}
