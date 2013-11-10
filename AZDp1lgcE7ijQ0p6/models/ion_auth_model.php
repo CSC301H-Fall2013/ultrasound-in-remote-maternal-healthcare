@@ -320,6 +320,8 @@ class Ion_auth_model extends CI_Model
 		// bcrypt
 		if ($use_sha1_override === FALSE && $this->hash_method == 'bcrypt')
 		{
+            echo $password;
+            
 			if ($this->bcrypt->verify($password,$hash_password_db->password))
 			{
 				return TRUE;
