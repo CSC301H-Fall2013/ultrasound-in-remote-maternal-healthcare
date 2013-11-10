@@ -56,7 +56,7 @@ if (defined('ENVIRONMENT'))
  * as this file.
  *
  */
-	$system_path = 's276pa8y8i1m91aM';
+	$system_path = 'system';
 
 /*
  *---------------------------------------------------------------
@@ -72,7 +72,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = 'AZDp1lgcE7ijQ0p6';
+	$application_folder = 'application';
 
 /*
  * --------------------------------------------------------------------
