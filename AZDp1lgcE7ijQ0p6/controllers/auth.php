@@ -232,7 +232,7 @@ class Auth extends CI_Controller {
 			}
 			else
 			{
-				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				//$this->session->set_flashdata('message', $this->ion_auth->errors());
 				redirect("auth/forgot_password", 'refresh');
 			}
 			
