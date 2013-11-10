@@ -60,7 +60,7 @@ class Auth extends CI_Controller {
 		$this->data['title'] = "Login";
 	
 		//validate form input
-		/*$this->form_validation->set_rules('identity', 'Identity', 'required');
+		$this->form_validation->set_rules('identity', 'Identity', 'required');
 		$this->form_validation->set_rules('password', 'Password', 'required');
 
 		if ($this->form_validation->run() == true)
@@ -71,12 +71,12 @@ class Auth extends CI_Controller {
 			$remember = (bool) $this->input->post('remember');
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
-			{*/
+			{
 				//if the login is successful
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				redirect('/', 'refresh');
-			/*}
+			}
 			else
 			{
 				//if the login was un-successful
@@ -104,7 +104,7 @@ class Auth extends CI_Controller {
 		
 			$this->load->view('auth/login', $this->data);
 			
-		}*/
+		}
 	}
 
 	//log the user out
