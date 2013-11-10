@@ -102,7 +102,7 @@ class Auth extends CI_Controller {
 			);
 			
 		
-			$this->load->view('auth/login', $this->data);
+			$this->_render_page('auth/login', $this->data);
 			
 		}
 	}
