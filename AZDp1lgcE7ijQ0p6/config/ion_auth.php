@@ -66,7 +66,7 @@ $config['join']['groups'] = 'group_id';
  | Becareful how high you set max_rounds, I would do your own testing on how long it takes
  | to encrypt with x rounds.
  */
-$config['hash_method']    = 'bcrypt';	// IMPORTANT: Make sure this is set to either sha1 or bcrypt
+$config['hash_method']    = 'sha1';	// IMPORTANT: Make sure this is set to either sha1 or bcrypt
 $config['default_rounds'] = 8;          // This does not apply if random_rounds is set to true
 $config['random_rounds']  = FALSE;
 $config['min_rounds']     = 5;
