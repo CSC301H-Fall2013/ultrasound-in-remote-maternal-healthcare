@@ -302,6 +302,9 @@ class Ion_auth_model extends CI_Model
 		{
 			return FALSE;
 		}
+        
+        
+        print 'hi!';
 
 		$this->trigger_events('extra_where');
 
@@ -320,10 +323,6 @@ class Ion_auth_model extends CI_Model
 		// bcrypt
 		if ($use_sha1_override === FALSE && $this->hash_method == 'bcrypt')
 		{
-            print '<script type="text/javascript">';
-            print 'alert("Password '. $password.' p")';
-            print '</script>'; 
-            
 			if ($this->bcrypt->verify($password,$hash_password_db->password))
 			{
 				return TRUE;
