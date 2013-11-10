@@ -70,7 +70,7 @@ class Auth extends CI_Controller {
 			echo "true";
 			$remember = (bool) $this->input->post('remember');
 
-			/f ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
+			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
 			{
 				//if the login is successful
 				//redirect them back to the home page
@@ -101,7 +101,7 @@ class Auth extends CI_Controller {
 		//		'type' => 'password',
 		//	);
 		
-			$this->load->view('welcome_message');
+			$this->load->view('auth/login');
 			
 		}
 	}
