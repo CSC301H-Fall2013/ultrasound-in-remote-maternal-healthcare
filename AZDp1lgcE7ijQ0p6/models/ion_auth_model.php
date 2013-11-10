@@ -907,15 +907,12 @@ class Ion_auth_model extends CI_Model
 
 		if ($query->num_rows() === 1)
 		{
-            print 'Queried';
 			$user = $query->row();
 
 			$password = $this->hash_password_db($user->id, $password);
-            echo $password;
-            
+
 			if ($password === TRUE)
 			{
-                print 'Matched';
 				if ($user->active == 0)
 				{
 					$this->trigger_events('post_login_unsuccessful');
