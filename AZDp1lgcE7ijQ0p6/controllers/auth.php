@@ -226,15 +226,17 @@ class Auth extends CI_Controller {
 			
 			if ($forgotten)
 			{
+				echo "No Error with forgotten method";
 				//if there were no errors
-				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				redirect("auth/login", 'refresh'); //we should display a confirmation page here instead of the login page
+				//$this->session->set_flashdata('message', $this->ion_auth->messages());
+				//redirect("auth/login", 'refresh'); //we should display a confirmation page here instead of the login page
 			}
 			else
 			{
-				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				//$this->session->set_flashdata('message', $this->ion_auth->errors());
 				//redirect("auth/forgot_password", 'refresh');
-				$this->load->view('auth/forgot_password');
+				//$this->load->view('auth/forgot_password');
+				echo "Error with forgotten method";
 			}
 			
 		}
