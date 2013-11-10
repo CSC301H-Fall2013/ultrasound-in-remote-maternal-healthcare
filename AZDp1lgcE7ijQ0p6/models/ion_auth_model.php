@@ -308,7 +308,7 @@ class Ion_auth_model extends CI_Model
 		$query = $this->db->select('password, salt')
 		                  ->where('id', $id)
 		                  ->limit(1)
-		                  ->get($this->tables['users']);
+		                  ->get($this->tables['ultrasound.users']);
 
 		$hash_password_db = $query->row();
 
@@ -396,7 +396,7 @@ class Ion_auth_model extends CI_Model
 			$query = $this->db->select($this->identity_column)
 			                  ->where('activation_code', $code)
 			                  ->limit(1)
-			                  ->get($this->tables['users']);
+			                  ->get($this->tables['ultrasound.users']);
 
 			$result = $query->row();
 
@@ -415,7 +415,7 @@ class Ion_auth_model extends CI_Model
 			);
 
 			$this->trigger_events('extra_where');
-			$this->db->update($this->tables['users'], $data, array($this->identity_column => $identity));
+			$this->db->update($this->tables['ultrasound.users'], $data, array($this->identity_column => $identity));
 		}
 		else
 		{
@@ -426,7 +426,7 @@ class Ion_auth_model extends CI_Model
 
 
 			$this->trigger_events('extra_where');
-			$this->db->update($this->tables['users'], $data, array('id' => $id));
+			$this->db->update($this->tables['ultrasound.users'], $data, array('id' => $id));
 		}
 
 
@@ -472,7 +472,7 @@ class Ion_auth_model extends CI_Model
 		);
 
 		$this->trigger_events('extra_where');
-		$this->db->update($this->tables['users'], $data, array('id' => $id));
+		$this->db->update($this->tables['ultrasound.users'], $data, array('id' => $id));
 
 		$return = $this->db->affected_rows() == 1;
 		if ($return)
@@ -492,14 +492,14 @@ class Ion_auth_model extends CI_Model
 
 		$this->db->where('forgotten_password_code', $code);
 
-		if ($this->db->count_all_results($this->tables['users']) > 0)
+		if ($this->db->count_all_results($this->tables['ultrasound.users']) > 0)
 		{
 			$data = array(
 			    'forgotten_password_code' => NULL,
 			    'forgotten_password_time' => NULL
 			);
 
-			$this->db->update($this->tables['users'], $data, array('forgotten_password_code' => $code));
+			$this->db->update($this->tables['ultrasound.users'], $data, array('forgotten_password_code' => $code));
 
 			return TRUE;
 		}
@@ -526,7 +526,7 @@ class Ion_auth_model extends CI_Model
 		$query = $this->db->select('id, password, salt')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
-		                  ->get($this->tables['users']);
+		                  ->get($this->tables['ultrasound.users']);
 
 		if ($query->num_rows() !== 1)
 		{
@@ -549,7 +549,7 @@ class Ion_auth_model extends CI_Model
 		);
 
 		$this->trigger_events('extra_where');
-		$this->db->update($this->tables['users'], $data, array($this->identity_column => $identity));
+		$this->db->update($this->tables['ultrasound.users'], $data, array($this->identity_column => $identity));
 
 		$return = $this->db->affected_rows() == 1;
 		if ($return)
@@ -581,7 +581,7 @@ class Ion_auth_model extends CI_Model
 		$query = $this->db->select('id, password, salt')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
-		                  ->get($this->tables['users']);
+		                  ->get($this->tables['ultrasound.users']);
 
 		if ($query->num_rows() !== 1)
 		{
@@ -605,7 +605,7 @@ class Ion_auth_model extends CI_Model
 
 			$this->trigger_events('extra_where');
 
-			$successfully_changed_password_in_db = $this->db->update($this->tables['users'], $data, array($this->identity_column => $identity));
+			$successfully_changed_password_in_db = $this->db->update($this->tables['ultrasound.users'], $data, array($this->identity_column => $identity));
 			if ($successfully_changed_password_in_db)
 			{
 				$this->trigger_events(array('post_change_password', 'post_change_password_successful'));
@@ -642,7 +642,7 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('extra_where');
 
 		return $this->db->where('username', $username)
-		                ->count_all_results($this->tables['users']) > 0;
+		                ->count_all_results($this->tables['ultrasound.users']) > 0;
 	}
 
 	/**
@@ -663,7 +663,7 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('extra_where');
 
 		return $this->db->where('email', $email)
-		                ->count_all_results($this->tables['users']) > 0;
+		                ->count_all_results($this->tables['ultrasound.users']) > 0;
 	}
 
 	/**
@@ -682,7 +682,7 @@ class Ion_auth_model extends CI_Model
 		}
 
 		return $this->db->where($this->identity_column, $identity)
-		                ->count_all_results($this->tables['users']) > 0;
+		                ->count_all_results($this->tables['ultrasound.users']) > 0;
 	}
 
 	/**
@@ -722,7 +722,7 @@ class Ion_auth_model extends CI_Model
 		    'forgotten_password_time' => time()
 		);
 
-		$this->db->update($this->tables['users'], $update, array($this->identity_column => $identity));
+		$this->db->update($this->tables['ultrasound.users'], $update, array($this->identity_column => $identity));
 
 		$return = $this->db->affected_rows() == 1;
 
@@ -773,7 +773,7 @@ class Ion_auth_model extends CI_Model
 			    'active'                  => 1,
 			 );
 
-			$this->db->update($this->tables['users'], $data, array('forgotten_password_code' => $code));
+			$this->db->update($this->tables['ultrasound.users'], $data, array('forgotten_password_code' => $code));
 
 			$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_successful'));
 			return $password;
@@ -842,11 +842,11 @@ class Ion_auth_model extends CI_Model
 
 		//filter out any data passed that doesnt have a matching column in the users table
 		//and merge the set user data and the additional data
-		$user_data = array_merge($this->_filter_data($this->tables['users'], $additional_data), $data);
+		$user_data = array_merge($this->_filter_data($this->tables['ultrasound.users'], $additional_data), $data);
 
 		$this->trigger_events('extra_set');
 
-		$this->db->insert($this->tables['users'], $user_data);
+		$this->db->insert($this->tables['ultrasound.users'], $user_data);
 
 		$id = $this->db->insert_id();
 
@@ -892,7 +892,7 @@ class Ion_auth_model extends CI_Model
 		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, last_login')
 		                  ->where($this->identity_column, $this->db->escape_str($identity))
 		                  ->limit(1)
-		                  ->get($this->tables['users']);
+		                  ->get($this->tables['ultrasound.users']);
 
 		if($this->is_time_locked_out($identity))
 		{
@@ -982,7 +982,7 @@ class Ion_auth_model extends CI_Model
             $this->db->select('1', FALSE);
             if ($this->config->item('track_login_ip_address', 'ion_auth')) $this->db->where('ip_address', $ip_address);
             else if (strlen($identity) > 0) $this->db->or_where('login', $identity);
-            $qres = $this->db->get($this->tables['login_attempts']);
+            $qres = $this->db->get($this->tables['ultrasound.login_attempts']);
             return $qres->num_rows();
         }
         return 0;
@@ -1012,7 +1012,7 @@ class Ion_auth_model extends CI_Model
 			$this->db->select_max('time');
             if ($this->config->item('track_login_ip_address', 'ion_auth')) $this->db->where('ip_address', $ip_address);
 			else if (strlen($identity) > 0) $this->db->or_where('login', $identity);
-			$qres = $this->db->get($this->tables['login_attempts'], 1);
+			$qres = $this->db->get($this->tables['ultrasound.login_attempts'], 1);
 
 			if($qres->num_rows() > 0) {
 				return $qres->row()->time;
@@ -1031,7 +1031,7 @@ class Ion_auth_model extends CI_Model
 	public function increase_login_attempts($identity) {
 		if ($this->config->item('track_login_attempts', 'ion_auth')) {
 			$ip_address = $this->_prepare_ip($this->input->ip_address());
-			return $this->db->insert($this->tables['login_attempts'], array('ip_address' => $ip_address, 'login' => $identity, 'time' => time()));
+			return $this->db->insert($this->tables['ultrasound.login_attempts'], array('ip_address' => $ip_address, 'login' => $identity, 'time' => time()));
 		}
 		return FALSE;
 	}
@@ -1050,7 +1050,7 @@ class Ion_auth_model extends CI_Model
 			// Purge obsolete login attempts
 			$this->db->or_where('time <', time() - $expire_period, FALSE);
 
-			return $this->db->delete($this->tables['login_attempts']);
+			return $this->db->delete($this->tables['ultrasound.login_attempts']);
 		}
 		return FALSE;
 	}
@@ -1191,9 +1191,9 @@ class Ion_auth_model extends CI_Model
 		{
 			//default selects
 			$this->db->select(array(
-			    $this->tables['users'].'.*',
-			    $this->tables['users'].'.id as id',
-			    $this->tables['users'].'.id as user_id'
+			    $this->tables['ultrasound.users'].'.*',
+			    $this->tables['ultrasound.users'].'.id as id',
+			    $this->tables['ultrasound.users'].'.id as user_id'
 			));
 		}
 
@@ -1211,12 +1211,12 @@ class Ion_auth_model extends CI_Model
 			{
 				$this->db->distinct();
 				$this->db->join(
-				    $this->tables['users_groups'],
-				    $this->tables['users_groups'].'.'.$this->join['users'].'='.$this->tables['users'].'.id',
+				    $this->tables['ultrasound.users_groups'],
+				    $this->tables['ultrasound.users_groups'].'.'.$this->join['ultrasound.users'].'='.$this->tables['ultrasound.users'].'.id',
 				    'inner'
 				);
 
-				$this->db->where_in($this->tables['users_groups'].'.'.$this->join['groups'], $groups);
+				$this->db->where_in($this->tables['ultrasound.users_groups'].'.'.$this->join['ultrasound.groups'], $groups);
 			}
 		}
 
@@ -1266,7 +1266,7 @@ class Ion_auth_model extends CI_Model
 			$this->_ion_order_by = NULL;
 		}
 
-		$this->response = $this->db->get($this->tables['users']);
+		$this->response = $this->db->get($this->tables['ultrasound.users']);
 
 		return $this;
 	}
@@ -1285,7 +1285,7 @@ class Ion_auth_model extends CI_Model
 		$id || $id = $this->session->userdata('user_id');
 
 		$this->limit(1);
-		$this->where($this->tables['users'].'.id', $id);
+		$this->where($this->tables['ultrasound.users'].'.id', $id);
 
 		$this->users();
 
@@ -1305,10 +1305,10 @@ class Ion_auth_model extends CI_Model
 		//if no id was passed use the current users id
 		$id || $id = $this->session->userdata('user_id');
 
-		return $this->db->select($this->tables['users_groups'].'.'.$this->join['groups'].' as id, '.$this->tables['groups'].'.name, '.$this->tables['groups'].'.description')
-		                ->where($this->tables['users_groups'].'.'.$this->join['users'], $id)
-		                ->join($this->tables['groups'], $this->tables['users_groups'].'.'.$this->join['groups'].'='.$this->tables['groups'].'.id')
-		                ->get($this->tables['users_groups']);
+		return $this->db->select($this->tables['ultrasound.users_groups'].'.'.$this->join['ultrasound.groups'].' as id, '.$this->tables['ultrasound.groups'].'.name, '.$this->tables['ultrasound.groups'].'.description')
+		                ->where($this->tables['ultrasound.users_groups'].'.'.$this->join['ultrasound.users'], $id)
+		                ->join($this->tables['ultrasound.groups'], $this->tables['ultrasound.users_groups'].'.'.$this->join['ultrasound.groups'].'='.$this->tables['ultrasound.groups'].'.id')
+		                ->get($this->tables['ultrasound.users_groups']);
 	}
 
 	/**
@@ -1325,9 +1325,9 @@ class Ion_auth_model extends CI_Model
 		$user_id || $user_id = $this->session->userdata('user_id');
 
 		//check if unique - num_rows() > 0 means row found
-		if ($this->db->where(array( $this->join['groups'] => (int)$group_id, $this->join['users'] => (int)$user_id))->get($this->tables['users_groups'])->num_rows()) return false;
+		if ($this->db->where(array( $this->join['ultrasound.groups'] => (int)$group_id, $this->join['ultrasound.users'] => (int)$user_id))->get($this->tables['ultrasound.users_groups'])->num_rows()) return false;
 
-		if ($return = $this->db->insert($this->tables['users_groups'], array( $this->join['groups'] => (int)$group_id, $this->join['users'] => (int)$user_id)))
+		if ($return = $this->db->insert($this->tables['ultrasound.users_groups'], array( $this->join['ultrasound.groups'] => (int)$group_id, $this->join['ultrasound.users'] => (int)$user_id)))
 		{
 			if (isset($this->_cache_groups[$group_id])) {
 				$group_name = $this->_cache_groups[$group_id];
@@ -1368,7 +1368,7 @@ class Ion_auth_model extends CI_Model
 
 			foreach($group_ids as $group_id)
 			{
-				$this->db->delete($this->tables['users_groups'], array($this->join['groups'] => (int)$group_id, $this->join['users'] => (int)$user_id));
+				$this->db->delete($this->tables['ultrasound.users_groups'], array($this->join['ultrasound.groups'] => (int)$group_id, $this->join['ultrasound.users'] => (int)$user_id));
 				if (isset($this->_cache_user_in_group[$user_id]) && isset($this->_cache_user_in_group[$user_id][$group_id]))
 				{
 					unset($this->_cache_user_in_group[$user_id][$group_id]);
@@ -1380,7 +1380,7 @@ class Ion_auth_model extends CI_Model
 		// otherwise remove user from all groups
 		else
 		{
-			if ($return = $this->db->delete($this->tables['users_groups'], array($this->join['users'] => (int)$user_id))) {
+			if ($return = $this->db->delete($this->tables['ultrasound.users_groups'], array($this->join['ultrasound.users'] => (int)$user_id))) {
 				$this->_cache_user_in_group[$user_id] = array();
 			}
 		}
@@ -1427,7 +1427,7 @@ class Ion_auth_model extends CI_Model
 			$this->db->order_by($this->_ion_order_by, $this->_ion_order);
 		}
 
-		$this->response = $this->db->get($this->tables['groups']);
+		$this->response = $this->db->get($this->tables['ultrasound.groups']);
 
 		return $this;
 	}
@@ -1444,7 +1444,7 @@ class Ion_auth_model extends CI_Model
 
 		if (isset($id))
 		{
-			$this->db->where($this->tables['groups'].'.id', $id);
+			$this->db->where($this->tables['ultrasound.groups'].'.id', $id);
 		}
 
 		$this->limit(1);
@@ -1478,7 +1478,7 @@ class Ion_auth_model extends CI_Model
 		}
 
 		// Filter the data passed
-		$data = $this->_filter_data($this->tables['users'], $data);
+		$data = $this->_filter_data($this->tables['ultrasound.users'], $data);
 
 		if (array_key_exists('username', $data) || array_key_exists('password', $data) || array_key_exists('email', $data))
 		{
@@ -1497,7 +1497,7 @@ class Ion_auth_model extends CI_Model
 		}
 
 		$this->trigger_events('extra_where');
-		$this->db->update($this->tables['users'], $data, array('id' => $user->id));
+		$this->db->update($this->tables['ultrasound.users'], $data, array('id' => $user->id));
 
 		if ($this->db->trans_status() === FALSE)
 		{
@@ -1531,7 +1531,7 @@ class Ion_auth_model extends CI_Model
 		$this->remove_from_group(NULL, $id);
 
 		// delete user from users table should be placed after remove from group
-		$this->db->delete($this->tables['users'], array('id' => $id));
+		$this->db->delete($this->tables['ultrasound.users'], array('id' => $id));
 
 		// if user does not exist in database then it returns FALSE else removes the user from groups
 		if ($this->db->affected_rows() == 0)
@@ -1568,7 +1568,7 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$this->db->update($this->tables['users'], array('last_login' => time()), array('id' => $id));
+		$this->db->update($this->tables['ultrasound.users'], array('last_login' => time()), array('id' => $id));
 
 		return $this->db->affected_rows() == 1;
 	}
@@ -1648,7 +1648,7 @@ class Ion_auth_model extends CI_Model
 
 		$salt = sha1($user->password);
 
-		$this->db->update($this->tables['users'], array('remember_code' => $salt), array('id' => $id));
+		$this->db->update($this->tables['ultrasound.users'], array('remember_code' => $salt), array('id' => $id));
 
 		if ($this->db->affected_rows() > -1)
 		{
@@ -1706,7 +1706,7 @@ class Ion_auth_model extends CI_Model
 		                  ->where($this->identity_column, get_cookie('identity'))
 		                  ->where('remember_code', get_cookie('remember_code'))
 		                  ->limit(1)
-		                  ->get($this->tables['users']);
+		                  ->get($this->tables['ultrasound.users']);
 
 		//if the user was found, sign them in
 		if ($query->num_rows() == 1)
@@ -1747,7 +1747,7 @@ class Ion_auth_model extends CI_Model
 		}
 
 		// bail if the group name already exists
-		$existing_group = $this->db->get_where($this->tables['groups'], array('name' => $group_name))->num_rows();
+		$existing_group = $this->db->get_where($this->tables['ultrasound.groups'], array('name' => $group_name))->num_rows();
 		if($existing_group !== 0)
 		{
 			$this->set_error('group_already_exists');
@@ -1758,12 +1758,12 @@ class Ion_auth_model extends CI_Model
 
 		//filter out any data passed that doesnt have a matching column in the groups table
 		//and merge the set group data and the additional data
-		if (!empty($additional_data)) $data = array_merge($this->_filter_data($this->tables['groups'], $additional_data), $data);
+		if (!empty($additional_data)) $data = array_merge($this->_filter_data($this->tables['ultrasound.groups'], $additional_data), $data);
 
 		$this->trigger_events('extra_group_set');
 
 		// insert the new group
-		$this->db->insert($this->tables['groups'], $data);
+		$this->db->insert($this->tables['ultrasound.groups'], $data);
 		$group_id = $this->db->insert_id();
 
 		// report success
@@ -1789,7 +1789,7 @@ class Ion_auth_model extends CI_Model
 			// we are changing the name, so do some checks
 
 			// bail if the group name already exists
-			$existing_group = $this->db->get_where($this->tables['groups'], array('name' => $group_name))->row();
+			$existing_group = $this->db->get_where($this->tables['ultrasound.groups'], array('name' => $group_name))->row();
 			if(isset($existing_group->id) && $existing_group->id != $group_id)
 			{
 				$this->set_error('group_already_exists');
@@ -1807,10 +1807,10 @@ class Ion_auth_model extends CI_Model
 
 		//filter out any data passed that doesnt have a matching column in the groups table
 		//and merge the set group data and the additional data
-		if (!empty($additional_data)) $data = array_merge($this->_filter_data($this->tables['groups'], $additional_data), $data);
+		if (!empty($additional_data)) $data = array_merge($this->_filter_data($this->tables['ultrasound.groups'], $additional_data), $data);
 
 
-		$this->db->update($this->tables['groups'], $data, array('id' => $group_id));
+		$this->db->update($this->tables['ultrasound.groups'], $data, array('id' => $group_id));
 
 		$this->set_message('group_update_successful');
 
@@ -1836,9 +1836,9 @@ class Ion_auth_model extends CI_Model
 		$this->db->trans_begin();
 
 		// remove all users from this group
-		$this->db->delete($this->tables['users_groups'], array($this->join['groups'] => $group_id));
+		$this->db->delete($this->tables['ultrasound.users_groups'], array($this->join['ultrasound.groups'] => $group_id));
 		// remove the group itself
-		$this->db->delete($this->tables['groups'], array('id' => $group_id));
+		$this->db->delete($this->tables['ultrasound.groups'], array('id' => $group_id));
 
 		if ($this->db->trans_status() === FALSE)
 		{
