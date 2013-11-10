@@ -98,7 +98,7 @@ echo base_url();
 				'type' => 'password',
 			);
 
-			$this->load->view('auth/login', $this->data);
+		
 		}
 	}
 
