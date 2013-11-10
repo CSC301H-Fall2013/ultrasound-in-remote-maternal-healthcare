@@ -29,7 +29,7 @@ class Auth extends CI_Controller {
 		if (!$this->ion_auth->logged_in())
 		{
 			//redirect them to the login page
-                         echo base_url();
+                        
 			//redirect('auth/login', 'refresh');
 			$this->login();
 		}
@@ -58,7 +58,7 @@ class Auth extends CI_Controller {
 	function login()
 	{
 		$this->data['title'] = "Login";
-		echo "Begin";
+	
 		//validate form input
 		$this->form_validation->set_rules('identity', 'Identity', 'required');
 		$this->form_validation->set_rules('password', 'Password', 'required');
@@ -67,7 +67,7 @@ class Auth extends CI_Controller {
 		{
 			//check to see if the user is logging in
 			//check for "remember me"
-			echo "true";
+			
 			$remember = (bool) $this->input->post('remember');
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
