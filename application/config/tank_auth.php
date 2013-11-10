@@ -69,7 +69,7 @@ $config['password_max_length'] = 20;
 |--------------------------------------------------------------------------
 */
 $config['login_by_username'] = TRUE;
-$config['login_by_email'] = TRUE;
+$config['login_by_email'] = FALSE;
 $config['login_record_ip'] = TRUE;
 $config['login_record_time'] = TRUE;
 $config['login_count_attempts'] = TRUE;
@@ -138,7 +138,7 @@ $config['recaptcha_private_key'] = '';
 | (except 'ci_sessions' table).
 |--------------------------------------------------------------------------
 */
-$config['db_table_prefix'] = '';
+$config['db_table_prefix'] = 'ultrasound.';
 
 
 /* End of file tank_auth.php */
