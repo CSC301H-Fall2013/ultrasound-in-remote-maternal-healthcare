@@ -181,7 +181,7 @@ class Users extends CI_Model
 	function purge_na($expire_period = 172800)
 	{
 		$this->db->where('activated', 0);
-		$this->db->where('UNIX_TIMESTAMP(created) <', time() - $expire_period);
+		$this->db->where('ultrasound.UNIX_TIMESTAMP(created) <', time() - $expire_period);
 		$this->db->delete($this->table_name);
 	}
 
