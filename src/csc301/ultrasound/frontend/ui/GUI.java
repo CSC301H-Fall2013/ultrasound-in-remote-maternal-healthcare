@@ -19,6 +19,7 @@ import csc301.ultrasound.global.Transmission;
 import csc301.ultrasound.model.*;
 
 import java.sql.*;
+import java.util.Date;
 
 public class GUI
 {
@@ -26,8 +27,10 @@ public class GUI
 	private JTable table;
 	private static Login loginFrame;
 	private static User usr;
-	private static Transmission t;
-	private static Connection connection;
+	
+	// The maximum number of record rows to be displayed
+	// on the interface at one time.
+	private int maxRecordRows = 20;
 
 	/**
 	 * Launch the application.
@@ -61,14 +64,7 @@ public class GUI
 		{
 			public void windowClosed(WindowEvent e) 
 			{
-				System.out.println("Done");
 				usr = loginFrame.getUser();
-				System.out.printf("DONE:%s", usr.getName());
-				
-				// Establish a connection with the database.
-				t = new Transmission();
-				connection = t.connectToDB();
-				
 				runApplication();
 			}
 		});
@@ -116,7 +112,6 @@ public class GUI
 		JMenuItem mntmLogOut = new JMenuItem("Log Out");
 		mntmLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				t.disconnectFromDB(connection);
 		        frmUrmhClient.dispose();
 				login();
 			}
@@ -126,7 +121,6 @@ public class GUI
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				t.disconnectFromDB(connection);
 				frmUrmhClient.dispose();
 		        System.exit(0);
 			}
@@ -159,33 +153,41 @@ public class GUI
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if (connection != null) {
-					try {
-						
-						// Query the database for new records.
-						Statement statement = connection.createStatement();
-						String query = "select * from Records where NumTimes < 3";
-						/*
-						String query = "select firstName, lastName, birthday, gender, date, record, status" 
-								+ "from Record natural join Patient natural join Response"
-								+ "where (rID <> " + usr.getName() + ") and not (status like '%C%')";
-						*/
-						
-						// Iterate through the set of results returned from executing the query.
-						ResultSet rs = statement.executeQuery(query);
-						while (rs.next()) {
-							
-							// TODO: Display the results in a JTable.
-							// 		 (So far, it just prints the complications.)
-							String complication = rs.getString("Complication");
-			               	System.out.println(complication);
-			            }
-					} catch (SQLException se)
-		            {
-		                System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
-		            }
+				// Establish a connection with the database.
+				Transmission t = new Transmission();
+				Connection connection = t.connectToDB();
+				
+				if (connection != null) {	
+					
+					// Create a record table containing records that need attending to.
+					String[] recordTableHeadings = { "Record ID", "Patient ID", "Submission Time", "Complaints", "Status" };
+					Object[][] recordTable = new Object[maxRecordRows][recordTableHeadings.length];
+					
+					// Fill in the record table and keep track of how many entries were added.
+					int numRecordRows = fillRecordTable(recordTable, connection);
+					
+					// Print the records.
+					// NOTE: These records will be displayed using a Jtable in the future.
+					System.out.println("---------------\nRecords:");
+
+					int m; int n;
+					for (n = 0; n < recordTableHeadings.length; n++) {
+						System.out.print(recordTableHeadings[n] + " - ");
+					}
+					
+					System.out.println("");
+					for (m = 0; m < numRecordRows; m++) {
+						for (n = 0; n < recordTableHeadings.length; n++) {
+							System.out.print(recordTable[m][n] + " - ");
+						}
+					System.out.println("");
+					}
+					System.out.println("---------------");
+					
+					// Disconnect from the database.
+					t.disconnectFromDB(connection);
 				} else {
-					// TODO: Decide what happens when a connection fails.
+					System.out.println("Connection failure.");
 				}
 			}
 		});
@@ -264,5 +266,83 @@ public class GUI
 		
 		frmUrmhClient.pack();
 		frmUrmhClient.setVisible(true);
+	}
+	
+	/**
+	* Fill the given record table with new records.
+	* Return the number of records added to the table.
+	*/
+	private int fillRecordTable(Object[][] recordTable, Connection connection)
+	{	
+		// Keep track of how many records have been added to the table.
+		int numRecords = 0;
+		
+		try 
+		{
+			Statement statement = connection.createStatement();
+			String query;
+			ResultSet rs;
+	
+			// Query the database for records that have not yet been responded to.
+			// Fill the record table with these records.
+			query = "select RID, PID, Date, Complaints, Status " 
+					+ "from ultrasound.Records "
+					+ "where Status = 0 "
+					+ "order by Date desc";
+			rs = statement.executeQuery(query);
+			numRecords = fillRecordTable(rs, recordTable, numRecords, "No Response");
+			
+			// Query the database for records that a user has already responded to.
+			// Fill the record table with these records.
+			query = "select RID, PID, Date, Complaints, Status " 
+					+ "from ultrasound.Records "
+					+ "where Status = 1 "
+					+ "order by Date desc";
+			rs = statement.executeQuery(query);
+			numRecords = fillRecordTable(rs, recordTable, numRecords, "Has Response");
+			
+			// Return the number of records added to the records table.
+			return numRecords;
+		}
+		catch (SQLException se) 
+		{
+			return numRecords;
+		}	
+	}
+	
+	/**
+	 * Fill the given record table with the contents of the result set, 
+	 * starting at the row indicated by the given record number, 
+	 * setting the last value of each row in the table as the status string.
+	 * Return the number of records the have been added to the table.
+	 */
+	private int fillRecordTable(ResultSet rs, Object[][] recordTable, int numRecords, String status)
+	{
+		try 
+		{
+			while (rs.next() && (numRecords < recordTable.length)) {
+				
+				// Extract data from the result set.
+				int recordID = rs.getInt("RID");
+				int patientID = rs.getInt("PID");
+				Timestamp date = rs.getTimestamp("Date");
+				String complaint = rs.getString("Complaints");
+				
+				// Record the data in the record table.
+				recordTable[numRecords][0] = recordID;
+				recordTable[numRecords][1] = patientID;
+				recordTable[numRecords][2] = date;
+				recordTable[numRecords][3] = complaint;
+				recordTable[numRecords][4] = status;
+
+				numRecords++;
+			}
+			return numRecords;
+		} 
+		catch (SQLException se)
+		{
+			System.out.println(status + " records have not been added.");
+			return numRecords;
+		}
 	}
 }

@@ -115,6 +115,8 @@ public class Login extends JFrame
 				else
 				{
 					JOptionPane.showMessageDialog(null, String.format("Authenticated. Hello %s.", authedUser.getName()), "Login Success!", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+					return;
 				}
 			}
 		});
