@@ -29,6 +29,27 @@ $confirm_password = array(
 	'maxlength'	=> $this->config->item('password_max_length', 'tank_auth'),
 	'size'	=> 30,
 );
+$authlevel = array(
+	'name'	=> 'authlevel',
+	'id'	=> 'authlevel',
+	'value'	=> set_value('authlevel'),
+	'maxlength'	=> 1,
+	'size'	=> 30,
+);
+$phone = array(
+	'name'	=> 'phone',
+	'id'	=> 'phone',
+	'value'	=> set_value('phone'),
+	'maxlength'	=> 16,
+	'size'	=> 30,
+);
+$location = array(
+	'name'	=> 'location',
+	'id'	=> 'location',
+	'value'	=> set_value('location'),
+	'maxlength'	=> 100,
+	'size'	=> 30,
+);
 $captcha = array(
 	'name'	=> 'captcha',
 	'id'	=> 'captcha',
@@ -58,6 +79,18 @@ $captcha = array(
 		<td><?php echo form_label('Confirm Password', $confirm_password['id']); ?></td>
 		<td><?php echo form_password($confirm_password); ?></td>
 		<td style="color: red;"><?php echo form_error($confirm_password['name']); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo form_label('Authlevel', $authlevel['id']); ?></td>
+		<td><?php echo form_input($authlevel); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo form_label('Phone', $phone['id']); ?></td>
+		<td><?php echo form_input($phone); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo form_label('Location', $location['id']); ?></td>
+		<td><?php echo form_input($location); ?></td>
 	</tr>
 
 	<?php if ($captcha_registration) {
