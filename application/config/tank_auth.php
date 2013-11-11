@@ -51,6 +51,13 @@ $config['username_max_length'] = 20;
 $config['password_min_length'] = 4;
 $config['password_max_length'] = 20;
 
+$config['authlevel_min_length'] = 1;
+$config['authlevel_max_length'] = 1;
+$config['phone_min_length'] = 9;
+$config['phone_max_length'] = 16;
+$config['location_min_length'] = 3;
+$config['location_max_length'] = 100;
+    
 /*
 |--------------------------------------------------------------------------
 | Login settings

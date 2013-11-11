@@ -33,21 +33,21 @@ $authlevel = array(
 	'name'	=> 'authlevel',
 	'id'	=> 'authlevel',
 	'value'	=> set_value('authlevel'),
-	'maxlength'	=> 1,
+	'maxlength'	=> $this->config->item('authlevel_max_length', 'tank_auth'),
 	'size'	=> 30,
 );
 $phone = array(
 	'name'	=> 'phone',
 	'id'	=> 'phone',
 	'value'	=> set_value('phone'),
-	'maxlength'	=> 16,
+	'maxlength'	=> $this->config->item('phone_max_length', 'tank_auth'),
 	'size'	=> 30,
 );
 $location = array(
 	'name'	=> 'location',
 	'id'	=> 'location',
 	'value'	=> set_value('location'),
-	'maxlength'	=> 100,
+	'maxlength'	=> $this->config->item('location_max_length', 'tank_auth'),
 	'size'	=> 30,
 );
 $captcha = array(
