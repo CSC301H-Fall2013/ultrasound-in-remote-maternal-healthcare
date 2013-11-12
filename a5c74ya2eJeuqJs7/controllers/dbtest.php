@@ -51,26 +51,20 @@ class Dbtest extends CI_Controller
 	}
 	
 	function insertPatientMed(){
-		if (isset($_REQUEST["pid"]) && isset($_REQUEST["fcomments"])
-				&& isset($_REQUEST["img"]) && isset($_REQUEST["gest"])
-				&& isset($_REQUEST["isbleed"]) && isset($_REQUEST["preb"])
-				&& isset($_REQUEST["diamFet"]) && isset($_REQUEST["diamot"])
-				&& isset($_REQUEST["fseen"])  ){
+		
 			$this->load->database();
 			$this->load->model("Patients");
-			$pid = $_REQUEST["pid"];
-			$fcomments =  $_REQUEST["fcomments"];
-			$img = $_REQUEST["img"];
-			$gest = $_REQUEST["gest"];
-			$isbleed = $_REQUEST["isbleed"];
-			$preb =  $_REQUEST["preb"];
-			$diamFet =  $_REQUEST["diamFet"];
-			$diamot =  $_REQUEST["diamot"];
-			$fseen =  $_REQUEST["fseen"];
-			echo $this->Patients->insert_Patient_Med($pid, $fcomments, $img, $preb, $gest, $isbleed, $diamFet, $diamot, $fseen);
-		} else {
-			echo "nothing set!";
-		}
+			echo $pid = $_REQUEST["pid"];
+			echo $fcomments =  $_REQUEST["fcomments"];
+			echo $img = $_REQUEST["img"];
+			echo $gest = $_REQUEST["gest"];
+			echo $isbleed = $_REQUEST["isbleed"];
+			echo $preb =  $_REQUEST["preb"];
+			echo $diamFet =  $_REQUEST["diamFet"];
+			echo $diamot =  $_REQUEST["diamot"];
+			echo $fseen =  $_REQUEST["fseen"];
+			//echo $this->Patients->insert_Patient_Med($pid, $fcomments, $img, $preb, $gest, $isbleed, $diamFet, $diamot, $fseen);
+		 
 	}
 	
 	
