@@ -30,6 +30,7 @@ class Dbtest extends CI_Controller
 		} else {
 			echo "nothing set!";
 		}
+	}
 		
 }
 
