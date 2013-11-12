@@ -26,6 +26,7 @@ $lang['auth_message_new_email_sent'] = 'A confirmation email has been sent to %s
 $lang['auth_message_new_email_activated'] = 'You have successfully changed your email';
 $lang['auth_message_new_email_failed'] = 'Your activation key is incorrect or expired. Please check your email again and follow the instructions.';
 $lang['auth_message_banned'] = 'You are banned.';
+$lang['auth_message_unauthorized'] = 'You are not authorized to be here.';
 $lang['auth_message_unregistered'] = 'Your account has been deleted...';
 
 // Email subjects

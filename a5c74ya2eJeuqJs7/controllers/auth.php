@@ -76,8 +76,9 @@ class Auth extends CI_Controller
 					$errors = $this->tank_auth->get_error_message();
 					if (isset($errors['banned'])) {								// banned user
 						$this->_show_message($this->lang->line('auth_message_banned').' '.$errors['banned']);
-
-					} elseif (isset($errors['not_activated'])) {				// not activated user
+					} elseif (isset($errors['not_authorized'])) {
+                        $this->_show_message($this->lang->line('auth_message_unauthorized').' '.$errors['not_authorized']);
+                    } elseif (isset($errors['not_activated'])) {				// not activated user
 						redirect('/auth/send_again/');
 
 					} else {													// fail

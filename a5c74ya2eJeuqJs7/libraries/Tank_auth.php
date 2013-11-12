@@ -66,7 +66,6 @@ class Tank_auth
 
 					if ($user->banned == 1) {									// fail - banned
 						$this->error = array('banned' => $user->ban_reason);
-
 					} else {
 						$this->ci->session->set_userdata(array(
 								'user_id'	=> $user->id,
@@ -81,7 +80,7 @@ class Tank_auth
                         }
                         else if ($user->authlevel <= 2)
                         {
-                            $this->error = array('not authorized' => '');       // fail - not authorized
+                            $this->error = array('not_authorized' => '');       // fail - not authorized
                         }
                         else 
                         {												// success
