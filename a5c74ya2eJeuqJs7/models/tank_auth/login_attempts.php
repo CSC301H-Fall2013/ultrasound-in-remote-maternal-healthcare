@@ -64,7 +64,7 @@ class Login_attempts extends CI_Model
 		$this->db->where(array('ip_address' => $ip_address, 'login' => $login));
 
 		// Purge obsolete login attempts
-		$this->db->or_where('ultrasound.UNIX_TIMESTAMP(time) <', time() - $expire_period);
+		$this->db->or_where('ultrasound.UNIX_TIMESTAMP(CURRENT_TIMESTAMP) <', time() - $expire_period);
 
 		$this->db->delete($this->table_name);
 	}
