@@ -24,11 +24,12 @@ class Patients extends CI_Model
 	 
 	 fucntion insert_Patient($first, $last, $date, $country){
 		$da = array(
-		'FirstName'=>$first,
-		'LastName'=>$last,
-		'Country' => $country,
+		'FirstName'=> '$first',
+		'LastName'=>'$last',
+		'Country' => '$country',
 		'Birthdate' => date ("dd/mm/YY",strtotime($date)));
 		$this->db->insert('ultrasound.Patients',$da);
+		return 0;
 	}
 }
 
