@@ -64,9 +64,15 @@ class Tank_auth
 						$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
 				if ($hasher->CheckPassword($password, $user->password)) {		// password ok
 
-					if ($user->banned == 1) {									// fail - banned
+					if ($user->banned == 1) 
+                    {									// fail - banned
 						$this->error = array('banned' => $user->ban_reason);
-					} else {
+					}
+                    else if ($user->authlevel > 2)
+                    {
+                        $this->error = array('not_authorized' => '');       // fail - not authorized
+                    }
+                    else {
 						$this->ci->session->set_userdata(array(
 								'user_id'	=> $user->id,
 								'username'	=> $user->username,
@@ -77,10 +83,6 @@ class Tank_auth
 						if ($user->activated == 0) 
                         {							
 							$this->error = array('not_activated' => '');        // fail - not activated
-                        }
-                        else if ($user->authlevel <= 2)
-                        {
-                            $this->error = array('not_authorized' => '');       // fail - not authorized
                         }
                         else 
                         {												// success
