@@ -27,7 +27,7 @@ class Patients extends CI_Model
 		'FirstName'=> $first,
 		'LastName'=> $last,
 		'Country' => $country,
-		'Birthdate' => date('dd/mm/YY'));
+		'Birthdate' => date('d/mm/Y', $date));
 		$this->db->insert('ultrasound.Patients',$da);
 		return 0;
 	}
