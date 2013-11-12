@@ -22,7 +22,7 @@ class Patients extends CI_Model
 		}
 	 }
 	 
-	 fucntion insert_Patient($first, $last, $date, $country){
+	 function insert_Patient($first, $last, $date, $country){
 		$da = array(
 		'FirstName'=> $first,
 		'LastName'=> $last,
