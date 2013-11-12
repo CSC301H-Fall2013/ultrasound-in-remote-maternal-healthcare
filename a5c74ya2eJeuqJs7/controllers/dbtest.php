@@ -43,7 +43,6 @@ class Dbtest extends CI_Controller
 			$last =  $_REQUEST["lastName"];
 			$dat = $_REQUEST["Birthdate"];
 			$country = "Nepal";
-			//echo $this->Patients->insert_Patient($first, $last, $dat, $country);
 			echo "Yo!";
 		} else {
 			echo "nothing set!";
