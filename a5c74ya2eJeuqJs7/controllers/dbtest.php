@@ -10,8 +10,12 @@ class Dbtest extends CI_Controller
 
 	function index()
 	{
-		$this->load->model("Patients");
+		/*$this->load->model("Patients");
 		$data['patients'] = $this->Patients->get_Patients();
-		$this->load->view("dbview.php", $this->data);
+		$this->load->view("dbview.php", $this->data);*/
+		echo "Dbtest file!";
+		
 	}
 }
+
+
