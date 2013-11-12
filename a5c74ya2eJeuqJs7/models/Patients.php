@@ -10,7 +10,7 @@ class Patients extends CI_Model
 
 	function get_Patients(){
 		$query = $this->db->query("SELECT * FROM ultrasound.Patients");
-		return $query->result(); }
+		return json_encode($query->result()); }
 		
 }
 
