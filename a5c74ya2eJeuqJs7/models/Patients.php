@@ -32,7 +32,7 @@ class Patients extends CI_Model
 		'Country' => $country,
 		'Birthdate' => date('d/m/Y', strtotime($date)));
 		$this->db->insert('ultrasound.Patients',$da);
-		$out = arra( 'result' => 1);
+		$out = array( 'result' => 1);
 		return json_encode($out);
 		
 		
