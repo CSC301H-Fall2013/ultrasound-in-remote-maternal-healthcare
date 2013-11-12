@@ -28,7 +28,7 @@ class Dbtest extends CI_Controller
 			$last =  $_REQUEST['lastName'];
 			echo $this->Patients->check_Patient($first, $last);
 		} else {
-			echo "nothing set!"
+			echo "nothing set!";
 		}
 		
 }
