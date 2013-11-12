@@ -18,7 +18,7 @@ class Patients extends CI_Model
 		$out = array(
 				'result' => -1);
 		$results = $query->result();
-		if (count() > 0){
+		if (count($results) > 0){
 			$out['result'] = $results[0]->PID;
 			return json_encode($out);
 		} else {
