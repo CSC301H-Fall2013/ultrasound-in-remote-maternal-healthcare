@@ -1,18 +1,11 @@
 package csc301.ultrasound.frontend.ui;
 
-import java.awt.EventQueue;
 import java.awt.Toolkit;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -24,39 +17,16 @@ public class Login extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	
-	private User   user     = null;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					Login frame = new Login();
-					
-					frame.setVisible(true);
-				} 
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private User user = null;
 
 	/**
 	 * Create the log-in window.
 	 */
 	public Login()
 	{
-		setTitle("Login");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 474, 343);
+		this.setTitle("Login");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setBounds(100, 100, 474, 343);
 
 		JPanel contentPane = new JPanel();
 		
@@ -87,12 +57,11 @@ public class Login extends JFrame
 			public void actionPerformed(ActionEvent arg0)
 			{
 				Authentication auth = new Authentication();
-				User authedUser = null;
 				
 				String userEmail    = userNameTf.getText();
-				String userPassword = passwordTf.getText();
+				String userPassword = new String(passwordTf.getPassword());
 				
-				authedUser = auth.authenticate(userEmail, userPassword);
+				user = auth.authenticate(userEmail, userPassword);
 				
 				if (userEmail == null || userEmail.isEmpty())
 				{
@@ -107,14 +76,14 @@ public class Login extends JFrame
 				}
 				
 				// A username and password was entered, but the user is still not authenicated. Their password and/or username must be wrong.
-				if (authedUser == null)
+				if (user == null)
 				{
 					JOptionPane.showMessageDialog(null, "Incorrect username and/or password.", "Login Failure!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(null, String.format("Authenticated. Hello %s.", authedUser.getName()), "Login Success!", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, String.format("Authenticated. Hello %s.", user.getName()), "Login Success!", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 					return;
 				}

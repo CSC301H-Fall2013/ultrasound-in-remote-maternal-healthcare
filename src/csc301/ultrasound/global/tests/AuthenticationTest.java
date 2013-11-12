@@ -38,7 +38,7 @@ public class AuthenticationTest
 		
 		Authentication auth = new Authentication();
 		
-		assertNotNull(auth.authenticate("test@example.com", "password"));
+		assertNotNull(auth.authenticate("foobar", "password"));
 	}
 	
 	/**
@@ -51,6 +51,6 @@ public class AuthenticationTest
 		
 		Authentication auth = new Authentication();
 
-		assertNull(auth.authenticate("test@example.com", "foo"));
+		assertNull(auth.authenticate("foobar", "foo"));
 	}
 }
