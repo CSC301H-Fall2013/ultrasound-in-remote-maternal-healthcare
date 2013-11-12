@@ -13,7 +13,8 @@ class Patients extends CI_Model
 		return $query->result(); }
 		
 	function check_Patient($first, $last){
-		$query = $this->db->query("SELECT * FROM ultrasound.Patients WHERE FirstName = '$first' AND LastName = '$last'");
+		$dat = "03/06/13";
+		$query = $this->db->query("SELECT * FROM ultrasound.Patients WHERE FirstName = '$first' AND LastName = '$last' AND Birthdate = $dat");
 		if (count($query->result()) > 0){
 			return 1;
 		} else {
