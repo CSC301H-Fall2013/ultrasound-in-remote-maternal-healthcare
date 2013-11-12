@@ -54,15 +54,15 @@ class Dbtest extends CI_Controller
 		
 			$this->load->database();
 			$this->load->model("Patients");
-			echo $pid = $_REQUEST['pid'];
-			echo $fcomments =  $_REQUEST["fcomments"];
-			echo $img = $_REQUEST["img"];
-			echo $gest = $_REQUEST["gest"];
-			echo $isbleed = $_REQUEST["isbleed"];
+			echo $pid = $_REQUEST['piD'];
+			echo $fcomments =  $_REQUEST["fComments"];
+			echo $img = $_REQUEST["imG"];
+			echo $gest = $_REQUEST["gesT"];
+			echo $isbleed = $_REQUEST["isBleed"];
 			echo $preb =  $_REQUEST["preb"];
 			echo $diamFet =  $_REQUEST["diamFet"];
-			echo $diamot =  $_REQUEST["diamot"];
-			echo $fseen =  $_REQUEST["fseen"];
+			echo $diamot =  $_REQUEST["diaMot"];
+			echo $fseen =  $_REQUEST["fSeen"];
 			//echo $this->Patients->insert_Patient_Med($pid, $fcomments, $img, $preb, $gest, $isbleed, $diamFet, $diamot, $fseen);
 		 
 	}
