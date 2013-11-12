@@ -1,0 +1,57 @@
+function login (email, password, callback) {
+  //this example uses the "tedious" library
+  //more info here: http://pekim.github.io/tedious/index.html
+  
+  var connection = sqlserver.connect({
+    userName:  configuration.i23223cVx2Y4ZIml2RK3MQZP36p7F83m,
+    password:  configuration.rk8mERQ56o4wgvc29QWer7rff2Wvd2jz,
+    server:    configuration.TvztNAUKj2869rjmiiit54k37SHjmf21,
+    options:  {
+      database: 'Ultrasound',
+      encrypt:  true
+    }
+  });
+
+  var query = "SELECT id, username, email, password, authlevel, phone, location, activated, banned " + 
+              "FROM ultrasound.users WHERE username = @Nickname";
+
+  connection.on('debug', function(text) {
+    console.log(text);
+  }).on('errorMessage', function(text) {
+    console.log(JSON.stringify(text, null, 2));
+    return callback(text);
+  }).on('infoMessage', function(text) {
+    console.log(JSON.stringify(text, null, 2));
+  });
+
+  connection.on('connect', function (err) {
+    if (err) return callback(err);
+    var profile;
+
+    var request = new sqlserver.Request(query, function (err, rows) {
+      if (err) return callback(err);
+      console.log('rows ' + rows);
+      callback(null, profile);
+    });
+
+    request.addParameter('Nickname', sqlserver.Types.VarChar, email);
+
+    request.on('row', function (fields) {
+      if (!bcrypt.compareSync(password, fields[3].value)) return;
+      
+      profile = {
+        user_id:     fields[0].value,
+        username:    fields[1].value,
+        email:       fields[2].value,
+        authlevel:   fields[4].value,
+        phone:       fields[5].value,
+        location:    fields[6].value,
+        activated:   fields[7].value,
+        banned:      fields[8].value
+      };
+
+    });
+    
+    connection.execSql(request);
+  });
+}

@@ -1,0 +1,9 @@
+# These are values referenced by the login script on Auth0 that contain
+# the username, password and server connection strings. The values are
+# encrypted with AES 256 CBC with the following keys.
+
+Type     | Key                              | Value 
+---------+----------------------------------+-------------------------------------------
+Username | i23223cVx2Y4ZIml2RK3MQZP36p7F83m | ultrasound@ze7duqnsz2.database.windows.net
+Password | rk8mERQ56o4wgvc29QWer7rff2Wvd2jz | csc301-erie
+Server   | TvztNAUKj2869rjmiiit54k37SHjmf21 | ze7duqnsz2.database.windows.net
