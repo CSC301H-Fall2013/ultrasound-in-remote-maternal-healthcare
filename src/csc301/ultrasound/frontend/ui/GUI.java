@@ -160,7 +160,7 @@ public class GUI
 				if (connection != null) {	
 					
 					// Create a record table containing records that need attending to.
-					String[] recordTableHeadings = { "Record ID", "Patient ID", "Submission Time", "Complaints", "Status" };
+					String[] recordTableHeadings = { "Record ID", "Patient ID", "Submission Time", "Comments", "Status" };
 					Object[][] recordTable = new Object[maxRecordRows][recordTableHeadings.length];
 					
 					// Fill in the record table and keep track of how many entries were added.
@@ -186,6 +186,8 @@ public class GUI
 					
 					// Disconnect from the database.
 					t.disconnectFromDB(connection);
+					patientInfoTable(1);
+					patientHistoryTable(1);
 				} else {
 					System.out.println("Connection failure.");
 				}
@@ -285,27 +287,41 @@ public class GUI
 	
 			// Query the database for records that have not yet been responded to.
 			// Fill the record table with these records.
-			query = "select RID, PID, Date, Complaints, Status " 
+			query = "select RID, PID, Date, FieldworkerComments " 
 					+ "from ultrasound.Records "
-					+ "where Status = 0 "
+					+ "where RadiologistResponse is null "
 					+ "order by Date desc";
 			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, recordTable, numRecords, "No Response");
+			numRecords = fillRecordTable(rs, recordTable, numRecords, "No Responses");
 			
-			// Query the database for records that a user has already responded to.
+			// Query the database for records that a user has already responded to,
+			// but the fieldworker has not yet received the response.
 			// Fill the record table with these records.
-			query = "select RID, PID, Date, Complaints, Status " 
+			query = "select RID, PID, Date, FieldworkerComments " 
 					+ "from ultrasound.Records "
-					+ "where Status = 1 "
+					+ "where RadiologistResponse is not null "
+					+ "and FieldworkerSeen = 0 "
 					+ "order by Date desc";
 			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, recordTable, numRecords, "Has Response");
+			numRecords = fillRecordTable(rs, recordTable, numRecords, "Has Unseen Response");
+			
+			// Query the database for records that a user has already responded to,
+			// and the fieldworker has received the response.
+			// Fill the record table with these records.
+			query = "select RID, PID, Date, FieldworkerComments " 
+					+ "from ultrasound.Records "
+					+ "where RadiologistResponse is not null "
+					+ "and FieldworkerSeen = 1 "
+					+ "order by Date desc";
+			rs = statement.executeQuery(query);
+			numRecords = fillRecordTable(rs, recordTable, numRecords, "Has Seen Response");
 			
 			// Return the number of records added to the records table.
 			return numRecords;
 		}
 		catch (SQLException se) 
 		{
+			System.err.println("SQL Exception.<Message>: " + se.getMessage());
 			return numRecords;
 		}	
 	}
@@ -314,7 +330,7 @@ public class GUI
 	 * Fill the given record table with the contents of the result set, 
 	 * starting at the row indicated by the given record number, 
 	 * setting the last value of each row in the table as the status string.
-	 * Return the number of records the have been added to the table.
+	 * Return the number of records that have been added to the table.
 	 */
 	private int fillRecordTable(ResultSet rs, Object[][] recordTable, int numRecords, String status)
 	{
@@ -326,7 +342,7 @@ public class GUI
 				int recordID = rs.getInt("RID");
 				int patientID = rs.getInt("PID");
 				Timestamp date = rs.getTimestamp("Date");
-				String complaint = rs.getString("Complaints");
+				String complaint = rs.getString("FieldworkerComments");
 				
 				// Record the data in the record table.
 				recordTable[numRecords][0] = recordID;
@@ -341,8 +357,161 @@ public class GUI
 		} 
 		catch (SQLException se)
 		{
-			System.out.println(status + " records have not been added.");
+			System.err.println("SQL Exception.<Message>: " + se.getMessage());
 			return numRecords;
+		}
+	}
+	
+	/**
+	 * Create a two-dimensional table consisting of the 
+	 * patient information of the patient with the given patientID.
+	 */
+	private void patientInfoTable(int patientID) {
+		
+		// Create a new table consisting of the patient's information.
+		String[] patientInfoTableHeadings = { "Patient ID", "Name", "Birthday", "Country" };
+		Object[][] patientInfoTable = new Object[1][patientInfoTableHeadings.length];
+		
+		// Establish a connection with the database.
+		Transmission t = new Transmission();
+		Connection connection = t.connectToDB();
+		
+		if (connection != null) {
+			try 
+			{
+				Statement statement = connection.createStatement();
+				String query;
+				ResultSet rs;
+
+				// Query the database for information about the patient.
+				query = "select FirstName, LastName, Birthdate, Country " 
+						+ "from ultrasound.Patients "
+						+ "where PID = "  + Integer.toString(patientID);
+				rs = statement.executeQuery(query);
+
+				while (rs.next()) {
+					// Extract data from the result set.
+					String firstName = rs.getString("FirstName");
+					String lastName = rs.getString("LastName");
+					Date birthday = rs.getDate("Birthdate");
+					String country = rs.getString("Country");
+				
+					// Record the data in the record table.
+					patientInfoTable[0][0] = patientID;
+					patientInfoTable[0][1] = firstName + " " + lastName;
+					patientInfoTable[0][2] = birthday;
+					patientInfoTable[0][3] = country; 
+				}
+				// Print the records.
+				// NOTE: These records will be displayed using a Jtable in the future.
+				System.out.println("---------------\nPatient Info:");
+	
+				int m; int n;
+				for (n = 0; n < patientInfoTableHeadings.length; n++) {
+					System.out.print(patientInfoTableHeadings[n] + " - ");
+				}
+				
+				System.out.println("");
+				for (m = 0; m < 1; m++) {
+					for (n = 0; n < patientInfoTableHeadings.length; n++) {
+						System.out.print(patientInfoTable[m][n] + " - ");
+					}
+				System.out.println("");
+				}
+				System.out.println("---------------");
+				
+				// Disconnect from the database.
+				t.disconnectFromDB(connection);
+			}
+			catch (SQLException se) 
+			{
+				System.err.println("SQL Exception.<Message>: " + se.getMessage());
+			}
+		} else {
+			System.out.println("Connection failure.");
+		}
+	}
+	
+	/**
+	 * Create a two-dimensional table consisting of the 
+	 * patient history of the patient with the given patientID.
+	 * The patient history consists of the last numRecords number
+	 * of records of the patient.
+	 */
+	private void patientHistoryTable(int patientID) {
+		
+		// The maximum number of records that can be displayed
+		int maxPatientRecords = 5;
+		
+		// The number of patient records added to the table.
+		int numPatientRecords = 0;
+		
+		// Create a new table consisting of the patient's information.
+		String[] patientHistoryTableHeadings = { "Record ID", "Patient ID", "Submission Time", "Comments", "Response" };
+		Object[][] patientHistoryTable = new Object[maxPatientRecords][patientHistoryTableHeadings.length];
+		
+		// Establish a connection with the database.
+		Transmission t = new Transmission();
+		Connection connection = t.connectToDB();
+		
+		if (connection != null) {
+			try 
+			{
+				Statement statement = connection.createStatement();
+				String query;
+				ResultSet rs;
+
+				// Query the database for previous records of the patient.
+				query = "select RID, Date, FieldworkerComments, RadiologistResponse "
+						+ "from ultrasound.Records "
+						+ "where PID = "  + Integer.toString(patientID) + " "
+						+ "order by Date desc";
+				rs = statement.executeQuery(query);
+
+				while (rs.next() && (numPatientRecords < maxPatientRecords)) {
+					
+					// Extract data from the result set.
+					int recordID = rs.getInt("RID");
+					Timestamp date = rs.getTimestamp("Date");
+					String comments = rs.getString("FieldworkerComments");
+					String response = rs.getString("RadiologistResponse");
+					
+					// Record the data in the record table.
+					patientHistoryTable[numPatientRecords][0] = recordID;
+					patientHistoryTable[numPatientRecords][1] = patientID;
+					patientHistoryTable[numPatientRecords][2] = date;
+					patientHistoryTable[numPatientRecords][3] = comments;
+					patientHistoryTable[numPatientRecords][4] = response;
+					
+					numPatientRecords++;
+				}
+				// Print the records.
+				// NOTE: These records will be displayed using a Jtable in the future.
+				System.out.println("---------------\nPatient History:");
+	
+				int m; int n;
+				for (n = 0; n < patientHistoryTableHeadings.length; n++) {
+					System.out.print(patientHistoryTableHeadings[n] + " - ");
+				}
+				
+				System.out.println("");
+				for (m = 0; m < numPatientRecords; m++) {
+					for (n = 0; n < patientHistoryTableHeadings.length; n++) {
+						System.out.print(patientHistoryTable[m][n] + " - ");
+					}
+				System.out.println("");
+				}
+				System.out.println("---------------");
+				
+				// Disconnect from the database.
+				t.disconnectFromDB(connection);
+			}
+			catch (SQLException se) 
+			{
+				System.err.println("SQL Exception.<Message>: " + se.getMessage());
+			}
+		} else {
+			System.out.println("Connection failure.");
 		}
 	}
 }
