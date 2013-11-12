@@ -75,11 +75,16 @@ class Tank_auth
                                 'authlevel' => $user->authlevel,
 						));
 
-						if ($user->activated == 0) {							// fail - not activated
-							$this->error = array('not_activated' => '');
-                        } elseif ($user->authlevel <= 2)                          // fail - not authorized
-                            $this->error = array('not authorized' => '');
-						} else {												// success
+						if ($user->activated == 0) 
+                        {							
+							$this->error = array('not_activated' => '');        // fail - not activated
+                        }
+                        else if ($user->authlevel <= 2)
+                        {
+                            $this->error = array('not authorized' => '');       // fail - not authorized
+                        }
+                        else 
+                        {												// success
 							if ($remember) {
 								$this->create_autologin($user->id);
 							}
