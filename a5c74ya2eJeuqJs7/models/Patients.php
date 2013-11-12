@@ -16,9 +16,10 @@ class Patients extends CI_Model
 		$query = $this->db->query("DECLARE @p_date DATE  SET @p_date = CONVERT( DATE, '$dat')  SELECT * FROM ultrasound.Patients WHERE FirstName = '$first' 
 		AND LastName = '$last' AND Birthdate = @p_date");
 		$out = array(
-				'result' => 0);
-		if (count($query->result()) > 0){
-			$out['result'] = 1;
+				'result' => -1);
+		$results = $query->result();
+		if (count() > 0){
+			$out['result'] = $results[0]->PID;
 			return json_encode($out);
 		} else {
 			return json_encode($out);
@@ -34,6 +35,11 @@ class Patients extends CI_Model
 		$this->db->insert('ultrasound.Patients',$da);
 		$out = array( 'result' => 1);
 		return json_encode($out);
+		
+		
+	}
+	
+	function insert_Patient_Med(){
 		
 		
 	}
