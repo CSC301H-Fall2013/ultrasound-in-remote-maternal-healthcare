@@ -16,7 +16,7 @@ class Dbtest extends CI_Controller
 		$results = $this->Patients->get_Patients();
 		echo json_encode($results[0]);
 		//$this->load->view("dbview.php", $data);
-		echo "Dbtest file!";
+		
 		
 	}
 }
