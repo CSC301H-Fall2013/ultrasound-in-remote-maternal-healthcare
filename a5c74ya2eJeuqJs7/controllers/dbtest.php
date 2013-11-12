@@ -55,7 +55,7 @@ class Dbtest extends CI_Controller
 				&& isset($_REQUEST["img"]) && isset($_REQUEST["gest"])
 				&& isset($_REQUEST["isbleed"]) && isset($_REQUEST["preb"])
 				&& isset($_REQUEST["diamFet"]) && isset($_REQUEST["diamot"])
-				&& isset($_REQUEST["fseen"])){
+				&& isset($_REQUEST["fseen"])  ){
 			$this->load->database();
 			$this->load->model("Patients");
 			$pid = $_REQUEST["pid"];
