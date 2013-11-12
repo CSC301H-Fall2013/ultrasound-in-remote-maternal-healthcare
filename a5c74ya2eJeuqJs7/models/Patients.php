@@ -1,4 +1,4 @@
-
+<?php
 class Patients extends CI_Model
 {
 	
@@ -13,3 +13,5 @@ class Patients extends CI_Model
 		return $query->result(); }
 		
 }
+
+?>
