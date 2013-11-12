@@ -36,12 +36,12 @@ class Dbtest extends CI_Controller
 	
 	function insertPatient(){
 		if (isset($_REQUEST["firstName"]) && isset($_REQUEST["lastName"])
-				&& isset($_REQUEST["Birthdate"])) {
+				&& isset($_REQUEST["birthdate"])) {
 			$this->load->database();
 			$this->load->model("Patients");
 			$first = $_REQUEST["firstName"];
 			$last =  $_REQUEST["lastName"];
-			$dat = $_REQUEST["Birthdate"];
+			$dat = $_REQUEST["birthdate"];
 			$country = "Nepal";
 			echo "Yo!";
 		} else {
