@@ -12,7 +12,7 @@ class Dbtest extends CI_Controller
 	{
 		$this->load->database();
 		$this->load->model("Patients");
-		//$data['patients'] = $this->Patients->get_Patients();
+		$data['patients'] = $this->Patients->get_Patients();
 		$this->load->view("dbview.php", $this->data);
 		echo "Dbtest file!";
 		
