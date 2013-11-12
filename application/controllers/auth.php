@@ -115,7 +115,8 @@ class Auth extends CI_Controller
 	 */
 	function register()
 	{
-		if ($this->tank_auth->is_logged_in()) {									// logged in
+		if ($this->tank_auth->is_logged_in() AND ($this->tank_auth->get_authlevel() <= 2))           // logged in, and admin or superuser
+        {
 			/*redirect('');
 
 		} elseif ($this->tank_auth->is_logged_in(FALSE)) {						// logged in, not activated

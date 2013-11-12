@@ -148,6 +148,16 @@ class Tank_auth
 	{
 		return $this->ci->session->userdata('username');
 	}
+    
+	/**
+	 * Get username
+	 *
+	 * @return	string
+	 */
+	function get_authlevel()
+	{
+		return $this->ci->session->userdata('authlevel');
+	}
 
 	/**
 	 * Create new user on the site and return some data about it:
@@ -190,6 +200,7 @@ class Tank_auth
 			if (!is_null($res = $this->ci->users->create_user($data, !$email_activation))) {
 				$data['user_id'] = $res['user_id'];
 				$data['password'] = $password;
+                $data['authlevel'] = $authlevel;
 				unset($data['last_ip']);
 				return $data;
 			}
@@ -571,6 +582,7 @@ class Tank_auth
 								'user_id'	=> $user->id,
 								'username'	=> $user->username,
 								'status'	=> STATUS_ACTIVATED,
+                                'authlevel' => $user->authlevel,
 						));
 
 						// Renew users cookie to prevent it from expiring
