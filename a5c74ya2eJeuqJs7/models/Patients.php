@@ -14,7 +14,7 @@ class Patients extends CI_Model
 		
 	function check_Patient($first, $last){
 		$dat = "03/06/13";
-		$query = $this->db->query("DECLARE @p_date DATE  SET @p_date = CONVERT( DATE, $dat)  SELECT * FROM ultrasound.Patients WHERE FirstName = '$first' 
+		$query = $this->db->query("DECLARE @p_date DATE  SET @p_date = CONVERT( DATE, '$dat')  SELECT * FROM ultrasound.Patients WHERE FirstName = '$first' 
 		AND LastName = '$last' AND Birthdate >= @p_date
  			AND     Birthdate < DATEADD(d, 1, @p_date)");
 		if (count($query->result()) > 0){
