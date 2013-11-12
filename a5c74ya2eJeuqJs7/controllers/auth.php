@@ -61,16 +61,18 @@ class Auth extends CI_Controller
 			}
 			$data['errors'] = array();
 
-			if ($this->form_validation->run()) {								// validation ok
+			if ($this->form_validation->run())  // validation ok
+            {	
 				if ($this->tank_auth->login(
 						$this->form_validation->set_value('login'),
 						$this->form_validation->set_value('password'),
 						$this->form_validation->set_value('remember'),
 						$data['login_by_username'],
-						$data['login_by_email'])) {								// success
-					redirect('');
-
-				} else {
+						$data['login_by_email'])) 
+                {								
+					redirect('');   // success
+				} 
+                else {
 					$errors = $this->tank_auth->get_error_message();
 					if (isset($errors['banned'])) {								// banned user
 						$this->_show_message($this->lang->line('auth_message_banned').' '.$errors['banned']);
