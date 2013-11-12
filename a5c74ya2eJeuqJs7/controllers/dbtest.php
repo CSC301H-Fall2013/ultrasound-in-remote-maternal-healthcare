@@ -33,6 +33,21 @@ class Dbtest extends CI_Controller
 			echo "nothing set!";
 		}
 	}
+	
+	function insertPatient(){
+		if (isset($_REQUEST["firstName"]) && isset($_REQUEST["lastName"])
+				&& isset($_REQUEST["Birthdate"])) {
+			$this->load->database();
+			$this->load->model("Patients");
+			$first = $_REQUEST["firstName"];
+			$last =  $_REQUEST["lastName"];
+			$dat = $_REQUEST["Birthdate"];
+			$country = "Nepal";
+			echo $this->Patients->insert_Patient($first, $last, $dat, $country);
+		} else {
+			echo "nothing set!";
+		}
+	}
 		
 }
 
