@@ -21,12 +21,12 @@ class Dbtest extends CI_Controller
 	}
 	
 	function callPatientCheck(){
-		if (isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
+		if (isset($_REQUEST["firstName"]) && isset($_REQUEST["lastName"])) {
 			$this->load->database();
 			$this->load->model("Patients");
-			$first = $_REQUEST['firstName'];
-			$last =  $_REQUEST['lastName'];
-			echo $this->Patients->check_Patient($first, $last);
+			$first = $_REQUEST["firstName"];
+			$last =  $_REQUEST["lastName"];
+			echo "$this->Patients->check_Patient($first, $last)";
 		} else {
 			echo "nothing set!";
 		}
