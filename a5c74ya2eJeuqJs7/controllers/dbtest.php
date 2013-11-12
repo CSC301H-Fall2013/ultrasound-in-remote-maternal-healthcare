@@ -12,6 +12,6 @@ class Dbtest extends CI_Controller
 	{
 		$this->load->model("Patients");
 		$data['patients'] = $this->Patients->get_Patients();
-		$this->load->view("dbview");
+		$this->load->view("dbview.php", $this->data);
 	}
 }
