@@ -16,8 +16,8 @@
 
 	<?php
 		foreach($patients as $patient){
-			echo $patient->FirstName <br>;
-			echo $patient->LastName <br>;
+			echo "$patient->FirstName <br>";
+			echo "$patient->LastName <br>";
 		}
 		?>
 
