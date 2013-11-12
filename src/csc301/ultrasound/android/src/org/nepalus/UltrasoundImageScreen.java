@@ -71,7 +71,7 @@ public class UltrasoundImageScreen extends Activity {
 	}
 	
 	/** Create a File for saving an image */
-	private static File getOutputMediaFile(String name){
+	public static File getOutputMediaFile(String name){
 
 		String externalStorageState = Environment.getExternalStorageState();
 		boolean isExternalStorageWriteable = Environment.MEDIA_MOUNTED.equals(externalStorageState);

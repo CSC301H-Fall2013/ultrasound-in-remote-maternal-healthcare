@@ -12,6 +12,11 @@
     <string name="metadata_age_label">Age</string>
     <string name="metadata_gestation_age_label">Gestation Age</string>
     <string name="metadata_comments_label">Comments</string>
+    <string name="fetal_head_diameter_label">Fetal Head Diameter</string>
+    <string name="mother_hip_diameter_label">Mother Hip Diameter</string>
+    <string name="pre_birth_label">Pre Birth</string>
+    <string name="metadata_is_bleeding_label">Is Bleeding</string>
+    <string name="metadata_id_label">Patient ID</string>
     
     <string name="action_settings" >Settings </string>
     

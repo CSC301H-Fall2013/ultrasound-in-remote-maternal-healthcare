@@ -2,13 +2,18 @@ package org.nepalus;
 
 import  com.microsoft.windowsazure.mobileservices.*;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -27,7 +32,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore.Images;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,18 +49,36 @@ public class MetadataScreen extends Activity {
 	private EditText mPatientAge;
 	private EditText mPatientGestationAge;
 	private EditText mComments;
+	private EditText mIsBleeding;
+	private EditText fetalDiameter;
+	private EditText hipDiameter;
+	private EditText patientIdentification;
+	private EditText preBirth;
 	private MobileServiceClient mClient;
 	
 	//Class To represent Patients object to be added to remote database.
-	public class Patients { 
+	public class Patients{ 
 		
-		public int Id; 
+		public int PID; 
 		
 		public String FirstName;
 		public String LastName;
-		public int Age;
-		public String Gender;
+		public String Country;
 		}
+	
+	public class Records {
+		public int RID;
+		public int PID;
+		public String Date;
+		public int Prebirth;
+		public int IsBleeding;
+		public int FieldworkerSeen;
+		public String FieldworkerComments;
+		public float DiameterFetalHead;
+		public float DiameterMotherHip;
+		public int Gestation;
+		public String IMGUltrasound;
+	}
 	
 	
     private NepalUltrasoundAPI api = new NepalUltrasoundSender();
@@ -70,6 +96,10 @@ public class MetadataScreen extends Activity {
         mPatientAge = (EditText) findViewById(R.id.patient_age);
         mPatientGestationAge = (EditText) findViewById(R.id.patient_gestation_age);
         mComments = (EditText) findViewById(R.id.comments);
+        mIsBleeding = (EditText) findViewById(R.id.is_bleeding);
+    	fetalDiameter = (EditText) findViewById(R.id.fetal_head_diameter);
+    	hipDiameter = (EditText) findViewById(R.id.mother_hip_diameter);
+    	preBirth = (EditText) findViewById(R.id.pre_birth);
         
         try {
 			mClient = new MobileServiceClient( "https://ultrasound.azure-mobile.net/", "uPQqAbRBcGKnSurAaFbXGKkYylpTAK93", this );
@@ -82,7 +112,15 @@ public class MetadataScreen extends Activity {
         // Get Image object from display
         ImageView thumbnail = (ImageView) findViewById(R.id.ultrasound_thumbnail);
         // Set the image to be displayed in image box via image object.
-        thumbnail.setImageURI(UltrasoundImageScreen.getOutputMediaFileUri(UltrasoundImageScreen.IMAGE_NAME));
+        Uri image = UltrasoundImageScreen.getOutputMediaFileUri(UltrasoundImageScreen.IMAGE_NAME);
+        thumbnail.setImageURI(image);
+        try {
+			Bitmap bmp=BitmapFactory.decodeStream(getContentResolver().openInputStream(image));
+			
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         
         // Handle the on click event of finish button
         Button nextButton = (Button) findViewById(R.id.finish);
@@ -94,7 +132,11 @@ public class MetadataScreen extends Activity {
             	final Patients pat = new Patients(); 
             	pat.FirstName = "";
             	pat.LastName = "";
-            	pat.Gender = "F";
+            	pat.Country = "Nepal";
+            	//pat.Birthdate = 20131112;
+            	
+            	final Records imgRecord = new Records();
+            	
     			
             	String name = mPatientName.getText().toString();
                 if(name.length() == 0){
@@ -108,18 +150,58 @@ public class MetadataScreen extends Activity {
                 		pat.LastName = name.split(" ")[1];
                 	}
                 }
-                String age = mPatientGestationAge.getText().toString();
-                if(age.length() == 0){
-                	age = "0";
+                String gage = mPatientGestationAge.getText().toString();
+                if(gage.length() == 0){
+                	gage = "0";
                 } else{
-                	pat.Age = new Integer(age);
+                	imgRecord.Gestation = Integer.valueOf(gage);
+                }
+                
+                String page = mPatientAge.getText().toString();
+                if(page.length() == 0){
+                	page = "0";
+                } else{
+                	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                	
                 }
                 String comments = mComments.getText().toString();
                 if(comments.length() == 0){
                 	comments = "NoComments";
+                } else {
+                	imgRecord.FieldworkerComments = comments;
                 }
+                
+                String prebirth = preBirth.getText().toString();
+                if(prebirth.length() == 0){
+                	prebirth = "No Data";
+                } else{
+                	imgRecord.Prebirth = Integer.valueOf(prebirth);
+                }
+                String isbleed = mIsBleeding.getText().toString();
+                if(isbleed.length() == 0){
+                	isbleed = "NoComments";
+                } else{
+                	imgRecord.IsBleeding = Integer.valueOf(isbleed);
+                }
+                String fetalDiam = fetalDiameter.getText().toString();
+                if(fetalDiam.length() == 0){
+                	fetalDiam = "NoComments";
+                }else{
+                	imgRecord.DiameterFetalHead = Float.valueOf(fetalDiam);
+                }
+                String hipDiam = hipDiameter.getText().toString();
+                if(hipDiam.length() == 0){
+                	hipDiam = "NoComments";
+                }else{
+                	imgRecord.DiameterMotherHip = Float.valueOf(hipDiam);
+                }
+                
+                
+                
+                
+                
                 // Build string data representing patient informaiton.
-            	String data = UltrasoundImageScreen.photoID.toString() +" "+ pat.FirstName +"."+pat.LastName +":"+ age +":"+ comments +";";
+            	String data = UltrasoundImageScreen.photoID.toString() +" "+ pat.FirstName +"."+pat.LastName +":"+ page +":"+ comments +";";
             	// Write the new patient data to patient record file
             	File a = getFilesDir();
             	String path = a.getAbsolutePath();
@@ -140,25 +222,15 @@ public class MetadataScreen extends Activity {
                 new Thread(new Runnable(){
                 	public void run(){
                 		try{
-                			long initial = System.currentTimeMillis();
-                			long cur = System.currentTimeMillis();
-                			while((cur - initial) < 5000){
-                				cur = System.currentTimeMillis();
-                			}
                 			
-                			
+              
                 			if((pat.FirstName.length() > 0) || (pat.LastName.length() > 0)){
                 				//Insert Patient Details into remote database Patients table
-                				mClient.getTable(Patients.class).insert(pat,
-                					new TableOperationCallback<Patients>() { 
-                						public void onCompleted(Patients entity, Exception exception, ServiceFilterResponse response) {
-                							if (exception == null) { 
-                								// Insertion succeeded.
-                								Toast.makeText(MetadataScreen.this, "Data sent successfully", Toast.LENGTH_SHORT).show();
-                								} else { 
-                									//Insertion Failed.
-                									Toast.makeText(MetadataScreen.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                									} } });
+                				System.out.println("About to insert Data to database!");
+                				System.out.println(mClient.getTable("Users",Patients.class).toString());
+                					
+                					//Toast.makeText(MetadataScreen.this, "PID: " + Integer.valueOf(imgRecord.PID).toString(), Toast.LENGTH_SHORT).show();
+                				
                 			} else{
                 				Toast.makeText(MetadataScreen.this, "Full Details not provided.", Toast.LENGTH_SHORT).show();
                 			}
@@ -237,6 +309,33 @@ public class MetadataScreen extends Activity {
 	        Log.e("Exception", "File write failed: " + e.toString());
 	    } 
 	}
+    
+    public static String encodeTobase64(Bitmap image)
+    {
+        Bitmap immagex=image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b,Base64.NO_WRAP);
+
+        Log.e("LOOK", imageEncoded);
+        return imageEncoded;
+    }
+    
+    public static Bitmap decodeBase64(String input) 
+    {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length); 
+    }
+    
+    
+    	
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+      inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+      String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+      return Uri.parse(path);
+    }
     
     
     //Below code is not required at the moment.

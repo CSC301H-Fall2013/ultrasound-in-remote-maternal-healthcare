@@ -33,28 +33,32 @@ public final class R {
         public static final int next=0x7f020003;
     }
     public static final class id {
-        public static final int accessRecord=0x7f0a0014;
-        public static final int action_settings=0x7f0a0016;
-        public static final int addRecord=0x7f0a0013;
-        public static final int clearRecord=0x7f0a0015;
-        public static final int comments=0x7f0a0008;
-        public static final int comments2=0x7f0a000e;
-        public static final int end_walkthrough=0x7f0a0011;
-        public static final int finish=0x7f0a0009;
-        public static final int finish2=0x7f0a000f;
+        public static final int accessRecord=0x7f0a0018;
+        public static final int action_settings=0x7f0a001a;
+        public static final int addRecord=0x7f0a0017;
+        public static final int clearRecord=0x7f0a0019;
+        public static final int comments=0x7f0a000c;
+        public static final int comments2=0x7f0a0012;
+        public static final int end_walkthrough=0x7f0a0015;
+        public static final int fetal_head_diameter=0x7f0a0009;
+        public static final int finish=0x7f0a000d;
+        public static final int finish2=0x7f0a0013;
+        public static final int is_bleeding=0x7f0a0008;
         public static final int login=0x7f0a0000;
         public static final int login_submit=0x7f0a0003;
         public static final int login_widget=0x7f0a0001;
+        public static final int mother_hip_diameter=0x7f0a000a;
         public static final int patient_age=0x7f0a0006;
-        public static final int patient_age2=0x7f0a000c;
+        public static final int patient_age2=0x7f0a0010;
         public static final int patient_gestation_age=0x7f0a0007;
-        public static final int patient_gestation_age2=0x7f0a000d;
+        public static final int patient_gestation_age2=0x7f0a0011;
         public static final int patient_name=0x7f0a0005;
-        public static final int patient_name2=0x7f0a000b;
-        public static final int textView1=0x7f0a0012;
-        public static final int tutorial_video_view=0x7f0a0010;
+        public static final int patient_name2=0x7f0a000f;
+        public static final int pre_birth=0x7f0a000b;
+        public static final int textView1=0x7f0a0016;
+        public static final int tutorial_video_view=0x7f0a0014;
         public static final int ultrasound_thumbnail=0x7f0a0004;
-        public static final int ultrasound_thumbnail2=0x7f0a000a;
+        public static final int ultrasound_thumbnail2=0x7f0a000e;
         public static final int user=0x7f0a0002;
     }
     public static final class layout {
@@ -73,20 +77,25 @@ public final class R {
         public static final int tutorial=0x7f040000;
     }
     public static final class string {
-        public static final int action_settings=0x7f070009;
-        public static final int app_name=0x7f07000e;
-        public static final int finish=0x7f07000d;
+        public static final int action_settings=0x7f07000e;
+        public static final int app_name=0x7f070013;
+        public static final int fetal_head_diameter_label=0x7f070009;
+        public static final int finish=0x7f070012;
         public static final int ideal_image_label=0x7f070003;
-        public static final int image_success=0x7f07000a;
+        public static final int image_success=0x7f07000f;
         public static final int login_password_label=0x7f070001;
         public static final int login_username_label=0x7f070000;
         public static final int metadata_age_label=0x7f070006;
         public static final int metadata_comments_label=0x7f070008;
         public static final int metadata_gestation_age_label=0x7f070007;
+        public static final int metadata_id_label=0x7f07000d;
         public static final int metadata_image_preview_label=0x7f070004;
+        public static final int metadata_is_bleeding_label=0x7f07000c;
         public static final int metadata_patient_name_label=0x7f070005;
-        public static final int next=0x7f07000b;
-        public static final int previous=0x7f07000c;
+        public static final int mother_hip_diameter_label=0x7f07000a;
+        public static final int next=0x7f070010;
+        public static final int pre_birth_label=0x7f07000b;
+        public static final int previous=0x7f070011;
         public static final int usage_instructions_label=0x7f070002;
     }
     public static final class style {
