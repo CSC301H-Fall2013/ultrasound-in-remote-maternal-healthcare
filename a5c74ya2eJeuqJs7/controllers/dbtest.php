@@ -26,7 +26,7 @@ class Dbtest extends CI_Controller
 			$this->load->model("Patients");
 			$first = $_REQUEST["firstName"];
 			$last =  $_REQUEST["lastName"];
-			echo "$this->Patients->check_Patient($first, $last)";
+			echo $this->Patients->check_Patient($first, $last);
 		} else {
 			echo "nothing set!";
 		}
