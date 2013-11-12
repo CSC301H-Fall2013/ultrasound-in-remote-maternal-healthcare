@@ -15,7 +15,7 @@
 	<h1>Welcome to Patients!</h1>
 
 	<?php
-		foreach $patients as $patient {
+		foreach($patients as $patient){
 			echo $patient->FirstName <br>;
 			echo $patient->LastName <br>;
 		}
