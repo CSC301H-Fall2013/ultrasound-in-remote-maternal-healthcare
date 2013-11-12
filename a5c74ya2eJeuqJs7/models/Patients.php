@@ -15,10 +15,13 @@ class Patients extends CI_Model
 	function check_Patient($first, $last, $dat){
 		$query = $this->db->query("DECLARE @p_date DATE  SET @p_date = CONVERT( DATE, '$dat')  SELECT * FROM ultrasound.Patients WHERE FirstName = '$first' 
 		AND LastName = '$last' AND Birthdate = @p_date");
+		$out = array(
+				'result' => 0);
 		if (count($query->result()) > 0){
-			return 1;
+			$out['result'] = 1;
+			return json_encode($out);
 		} else {
-			return 0;
+			return json_encode($out);
 		}
 	 }
 	 
