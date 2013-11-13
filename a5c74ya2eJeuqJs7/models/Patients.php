@@ -44,7 +44,7 @@ class Patients extends CI_Model
 			
 			$preBirth = ($preb == "true");
 			$isBleeding = ($isbleed == "true");
-			$fSeenIt = ($fSeen == "true");
+			$fSeenIt = ($fseen == "true");
 			$curdat = date('Y/m/d H:i:s');
 		//$this->db->insert("ultrasound.Records", $da);
 		$this->db->simple_query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),$binary)
