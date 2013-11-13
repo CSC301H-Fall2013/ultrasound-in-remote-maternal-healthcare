@@ -67,6 +67,17 @@ class Dbtest extends CI_Controller
 		 
 	}
 	
+	function getPatientMed(){
+		if(isset($_REQUEST["piD"])){
+			$this->load->database();
+			$this->load->model("Patients");
+			$pid = $_REQUEST["piD"];
+			echo $this->Patients->get_Patient_Med($pid);
+		} else{
+			echo "nothing set!";
+		}
+	}
+	
 	
 		
 }
