@@ -65,7 +65,7 @@ class Patients extends CI_Model
 	
 	function get_Patient_Med($pid){
 		$query = $this->db->query("SELECT * FROM ultrasound.Records where PID = $pid");
-		return json_encode($query->result()[0]); 
+		return json_encode($query->result()); 
 		}
 }
 
