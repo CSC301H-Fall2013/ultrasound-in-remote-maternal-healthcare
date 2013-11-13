@@ -51,7 +51,14 @@ class Patients extends CI_Model
 			"DiameterFetalHead" => floatval($diamfet),
 			"DiameterMotherHip" => floatval($diamot),
 			"FieldworkerSeen" => ($fseen == "true"));
-		$this->db->insert("ultrasound.Records", $da);
+			
+			$curdat = date('Y/m/d H:i:s');
+		//$this->db->insert("ultrasound.Records", $da);
+		$this->db->query("DECLARE @image varbinary(max) SET @image = convert(varbinary(max),$binary)
+						INSERT INTO ultrasound.Records (PID, Date, FieldworkerComments, IMGUltrasound,
+						Prebirth, Gestation, IsBleeding, DiameterFetalHead, DiameterMotherHip, FieldworkerSeen)
+						VALUES (intval($pid),$curdat, $fcomments, @image,  ($preb == "true"),  intval($gest),
+						($isbleed == "true"), floatval($diamfet), floatval($diamot), ($fseen == "true")) ");
 		$out = array( "result" => 1);
 		return json_encode($out);
 		
