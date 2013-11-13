@@ -31,9 +31,8 @@ public class GUI extends JFrame
 	private JTable mainTable = null;
 	private JTable infoTable = null;
 	private JTable histTable = null;
-
-	// non-swing fields
-	private int currPatientId = -1;
+	
+	private ImagePanel viewPnl = null;
 
 	/**
 	 * Create the application.
@@ -46,6 +45,8 @@ public class GUI extends JFrame
 		buildUI();
 		
 		updateMainTable();
+		
+		this.setVisible(true);
 	}
 
 	/**
@@ -213,8 +214,8 @@ public class GUI extends JFrame
 
 		JTabbedPane tabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel1.add(tabbedPane1, "2, 2, fill, fill");
-
-		JPanel viewPnl = new JPanel();
+		
+		viewPnl = new ImagePanel(dbConnection);
 		tabbedPane1.addTab("View image", null, viewPnl, null);
 
 		JPanel annotatePnl = new JPanel();
@@ -255,7 +256,6 @@ public class GUI extends JFrame
 
 		this.pack();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.setVisible(true);
 	}
 	
 	private void quit()
@@ -288,10 +288,14 @@ public class GUI extends JFrame
 				return;
 			
 			int[] listSelection = mainTable.getSelectedRows();
-			currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
+			
+			int currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
+			int currRID = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 0).toString());
+			
 			histTable.setModel(new PatientHistory(currPatientId, dbConnection));
 			infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
+			
+			viewPnl.setRID(currRID);
 		}
 	}
-
 }

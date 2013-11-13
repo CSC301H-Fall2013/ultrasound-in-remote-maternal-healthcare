@@ -1,7 +1,6 @@
 package csc301.ultrasound.frontend.ui;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import java.sql.Connection;
 
@@ -13,29 +12,43 @@ public class ImagePanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
-	int   RID   = -1;
-	Image image = null;
+	private Connection dbConnection = null;
+	private Image      image        = null;
 	
-	public ImagePanel(int RID, Connection dbConnection, Dimension panelSize)
+	public ImagePanel(Connection dbConnection)
 	{
 		if (dbConnection == null)
 			return;
 		
-		this.RID = RID;
+		this.dbConnection = dbConnection;
 		
-		BufferedImage bImage = new Transmission().getUltrasoundFromDB(RID, dbConnection);
-		
-		image = bImage.getScaledInstance(panelSize.width, panelSize.height, Image.SCALE_SMOOTH);
-
 		this.setLayout(new BorderLayout(0, 0));
 		this.setBackground(Color.BLACK);
-		this.setPreferredSize(new Dimension(panelSize.width, panelSize.height));
+	}
+	
+	public ImagePanel(int RID, Connection dbConnection)
+	{	
+		if (dbConnection == null)
+			return;
+		
+		this.dbConnection = dbConnection;
+		
+		image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		
+		this.setLayout(new BorderLayout(0, 0));
+		this.setBackground(Color.BLACK);
 	}
 	
 	protected void paintComponent(Graphics g) 
 	{
         super.paintComponent(g);
         
-        g.drawImage(image, 0, 0, null);
+        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
     }
+	
+	public void setRID(int RID)
+	{
+		image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		this.repaint();
+	}
 }
