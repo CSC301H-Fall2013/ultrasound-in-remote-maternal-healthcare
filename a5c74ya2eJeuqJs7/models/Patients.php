@@ -39,18 +39,18 @@ class Patients extends CI_Model
 		
 	}
 	
-	function insert_Patient_Med($pid, $fcomments,$img, $preb, $gest, $isbleed, $diamfet, $diamot, $fseen){
+	function insert_Patient_Med($pid, $fcomments,$binary, $preb, $gest, $isbleed, $diamfet, $diamot, $fseen){
 		$da = array(
 			"PID" => intval($pid),
 			"Date" => date("Y/m/d H:i:s"),
 			"FieldworkerComments" => $fcomments,
-			"IMGUltrasound" => $img,
+			"IMGUltrasound" => $binary,
 			"Prebirth" => ($preb == "true"),
 			"Gestation" => intval($gest),
-			"IsBleeding" => True,
+			"IsBleeding" => ($isbleed == "true"),
 			"DiameterFetalHead" => floatval($diamfet),
 			"DiameterMotherHip" => floatval($diamot),
-			"FieldworkerSeen" => False);
+			"FieldworkerSeen" => ($fseen == "true"));
 		$this->db->insert("ultrasound.Records", $da);
 		$out = array( "result" => 1);
 		return json_encode($out);
