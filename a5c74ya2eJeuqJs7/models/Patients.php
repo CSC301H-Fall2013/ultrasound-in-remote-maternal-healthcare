@@ -44,7 +44,6 @@ class Patients extends CI_Model
 			'PID' => intval($pid),
 			'Date' => date("Y/m/d H:i:s"),
 			'FieldworkerComments' => $fcomments,
-			'IMGUltrasound' => $img,
 			'Prebirth' => True,
 			'Gestation' => intval($gest),
 			'IsBleeding' => True,
