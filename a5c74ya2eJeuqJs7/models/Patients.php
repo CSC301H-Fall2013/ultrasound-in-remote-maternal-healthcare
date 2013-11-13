@@ -47,7 +47,7 @@ class Patients extends CI_Model
 			$fSeenIt = ($fseen == "true");
 			$curdat = date('Y/m/d H:i:s');
 		//$this->db->insert("ultrasound.Records", $da);
-		$this->db->simple_query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),$binary)
+		echo $this->db->simple_query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),$binary)
 						INSERT INTO ultrasound.ultrasound.Records (PID, Date, FieldworkerComments, IMGUltrasound,
 						Prebirth, Gestation, IsBleeding, DiameterFetalHead, DiameterMotherHip, FieldworkerSeen)
 						VALUES (intval($pid),$curdat, $fcomments, @image,  $preBirth,  intval($gest),
