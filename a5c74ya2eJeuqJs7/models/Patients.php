@@ -56,7 +56,7 @@ class Patients extends CI_Model
 						INSERT INTO ultrasound.Records (PID, Date, FieldworkerComments, IMGUltrasound,
 						Prebirth, Gestation, IsBleeding, DiameterFetalHead, DiameterMotherHip, FieldworkerSeen)
 						VALUES ($intpid, '$curdat', '$fcomments', @image , $preBirth,  $intgest,
-						$isBleeding, $floatfet, $floatmot, $fSeenIt)");
+						$isBleeding, $floatfet, $floatmot, $preBirth)");
 		$out = array( "result" => 1);
 		return json_encode($out);
 		
