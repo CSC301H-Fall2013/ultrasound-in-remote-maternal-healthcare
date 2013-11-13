@@ -1,6 +1,7 @@
 package csc301.ultrasound.frontend.ui;
 
 import javax.swing.*;
+
 import java.awt.image.BufferedImage;
 import java.sql.*;
 import java.awt.*;
@@ -90,13 +91,19 @@ public class ResponsePanel extends JPanel
 								
 								// make sure we actually inserted an image
 								if (nRowsUpdated > 0)
+								{
 									setSubmitted(true);
+									JOptionPane.showMessageDialog(null, String.format("Response to record %d was stored successfully.", RID), "Success!", JOptionPane.INFORMATION_MESSAGE);
+								}
 							}
 						} 
 						catch (SQLException se)
 			            {
 			                System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
 			            }
+						
+						if (isSubmitted() == false)
+							JOptionPane.showMessageDialog(null, String.format("An error occured while storing the response to record %d.", RID), "Error!", JOptionPane.ERROR_MESSAGE);
 					}
 				});
 				
