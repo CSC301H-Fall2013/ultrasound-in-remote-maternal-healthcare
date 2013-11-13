@@ -39,7 +39,7 @@ class Patients extends CI_Model
 		
 	}
 	
-	function insert_Patient_Med($pid, $fcomments, $img, $preb, $gest, $isbleed, $diamfet, $diamot, $fseen){
+	function insert_Patient_Med($pid, $fcomments, $preb, $gest, $isbleed, $diamfet, $diamot, $fseen){
 		$da = array(
 			"PID" => intval($pid),
 			"Date" => date('Y/m/d H:i:s'),
