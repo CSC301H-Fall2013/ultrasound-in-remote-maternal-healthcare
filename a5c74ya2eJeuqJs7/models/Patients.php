@@ -45,12 +45,12 @@ class Patients extends CI_Model
 			'Date' => date('Y/m/d H:i:s'),
 			'FieldworkerComments' => $fcomments,
 			'IMGUltrasound' => $img,
-			'Prebirth' => $preb,
-			'Gestation' => $gest,
-			'IsBleeding' => $isbleed,
+			'Prebirth' => True,
+			'Gestation' => intval($gest),
+			'IsBleeding' => True,
 			'DiameterFetalHead' => $diamfet,
 			'DiameterMotherHip' => $diamot,
-			'FieldworkerSeen' => $fseen);
+			'FieldworkerSeen' => False);
 		$this->db->insert('ultrasound.Records', $da);
 		$out = array( 'result' => 1);
 		return json_encode($out);
