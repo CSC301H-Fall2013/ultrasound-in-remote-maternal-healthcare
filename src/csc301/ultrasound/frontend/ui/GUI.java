@@ -1,7 +1,5 @@
 package csc301.ultrasound.frontend.ui;
 
-import java.awt.EventQueue;
-
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.*;
@@ -287,12 +285,10 @@ public class GUI extends JFrame
 		public void valueChanged(ListSelectionEvent event)
 		{
 			if (event.getValueIsAdjusting())
-			{
 				return;
-			}
 			
 			int[] listSelection = mainTable.getSelectedRows();
-			//currPatientId = (int) mainTable.getModel().getValueAt(listSelection[0], 1);
+			currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
 			histTable.setModel(new PatientHistory(currPatientId, dbConnection));
 			infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
 		}
