@@ -42,9 +42,9 @@ class Patients extends CI_Model
 	function insert_Patient_Med($pid, $fcomments,$binary, $preb, $gest, $isbleed, $diamfet, $diamot, $fseen){
 		
 			
-			$preBirth = ($preb == "true");
-			$isBleeding = ($isbleed == "true");
-			$fSeenIt = ($fseen == "true");
+			$preBirth = True;
+			$isBleeding = False;
+			$fSeenIt = False;
 			$curdat = date('Y/m/d H:i:s');
 			$intpid = intval($pid);
 			$intgest = intval($gest);
@@ -55,8 +55,8 @@ class Patients extends CI_Model
 		echo $this->db->query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),$binary)
 						INSERT INTO ultrasound.ultrasound.Records (PID, Date, FieldworkerComments, IMGUltrasound,
 						Prebirth, Gestation, IsBleeding, DiameterFetalHead, DiameterMotherHip, FieldworkerSeen)
-						VALUES ($intpid, $curdat, $fcomments, @image ,   $preBirth,  $intgest,
-						$isBleeding, $floatfet, $floatmot, $fSeenIt) ");
+						VALUES ($intpid, $curdat, $fcomments, @image , $preBirth,  $intgest,
+						$isBleeding, $floatfet, $floatmot, $fSeenIt)");
 		$out = array( "result" => 1);
 		return json_encode($out);
 		
