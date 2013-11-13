@@ -55,7 +55,7 @@ class Patients extends CI_Model
 		echo $this->db->query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),$binary)
 						INSERT INTO ultrasound.Records (PID, Date, FieldworkerComments, IMGUltrasound,
 						Prebirth, Gestation, IsBleeding, DiameterFetalHead, DiameterMotherHip, FieldworkerSeen)
-						VALUES ($intpid, '$curdat', $fcomments, @image , $preBirth,  $intgest,
+						VALUES ($intpid, '$curdat', '$fcomments', @image , $preBirth,  $intgest,
 						$isBleeding, $floatfet, $floatmot, $fSeenIt)");
 		$out = array( "result" => 1);
 		return json_encode($out);
