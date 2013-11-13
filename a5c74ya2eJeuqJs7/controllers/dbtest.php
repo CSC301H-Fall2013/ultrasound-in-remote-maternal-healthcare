@@ -54,7 +54,7 @@ class Dbtest extends CI_Controller
 		
 			$this->load->database();
 			$this->load->model("Patients");
-			$pid = $_REQUEST['piD'];
+			$pid = $_REQUEST["piD"];
 			$fcomments =  $_REQUEST["fComments"];
 			$img = pack('I*', $_REQUEST["img"]);
 			$gest = $_REQUEST["gesT"];
