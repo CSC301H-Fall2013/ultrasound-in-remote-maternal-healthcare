@@ -83,11 +83,16 @@ public class Authentication
 			    // parse the info about the user
 			    JsonElement decodedJElement = new JsonParser().parse(idToken);
 			    
-			    int    id        = decodedJElement.getAsJsonObject().get("user_id").getAsInt();
-				String name      = decodedJElement.getAsJsonObject().get("nickname").getAsString();
-				String location  = decodedJElement.getAsJsonObject().get("location").getAsString();
-				int    phone     = decodedJElement.getAsJsonObject().get("phone").getAsInt();
-				int    authlevel = decodedJElement.getAsJsonObject().get("authlevel").getAsInt();
+			    // Auth0 qualifies the user id with the service that the authentication was provided by,
+			    // in this case Auth0; delimited by a pipe. To get the ID, split on the pipe and grab
+			    // the last index.
+			    String  qualifiedID = decodedJElement.getAsJsonObject().get("user_id").getAsString();
+			    
+			    int     id        = Integer.parseInt(qualifiedID.split("\\|")[1]);
+			    String  name      = decodedJElement.getAsJsonObject().get("nickname").getAsString();
+				String  location  = decodedJElement.getAsJsonObject().get("location").getAsString();
+				int     phone     = decodedJElement.getAsJsonObject().get("phone").getAsInt();
+				int     authlevel = decodedJElement.getAsJsonObject().get("authlevel").getAsInt();
 				
 				// create the internal representation of the user
 				authedUser = new User(id, email, name, location, phone, authlevel);

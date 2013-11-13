@@ -14,6 +14,15 @@ function login (email, password, callback) {
 
   var query = "SELECT id, username, email, password, authlevel, phone, location, activated, banned " + 
               "FROM ultrasound.users WHERE username = @Nickname";
+  
+  var FIELD_USER_ID   = 0;
+  var FIELD_USERNAME  = 1;
+  var FIELD_EMAIL     = 2;
+  var FIELD_AUTHLEVEL = 4;
+  var FIELD_PHONE     = 5;
+  var FIELD_LOCATION  = 6;
+  var FIELD_ACTIVATED = 7;
+  var FIELD_BANNED    = 8;
 
   connection.on('debug', function(text) {
     console.log(text);
@@ -39,15 +48,17 @@ function login (email, password, callback) {
     request.on('row', function (fields) {
       if (!bcrypt.compareSync(password, fields[3].value)) return;
       
+      // user has either been banned or is not yet activated
+      if (fields[FIELD_ACTIVATED].value === 0 || 
+          fields[FIELD_BANNED].value === 1) return;
+      
       profile = {
-        user_id:     fields[0].value,
-        username:    fields[1].value,
-        email:       fields[2].value,
-        authlevel:   fields[4].value,
-        phone:       fields[5].value,
-        location:    fields[6].value,
-        activated:   fields[7].value,
-        banned:      fields[8].value
+        user_id:     fields[FIELD_USER_ID].value,
+        username:    fields[FIELD_USERNAME].value,
+        email:       fields[FIELD_EMAIL].value,
+        authlevel:   fields[FIELD_AUTHLEVEL].value,
+        phone:       fields[FIELD_PHONE].value,
+        location:    fields[FIELD_LOCATION].value
       };
 
     });

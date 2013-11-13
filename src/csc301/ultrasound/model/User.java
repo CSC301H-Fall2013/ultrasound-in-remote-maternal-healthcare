@@ -6,12 +6,12 @@ package csc301.ultrasound.model;
  */
 public class User
 {
-	private int    id        = -1;
-	private String email     = "";
-	private String name      = "";
-	private String location  = "";
-	private int    phone     = -1;
-	private int    authlevel = -1;
+	private int     id        = -1;
+	private String  email     = "";
+	private String  name      = "";
+	private String  location  = "";
+	private int     phone     = -1;
+	private int     authlevel = -1;
 	
 	/**
 	 * Instantiates a new user.

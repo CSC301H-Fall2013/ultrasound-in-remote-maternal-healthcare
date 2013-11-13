@@ -14,12 +14,12 @@ public class UserTest
 {
 	private static User user = null;
 	
-	private static int    userID        = 1234;
-	private static String userEmail     = "foo@bar.com";
-	private static String userName      = "Foo Bar";
-	private static String userLocation  = "Bundy";
-	private static int    userPhone     = 1234567890;
-	private static int    userAuthlevel = 0;
+	private static int     userID        = 1234;
+	private static String  userEmail     = "foo@bar.com";
+	private static String  userName      = "Foo Bar";
+	private static String  userLocation  = "Bundy";
+	private static int     userPhone     = 1234567890;
+	private static int     userAuthlevel = 0;
 	
 	/**
 	 * Any initialization needed before the tests begin.
