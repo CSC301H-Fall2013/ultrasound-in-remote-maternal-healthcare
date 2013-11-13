@@ -1,8 +1,11 @@
 package csc301.ultrasound.global.tests;
 
-import java.io.UnsupportedEncodingException;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
+
+import javax.imageio.ImageIO;
 
 import static org.junit.Assert.*;
 import org.junit.AfterClass;
@@ -24,18 +27,9 @@ public class TransmissionTest
 										   98, 108, 97, 104, 98, 108, 97, 104, 98, 108, 97, 104, 63, 63, 
 										   98, 108, 97, 104, 98, 108, 97, 104, 98, 108, 97, 104, 63, 63};
 	
-	/** The expected compressed value of originalData[] */
+	/** The expected compressed value of originalData[]. */
 	private static byte gtCompressedData[] = {120, -38, 75, -54, 73, -52, 72, -126, 98, 123, -5, 36, -86, 
 											  -16, 0, 73, 3, 31, -109};
-	
-	/** The expected encrypted value of originalData[] */
-	private static byte gtEncryptedData[] = {-68, 77, -102, 29, -16, -72, -125, -121, -102, -87, 125, -34, -33, 110, 
-											  38, 39, 76, -73, -117, 12, 90, -84, -85, -111, -28, 12, -45, -18,
-											 -107, -89, 101, -37, -118, 108, 76, 35, -113, 36, 44, 11, 34, 125,
-											  0, -46, 49, -112, 94, -53, 121, -117, 103, -30, 89, 39, 81, -70,
-											 -101, -45, -44, -107, -72, 35, 31, 77, 115, 64, -114, -43, 16, 66,
-											 -5, -31, -13, -109, 82, -74, -113, -83, -47, -109, -99, -27, 65, 111,
-											 -120, -22, -98, -95, 16, 42, -40, 127, -72, -76, 20, -63};
 	
 	/**
 	 * Any initialization needed before the tests begin.
@@ -88,68 +82,14 @@ public class TransmissionTest
 		for (int i = 0; i < decompressed.length; i++)
 			assertTrue("Every byte of the decompressed data must equal the ground truth's.", decompressed[i] == originalData[i]);
 	}
-
-	/**
-	 * Test the encryption method.
-	 */
-	@Test
-	public void testEncrypt() 
-	{
-		System.out.println("Running testEncrypt()...");
-		
-		Transmission t = new Transmission();
-		
-		String key = "ThisIsASecretKey";
-		
-		try 
-		{
-			byte encrypted[] = t.encrypt(originalData, key.getBytes("UTF-8"));
-
-			assertEquals("The length of the encrypted data must match the length of the ground truth.", encrypted.length, gtEncryptedData.length);
-			
-			for (int i = 0; i < encrypted.length; i++)
-				assertTrue("Every byte of the encrypted data must equal the ground truth's.", encrypted[i] == gtEncryptedData[i]);
-		} 
-		catch (UnsupportedEncodingException e) 
-		{
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Test the decryption method.
-	 */
-	@Test
-	public void testDecrypt() 
-	{
-		System.out.println("Running testDecrypt()...");
-		
-		Transmission t = new Transmission();
-		
-		String key = "ThisIsASecretKey";
-		
-		try 
-		{
-			byte decrypted[] = t.decrypt(gtEncryptedData, key.getBytes("UTF-8"));
-
-			assertEquals("The length of the decrypted data must match the length of the ground truth.", decrypted.length, originalData.length);
-			
-			for (int i = 0; i < decrypted.length; i++)
-				assertTrue("Every byte of the decrypted data must equal the ground truth's.", decrypted[i] == originalData[i]);
-		} 
-		catch (UnsupportedEncodingException e) 
-		{
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 * Test the database connection method.
 	 */
 	@Test
-	public void connectToDB()
+	public void testConnectToDB()
 	{
-		System.out.println("Running connectToDB()...");
+		System.out.println("Running testConnectToDB()...");
 		
 		Transmission t = new Transmission();
 		
@@ -162,9 +102,9 @@ public class TransmissionTest
 	 * Test the database disconnection method.
 	 */
 	@Test
-	public void disconnectFromDB()
+	public void testDisconnectFromDB()
 	{
-		System.out.println("Running disconnectFromDB()...");
+		System.out.println("Running testDisconnectFromDB()...");
 		
 		Transmission t = new Transmission();
 		
@@ -173,5 +113,138 @@ public class TransmissionTest
 		boolean successful = t.disconnectFromDB(connection);
 		
 		assertTrue(successful);
+	}
+	
+	/**
+	 * Test the method to get the ultrasound image from the database with a valid RID.
+	 */
+	@Test
+	public void testGetUltrasoundFromDBGoodRID()
+	{
+		System.out.println("Running testGetUltrasoundFromDBGoodRID()...");
+		
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		if (t.ridExists(15, connection) == false)
+			System.err.println("Error. The RID that this test relies on has been removed. Please specify a new one in TransmissionTest.java");
+		
+		BufferedImage image = t.getUltrasoundFromDB(15, connection);
+		
+		assertNotNull(image);
+	}
+	
+	/**
+	 * Test the method to get the ultrasound image from the database with an invalid RID.
+	 */
+	@Test
+	public void testGetUltrasoundFromDBBadRID()
+	{
+		System.out.println("Running testGetUltrasoundFromDBBadRID()...");
+		
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		BufferedImage image = t.getUltrasoundFromDB(-1, connection);
+		
+		assertNull(image);
+	}
+	
+	/**
+	 * Test the method to check if an RID exists or not with a valid RID.
+	 */
+	@Test
+	public void testRidExistsGoodRID()
+	{
+		System.out.println("Running testRidExistsGoodRID()...");
+		
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		if (t.ridExists(15, connection) == false)
+			System.err.println("Error. The RID that this test relies on has been removed. Please specify a new one in TransmissionTest.java");
+		
+		boolean exists = t.ridExists(15, connection);
+		
+		assertTrue(exists);
+	}
+	
+	/**
+	 * Test the method to check if an RID exists or not with an invalid RID.
+	 */
+	@Test
+	public void testRidExistsBadRID()
+	{
+		System.out.println("Running testRidExistsBadRID()...");
+		
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		boolean exists = t.ridExists(-1, connection);
+		
+		assertFalse(exists);
+	}
+	
+	/**
+	 * Test the method to compress and upload an ultrasound to the database with a valid RID.
+	 */
+	@Test
+	public void testCompressAndUploadUltrasoundToDBGoodRID()
+	{
+		System.out.println("Running testCompressAndUploadUltrasoundToDBGoodRID()...");
+		
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		int nUpdates = -1;
+		
+		try
+		{
+			BufferedImage image = ImageIO.read(new File("/Users/johnmather/Desktop/ultrasound-in-remote-maternal-healthcare/resources/img/ultrasound.jpg"));
+			
+			if (t.ridExists(15, connection) == false)
+				System.err.println("Error. The RID that this test relies on has been removed. Please specify a new one in TransmissionTest.java");
+			
+			nUpdates = t.compressAndUploadUltrasoundToDB(15, image, connection);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		assertTrue(nUpdates == 1);
+	}
+	
+	/**
+	 * Test the method to compress and upload an ultrasound to the database with an invalid RID.
+	 */
+	@Test
+	public void testCompressAndUploadUltrasoundToDBBadRID()
+	{
+		System.out.println("Running testCompressAndUploadUltrasoundToDBBadRID()...");
+		
+		Transmission t = new Transmission();
+		
+		Connection connection = t.connectToDB();
+		
+		int nUpdates = -1;
+		
+		try
+		{
+			BufferedImage image = ImageIO.read(new File("/Users/johnmather/Desktop/ultrasound-in-remote-maternal-healthcare/resources/img/ultrasound.jpg"));
+
+			nUpdates = t.compressAndUploadUltrasoundToDB(-1, image, connection);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		assertTrue(nUpdates == -1);
 	}
 }

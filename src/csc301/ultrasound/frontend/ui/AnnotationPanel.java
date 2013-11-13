@@ -107,7 +107,7 @@ public class AnnotationPanel extends JPanel
         g2dAnnotation.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2dAnnotation.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         
-        originalImage = image.getScaledInstance(panelSize.width, panelSize.height, Image.SCALE_SMOOTH);;
+        originalImage = image.getScaledInstance(panelSize.width, panelSize.height, Image.SCALE_SMOOTH);
     }
 	
 	/**

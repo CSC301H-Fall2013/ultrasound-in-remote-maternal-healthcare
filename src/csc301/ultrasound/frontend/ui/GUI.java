@@ -14,13 +14,9 @@ import com.jgoodies.forms.factories.FormFactory;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.*;
 
-import csc301.ultrasound.global.Transmission;
 import csc301.ultrasound.model.*;
 
-import java.sql.*;
-import java.util.Date;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -50,6 +46,8 @@ public class GUI extends JFrame
 		this.dbConnection = dbConnection;
 		
 		buildUI();
+		
+		updateMainTable();
 	}
 
 	/**
@@ -294,7 +292,7 @@ public class GUI extends JFrame
 			}
 			
 			int[] listSelection = mainTable.getSelectedRows();
-			currPatientId = (int) mainTable.getModel().getValueAt(listSelection[0], 1);
+			//currPatientId = (int) mainTable.getModel().getValueAt(listSelection[0], 1);
 			histTable.setModel(new PatientHistory(currPatientId, dbConnection));
 			infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
 		}

@@ -1,15 +1,14 @@
 package csc301.ultrasound.global;
 
-import java.io.ByteArrayOutputStream;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+
+import java.io.*;
 
 import java.util.zip.*;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Main class that handles transmitting data to and from the database.
@@ -81,62 +80,6 @@ public class Transmission
 	}
 	
 	/**
-	 * Encrypt the provided byte array using AES-128 encryption with a secret key cipher.
-	 *
-	 * @param toEncrypt The byte array to encrypt
-	 * @param key The secret key to encrypt the data with
-	 * @return The encrypted data. null if an error occured.
-	 */
-	public byte[] encrypt(byte toEncrypt[], byte key[])
-	{
-		try 
-		{
-			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-			
-			SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-			
-			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-			
-			return cipher.doFinal(toEncrypt);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Decrypt the provided byte array using AES-128 encryption with a secret key cipher.
-	 * Note that x = decrypt(encrypt(x, k), k), must hold for any given byte array x, and
-	 * a secret key k.
-	 *
-	 * @param toDecrypt The byte array to decrypt
-	 * @param key The secret key used to encrypt the data
-	 * @return The decrypted data. null if an error occured.
-	 */
-	public byte[] decrypt(byte toDecrypt[], byte key[])
-	{
-		try
-		{
-			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		
-			SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-		
-			cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		
-			return cipher.doFinal(toDecrypt);
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-	
-	/**
 	 * Connect to the SQL Server database. Note that this will timeout in 30 seconds if your 
 	 * IP address range is not whitelisted in the Windows Azure SQL Firewall.
 	 *
@@ -196,5 +139,119 @@ public class Transmission
 		}
 		
 		return true;
+	}
+	
+	public BufferedImage getUltrasoundFromDB(int RID, Connection connection)
+	{
+		BufferedImage image = null;
+		
+		try
+		{
+			if (connection != null && !connection.isClosed())
+			{
+				String query = "SELECT ultrasound.Records.IMGUltrasound "
+						     + "FROM ultrasound.Records "
+						     + "WHERE ultrasound.Records.RID = ?;";
+				
+				PreparedStatement statement = connection.prepareStatement(query);
+				statement.setInt(1, RID);
+				
+				ResultSet rs = statement.executeQuery();
+				
+				if (rs.next() == false)
+					return null;		// no results
+				
+				byte compressedImageBytes[] = rs.getBytes(1);
+				
+				try
+				{
+					byte imageBytes[] = new Transmission().decompress(compressedImageBytes);
+				
+					image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+				} 
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		} 
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			
+			return null;
+		}
+		
+		return image;
+	}
+	
+	public int compressAndUploadUltrasoundToDB(int RID, BufferedImage image, Connection connection)
+	{
+		return compressAndUploadImageToDB(RID, image, "IMGUltrasound", connection);
+	}
+
+	public int compressAndUploadAnnotationImgToDB(int RID, BufferedImage image, Connection connection)
+	{
+		return compressAndUploadImageToDB(RID, image, "IMGAnnotation", connection);
+	}
+	
+	private int compressAndUploadImageToDB(int RID, BufferedImage image, String attribute, Connection connection)
+	{	
+		if (ridExists(RID, connection))
+		{
+			try
+			{
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				
+				ImageIO.write(image, "png", baos);
+				
+				baos.flush();
+			
+				byte compressed[] = compress(baos.toByteArray());
+				
+				PreparedStatement statement = connection.prepareStatement(String.format("UPDATE ultrasound.Records SET %s = ? WHERE RID = ?", attribute));
+				statement.setBytes(1, compressed);
+				statement.setInt(2, RID);
+				statement.executeUpdate();
+				
+				return statement.getUpdateCount();
+			} 
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return -1;
+	}
+	
+	public boolean ridExists(int RID, Connection connection)
+	{
+		String query = "SELECT COUNT(*) "
+                     + "FROM ultrasound.Records "
+                     + "WHERE RID = ?;";
+		
+		try
+		{
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, RID);
+			statement.executeQuery();
+			
+			ResultSet rs = statement.getResultSet();
+			
+			if (rs.next() != false)
+			{
+				int ridCount = rs.getInt(1);
+				
+				if (ridCount > 0)
+					return true;
+			}
+		} 
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }

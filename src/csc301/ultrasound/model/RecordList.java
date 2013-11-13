@@ -17,18 +17,18 @@ public class RecordList extends AbstractTableModel
 	private Object[][] data = null;
 	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Status" };
 
-	public RecordList(Connection connection)
+	public RecordList(Connection dbConnection)
 	{
-		if (connection != null)
+		if (dbConnection != null)
 		{
 			// Create a record table containing records that need attending
 			// to.
-			Object[][] recordTable = new Object[maxRecordRows][5];
+			Object[][] recordTable = new Object[maxRecordRows][columnNames.length];
 
 			// Fill in the record table and keep track of how many entries
 			// were added.
 			//int numRecordRows = fillRecordTable(recordTable, connection);
-			fillRecordTable(recordTable, connection);
+			fillRecordTable(recordTable, dbConnection);
 			
 			// Set dataset
 			data = recordTable;
