@@ -83,13 +83,14 @@ public class Authentication
 			    // parse the info about the user
 			    JsonElement decodedJElement = new JsonParser().parse(idToken);
 			    
+			    int    id        = decodedJElement.getAsJsonObject().get("user_id").getAsInt();
 				String name      = decodedJElement.getAsJsonObject().get("nickname").getAsString();
 				String location  = decodedJElement.getAsJsonObject().get("location").getAsString();
 				int    phone     = decodedJElement.getAsJsonObject().get("phone").getAsInt();
 				int    authlevel = decodedJElement.getAsJsonObject().get("authlevel").getAsInt();
 				
 				// create the internal representation of the user
-				authedUser = new User(email, name, location, phone, authlevel);
+				authedUser = new User(id, email, name, location, phone, authlevel);
 			}
 		}
 		catch (Exception e)

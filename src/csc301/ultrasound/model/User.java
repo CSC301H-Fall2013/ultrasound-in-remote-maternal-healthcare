@@ -6,6 +6,7 @@ package csc301.ultrasound.model;
  */
 public class User
 {
+	private int    id        = -1;
 	private String email     = "";
 	private String name      = "";
 	private String location  = "";
@@ -21,14 +22,25 @@ public class User
 	 * @param phone The phone number of the registered user
 	 * @param authlevel The authentication level of the registered user
 	 */
-	public User(String email, String name, String location, int phone, int authlevel) 
+	public User(int id, String email, String name, String location, int phone, int authlevel) 
 	{
 		// Todo: Check for valid email, phone number and authlevel
+		this.id        = id;
 		this.email     = email;
 		this.name      = name;
 		this.location  = location;
 		this.phone     = phone;
 		this.authlevel = authlevel;
+	}
+	
+	/**
+	 * Returns the unique ID of the registered user.
+	 *
+	 * @return The user's id
+	 */
+	public int getID()
+	{ 
+		return id; 
 	}
 
 	/**

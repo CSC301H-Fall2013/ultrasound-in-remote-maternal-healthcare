@@ -14,6 +14,7 @@ public class UserTest
 {
 	private static User user = null;
 	
+	private static int    userID        = 1234;
 	private static String userEmail     = "foo@bar.com";
 	private static String userName      = "Foo Bar";
 	private static String userLocation  = "Bundy";
@@ -26,7 +27,7 @@ public class UserTest
 	@BeforeClass
 	public static void testSetup() 
 	{
-		user = new User(userEmail, userName, userLocation, userPhone, userAuthlevel);
+		user = new User(userID, userEmail, userName, userLocation, userPhone, userAuthlevel);
 	}
 
 	/**
@@ -35,6 +36,14 @@ public class UserTest
 	@AfterClass
 	public static void testCleanup() 
 	{
+	}
+	
+	@Test
+	public void testUserGetID() 
+	{
+		System.out.println("Running testUserGetID()...");
+		
+		assertEquals(user.getID(), userID);
 	}
 	
 	@Test
