@@ -40,25 +40,18 @@ class Patients extends CI_Model
 	}
 	
 	function insert_Patient_Med($pid, $fcomments,$binary, $preb, $gest, $isbleed, $diamfet, $diamot, $fseen){
-		$da = array(
-			"PID" => intval($pid),
-			"Date" => date("Y/m/d H:i:s"),
-			"FieldworkerComments" => $fcomments,
-			"IMGUltrasound" => $binary,
-			"Prebirth" => ($preb == "true"),
-			"Gestation" => intval($gest),
-			"IsBleeding" => ($isbleed == "true"),
-			"DiameterFetalHead" => floatval($diamfet),
-			"DiameterMotherHip" => floatval($diamot),
-			"FieldworkerSeen" => ($fseen == "true"));
+		
 			
+			$preBirth = ($preb == "true");
+			$isBleeding = ($isbleed == "true");
+			$fSeenIt = ($fSeen == "true");
 			$curdat = date('Y/m/d H:i:s');
 		//$this->db->insert("ultrasound.Records", $da);
 		$this->db->simple_query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),$binary)
 						INSERT INTO ultrasound.Records (PID, Date, FieldworkerComments, IMGUltrasound,
 						Prebirth, Gestation, IsBleeding, DiameterFetalHead, DiameterMotherHip, FieldworkerSeen)
-						VALUES (intval($pid),$curdat, $fcomments, @image,  $da->Prebirth,  intval($gest),
-						$da->ISBleeding, floatval($diamfet), floatval($diamot), $da->FieldworkerSeen) ");
+						VALUES (intval($pid),$curdat, $fcomments, @image,  $preBirth,  intval($gest),
+						$isBleeding, floatval($diamfet), floatval($diamot), $fSeenIt) ");
 		$out = array( "result" => 1);
 		return json_encode($out);
 		
