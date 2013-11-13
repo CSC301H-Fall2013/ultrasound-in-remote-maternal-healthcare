@@ -10,6 +10,7 @@ import java.util.zip.*;
 
 import java.sql.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Main class that handles transmitting data to and from the database.
  */
@@ -122,7 +123,7 @@ public class Transmission
 	 * Disconnect from the SQL Server database.
 	 *
 	 * @param connection The established connection.
-	 * @return true, if the connection was successfully closed. false otherwise, or an error occured.
+	 * @return True if the connection was successfully closed. False otherwise, or an error occured.
 	 */
 	public boolean disconnectFromDB(Connection connection)
 	{
@@ -141,6 +142,13 @@ public class Transmission
 		return true;
 	}
 	
+	/**
+	 * Retreives the ultrasound image from the database.
+	 *
+	 * @param RID The record id to update.
+	 * @param connection The established connection.
+	 * @return The ultrasound image.
+	 */
 	public BufferedImage getUltrasoundFromDB(int RID, Connection connection)
 	{
 		BufferedImage image = null;
@@ -185,16 +193,41 @@ public class Transmission
 		return image;
 	}
 	
+	/**
+	 * Compress and upload an ultrasound image to the database.
+	 *
+	 * @param RID The record id to update.
+	 * @param image The ultrasound image.
+	 * @param connection The established connection.
+	 * @return The number of sucessfully updated rows. Should always be 1, 0, or -1 on error.
+	 */
 	public int compressAndUploadUltrasoundToDB(int RID, BufferedImage image, Connection connection)
 	{
 		return compressAndUploadImageToDB(RID, image, "IMGUltrasound", connection);
 	}
 
+	/**
+	 * Compress and upload an annotation image to the database.
+	 *
+	 * @param RID The record id to update.
+	 * @param image The annotation image.
+	 * @param connection The established connection.
+	 * @return The number of sucessfully updated rows. Should always be 1, 0, or -1 on error.
+	 */
 	public int compressAndUploadAnnotationImgToDB(int RID, BufferedImage image, Connection connection)
 	{
 		return compressAndUploadImageToDB(RID, image, "IMGAnnotation", connection);
 	}
 	
+	/**
+	 * Compress and upload an image to the database.
+	 *
+	 * @param RID The record id to update.
+	 * @param image The image to upload.
+	 * @param attribute The attribute in the Records table to update.
+	 * @param connection The established connection.
+	 * @return The number of sucessfully updated rows. Should always be 1, 0, or -1 on error.
+	 */
 	private int compressAndUploadImageToDB(int RID, BufferedImage image, String attribute, Connection connection)
 	{	
 		if (ridExists(RID, connection))
@@ -225,6 +258,13 @@ public class Transmission
 		return -1;
 	}
 	
+	/**
+	 * Checks if an RID (Record ID) exists in the database.
+	 *
+	 * @param RID The record id to look for.
+	 * @param connection The established connection.
+	 * @return True, if the RID exists. False otherwise.
+	 */
 	public boolean ridExists(int RID, Connection connection)
 	{
 		String query = "SELECT COUNT(*) "
