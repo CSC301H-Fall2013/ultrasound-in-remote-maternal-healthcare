@@ -33,21 +33,25 @@ public final class R {
         public static final int next=0x7f020003;
     }
     public static final class id {
-        public static final int accessRecord=0x7f0a0018;
-        public static final int action_settings=0x7f0a001a;
-        public static final int addRecord=0x7f0a0017;
-        public static final int clearRecord=0x7f0a0019;
+        public static final int accessRecord=0x7f0a001d;
+        public static final int action_settings=0x7f0a001f;
+        public static final int addRecord=0x7f0a001c;
+        public static final int clearRecord=0x7f0a001e;
         public static final int comments=0x7f0a000c;
-        public static final int comments2=0x7f0a0012;
-        public static final int end_walkthrough=0x7f0a0015;
+        public static final int comments2=0x7f0a0016;
+        public static final int end_walkthrough=0x7f0a001a;
         public static final int fetal_head_diameter=0x7f0a0009;
+        public static final int fetal_head_diameter2=0x7f0a0013;
         public static final int finish=0x7f0a000d;
-        public static final int finish2=0x7f0a0013;
+        public static final int finish2=0x7f0a0018;
+        public static final int finish3=0x7f0a0017;
         public static final int is_bleeding=0x7f0a0008;
+        public static final int is_bleeding2=0x7f0a0012;
         public static final int login=0x7f0a0000;
         public static final int login_submit=0x7f0a0003;
         public static final int login_widget=0x7f0a0001;
         public static final int mother_hip_diameter=0x7f0a000a;
+        public static final int mother_hip_diameter2=0x7f0a0014;
         public static final int patient_age=0x7f0a0006;
         public static final int patient_age2=0x7f0a0010;
         public static final int patient_gestation_age=0x7f0a0007;
@@ -55,8 +59,9 @@ public final class R {
         public static final int patient_name=0x7f0a0005;
         public static final int patient_name2=0x7f0a000f;
         public static final int pre_birth=0x7f0a000b;
-        public static final int textView1=0x7f0a0016;
-        public static final int tutorial_video_view=0x7f0a0014;
+        public static final int pre_birth2=0x7f0a0015;
+        public static final int textView1=0x7f0a001b;
+        public static final int tutorial_video_view=0x7f0a0019;
         public static final int ultrasound_thumbnail=0x7f0a0004;
         public static final int ultrasound_thumbnail2=0x7f0a000e;
         public static final int user=0x7f0a0002;
