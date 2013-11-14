@@ -9,6 +9,7 @@ import java.awt.Robot;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.sql.Connection;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -17,6 +18,7 @@ import org.junit.Test;
 
 import csc301.ultrasound.frontend.ui.AnnotationPanel;
 import csc301.ultrasound.frontend.ui.GUI;
+import csc301.ultrasound.global.Transmission;
 
 /**
  * Test for AnnotationPanel.
@@ -61,21 +63,23 @@ public class AnnotationPanelTest
 							  (screenSize.height / 2) - (windowSize.height / 2));
 			
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-			// load a temporary image
-			BufferedImage image = ImageIO.read(this.getClass().getResource("/img/ultrasound.jpg"));
 			
-			AnnotationPanel ap = new AnnotationPanel(windowSize, image);
+			Transmission t = new Transmission();
+			Connection connection = t.connectToDB();
+			
+			AnnotationPanel ap = new AnnotationPanel(connection);
 			
 			// attach the panel
 			frame.setContentPane(ap);
 			
 			frame.setResizable(false);
 			frame.setBackground(Color.WHITE);
-			frame.pack();
+			//frame.pack();
 			
 			frame.setVisible(true);
-
+			
+			ap.setRID(15);
+			
 			Point p = new Point();
 			
 			// simulate some drawing
@@ -114,6 +118,8 @@ public class AnnotationPanelTest
 			md.update(bufferedImageToByteArray(gtAn, "png"));
 			byte[] gtAnHash = md.digest();
 			String strHashGtan = org.apache.commons.codec.binary.Hex.encodeHexString(gtAnHash);
+			
+			connection.close();
 			
 			org.junit.Assert.assertArrayEquals(strHashAn + " must equal " + strHashGtan, anHash, gtAnHash);
 		}

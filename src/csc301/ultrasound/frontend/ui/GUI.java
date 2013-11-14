@@ -32,7 +32,8 @@ public class GUI extends JFrame
 	private JTable infoTable = null;
 	private JTable histTable = null;
 	
-	private ImagePanel viewPnl = null;
+	private ImagePanel imagePanel = null;
+	private ResponsePanel responsePanel = null;
 
 	/**
 	 * Create the application.
@@ -128,6 +129,7 @@ public class GUI extends JFrame
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.2);
 		splitPane.setOneTouchExpandable(true);
+		splitPane.setContinuousLayout(true);
 		this.getContentPane().add(splitPane, "cell 0 1,grow");
 
 		JPanel panel = new JPanel();
@@ -136,6 +138,7 @@ public class GUI extends JFrame
 		JSplitPane subSplitPlane = new JSplitPane();
 		subSplitPlane.setResizeWeight(0.65);
 		subSplitPlane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		subSplitPlane.setContinuousLayout(true);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(
 				Alignment.LEADING).addComponent(subSplitPlane,
@@ -211,15 +214,45 @@ public class GUI extends JFrame
 				RowSpec.decode("default:grow"), }));
 		
 		tabPanel1.setMinimumSize(new Dimension(100, 400));
+		
+		/*tabPanel1.addComponentListener(new ComponentListener()
+		{
+			@Override
+			public void componentResized(ComponentEvent e) 
+			{
+				//imagePanel.resize(e.getComponent().getSize());
+				imagePanel.setSize(e.getComponent().getSize());
+				//System.out.println("\n" + e.getComponent().getSize());            
+			}
+		@Override
+		public void componentHidden(ComponentEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentMoved(ComponentEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}});*/
 
 		JTabbedPane tabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel1.add(tabbedPane1, "2, 2, fill, fill");
 		
-		viewPnl = new ImagePanel(dbConnection);
-		tabbedPane1.addTab("View image", null, viewPnl, null);
+		imagePanel = new ImagePanel(dbConnection);
+		tabbedPane1.addTab("View image", null, imagePanel, null);
 
-		JPanel annotatePnl = new JPanel();
-		tabbedPane1.addTab("Annotate image", null, annotatePnl, null);
+		responsePanel = new ResponsePanel(user, dbConnection);
+		tabbedPane1.addTab("Respond", null, responsePanel, null);
 
 		JPanel msgPnl = new JPanel();
 		tabbedPane1.addTab("Leave message", null, msgPnl, null);
@@ -295,7 +328,8 @@ public class GUI extends JFrame
 			histTable.setModel(new PatientHistory(currPatientId, dbConnection));
 			infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
 			
-			viewPnl.setRID(currRID);
+			imagePanel.setRID(currRID);
+			responsePanel.setRID(currRID);
 		}
 	}
 }

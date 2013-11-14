@@ -22,8 +22,7 @@ public class ImagePanel extends JPanel
 		
 		this.dbConnection = dbConnection;
 		
-		this.setLayout(new BorderLayout(0, 0));
-		this.setBackground(Color.BLACK);
+		initUI();
 	}
 	
 	public ImagePanel(int RID, Connection dbConnection)
@@ -33,9 +32,13 @@ public class ImagePanel extends JPanel
 		
 		this.dbConnection = dbConnection;
 		
-		image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		initUI();
 		
-		this.setLayout(new BorderLayout(0, 0));
+		setRID(RID);
+	}
+	
+	private void initUI()
+	{
 		this.setBackground(Color.BLACK);
 	}
 	
@@ -43,12 +46,13 @@ public class ImagePanel extends JPanel
 	{
         super.paintComponent(g);
         
-        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
+        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight() - 10, null);
     }
 	
 	public void setRID(int RID)
 	{
 		image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		
 		this.repaint();
 	}
 }

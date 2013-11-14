@@ -5,9 +5,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.sql.Connection;
 
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+
+import csc301.ultrasound.global.Transmission;
 
 /**
  * A panel used to annotate an image.
@@ -28,22 +31,35 @@ public class AnnotationPanel extends JPanel
 	/** The graphics context of the annotation image. */
 	private Graphics2D g2dAnnotation = null;
 	
+	/** The ultrasound image. */
+	private Image image = null;
+	
 	/** The annotation image. */
 	private BufferedImage annotationImage = null;
-	
-	/** The original image. */
-	private Image originalImage = null;
 	
 	/** The size of the color button */
 	private static final int colorButtonSize = 20;
 	
+	private Connection dbConnection = null;
+
+	private int RID = -1;
+	
 	/**
 	 * Instantiates a new annotation panel.
 	 *
-	 * @param panelSize The panel size.
-	 * @param image The image to be annotated.
+	 * @param connection The established connection.
 	 */
-	public AnnotationPanel(Dimension panelSize, BufferedImage image)
+	public AnnotationPanel(Connection dbConnection)
+	{
+		if (dbConnection == null)
+			return;
+		
+		this.dbConnection = dbConnection;
+		
+		initUI();
+	}
+	
+	private void initUI()
 	{
 		this.setLayout(new BorderLayout(0, 0));
 		this.setBackground(Color.BLACK);
@@ -91,24 +107,13 @@ public class AnnotationPanel extends JPanel
 		
 		this.add(colorPanel, BorderLayout.NORTH);
 		
-		this.setPreferredSize(new Dimension(panelSize.width, panelSize.height + colorButtonSize));
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		
 		// add the mouse listener for the pen tool
 		MouseListener ml = new MouseListener();
 		this.addMouseListener(ml);
 		this.addMouseMotionListener(ml);
-		
-		// create an image to draw into
-		annotationImage = new BufferedImage(panelSize.width, panelSize.height, BufferedImage.TYPE_INT_ARGB);
-		g2dAnnotation = annotationImage.createGraphics();
-        g2dAnnotation.setColor(prevColor);
-        
-        g2dAnnotation.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2dAnnotation.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        originalImage = image.getScaledInstance(panelSize.width, panelSize.height, Image.SCALE_SMOOTH);
-    }
+	}
 	
 	/**
 	 * The listener interface for receiving mouse events.
@@ -129,6 +134,9 @@ public class AnnotationPanel extends JPanel
 		@Override
 		public void mouseDragged(MouseEvent arg0) 
 		{
+			if (RID == -1)
+				return;
+			
 			currLoc = arg0.getPoint();
 			
 			updateCanvas();
@@ -142,6 +150,9 @@ public class AnnotationPanel extends JPanel
 		@Override
 		public void mousePressed(MouseEvent arg0) 
 		{
+			if (RID == -1)
+				return;
+			
 			currLoc = arg0.getPoint();
 			prevLoc = currLoc;
 		}
@@ -154,8 +165,9 @@ public class AnnotationPanel extends JPanel
 	{
 		g2dAnnotation.setPaint(prevColor);
 		g2dAnnotation.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
-        g2dAnnotation.drawLine((int)prevLoc.getX(), (int)prevLoc.getY() - colorButtonSize, (int)currLoc.getX(), (int)currLoc.getY() - colorButtonSize);
-        
+        g2dAnnotation.drawLine((int)prevLoc.getX(), (int)prevLoc.getY() - colorButtonSize, 
+        		               (int)currLoc.getX(), (int)currLoc.getY() - colorButtonSize);
+        System.out.println(annotationImage.getHeight() - this.getHeight());
         repaint();
 	}
 	
@@ -168,8 +180,24 @@ public class AnnotationPanel extends JPanel
         Graphics2D g2d = (Graphics2D)g;
 
         // draw both images on top of one another. Since annotationImage is RGBA, it will overlay.
-        g2d.drawImage(originalImage, 0, colorButtonSize, null);
-        g2d.drawImage(annotationImage, null, 0, colorButtonSize);
+        g2d.drawImage(image,           0, colorButtonSize, this.getWidth(), this.getHeight() - colorButtonSize, null);
+        g2d.drawImage(annotationImage, 0, colorButtonSize, this.getWidth(), this.getHeight() - colorButtonSize, null);
+	}
+	
+	public void setRID(int RID)
+	{
+		this.RID = RID;
+		image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		
+		// create an image to draw into
+		annotationImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		g2dAnnotation = annotationImage.createGraphics();
+        g2dAnnotation.setColor(prevColor);
+        
+        g2dAnnotation.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2dAnnotation.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		this.repaint();
 	}
 	
 	/**

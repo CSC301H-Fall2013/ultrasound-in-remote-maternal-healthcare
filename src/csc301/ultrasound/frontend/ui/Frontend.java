@@ -33,7 +33,7 @@ public class Frontend
 		Transmission t = new Transmission();
 		Connection dbConnection = t.connectToDB();
 		
-		new GUI(user, dbConnection);
+		new GUI2(user, dbConnection);
 	}
 	
 	/**
