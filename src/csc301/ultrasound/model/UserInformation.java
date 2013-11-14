@@ -34,12 +34,12 @@ public class UserInformation extends AbstractTableModel
 				ResultSet rs;
 
 				// Query the database for user information with the provided authlevel.
-				query = "select id, username, email, phone, location"
-						+ "from ultrasound.users"
+				query = "select id, username, email, phone, location "
+						+ "from ultrasound.users "
 						+ "where authlevel = " 
 						+ Integer.toString(authLevel)
 						+ " "
-						+ "order by id desc";
+						+ "order by id desc ";
 				rs = statement.executeQuery(query);
 
 				while (rs.next())
