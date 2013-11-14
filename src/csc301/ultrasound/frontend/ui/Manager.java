@@ -6,13 +6,11 @@ import java.awt.GridBagLayout;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.sql.Connection;
 
 import javax.swing.JTabbedPane;
 
-import csc301.ultrasound.model.PatientInformation;
+import csc301.ultrasound.model.UsersInformation;
 
 import java.awt.GridBagConstraints;
 
@@ -27,8 +25,8 @@ public class Manager extends JFrame
 	private Connection dbConnection = null;
 	private JTable fwTable = null;
 	private JTable rTable = null;
-	private PatientInformation fwModel = null;
-	private PatientInformation rModel = null;
+	private UsersInformation fwModel = null;	// field worker
+	private UsersInformation rModel = null;		// radiologist
 
 	/**
 	 * Create the frame.
@@ -96,15 +94,14 @@ public class Manager extends JFrame
 		gbc_rTable.gridx = 0;
 		gbc_rTable.gridy = 0;
 		rPanel.add(new JScrollPane(rTable), gbc_rTable);
-		
 	}
 	
 	private void updateMainTable()
 	{
 		if (dbConnection != null)
 		{
-			fwModel = new PatientInformation(5, dbConnection);
-			rModel = new PatientInformation(4, dbConnection);
+			fwModel = new UsersInformation(5, dbConnection);
+			rModel = new UsersInformation(4, dbConnection);
 			rTable.setModel(rModel);
 			fwTable.setModel(fwModel);
 		}

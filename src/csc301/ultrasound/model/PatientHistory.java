@@ -1,6 +1,7 @@
 package csc301.ultrasound.model;
 
 import java.sql.*;
+import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -14,36 +15,40 @@ public class PatientHistory extends AbstractTableModel
 	private static final long serialVersionUID = 1L;
 	
 	private static Object[][] data;
-	private static String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Response" };
+	private Vector<String> columnNames = null;
 	
-	public PatientHistory(int currPatientId, Connection dbConnection)
+	public PatientHistory(int value, String dbColumnToFilter, String niceName, Connection dbConnection)
 	{
+		columnNames = new Vector<String>();
+		columnNames.add("Record ID");
+		columnNames.add(niceName);
+		columnNames.add("Submission Time");
+		columnNames.add("Comments");
+		columnNames.add("Response");
+		
 		// The maximum number of records that can be displayed
-		int maxPatientRecords = Integer.MAX_VALUE;
+		// TODO: Remove restriction by using LinkedLists instead
+		int maxPatientRecords = 100;
 
 		// The number of patient records added to the table.
 		int numPatientRecords = 0;
 
 		// Create a new table consisting of the patient's information.
-		Object[][] patientHistoryTable;
-		patientHistoryTable = new Object[maxPatientRecords][5];
+		Object[][] patientHistoryTable = new Object[maxPatientRecords][columnNames.size()];
 		
 		if (dbConnection != null)
 		{
 			try
 			{
 				Statement statement = dbConnection.createStatement();
-				String query;
-				ResultSet rs;
 
 				// Query the database for previous records of the patient.
-				query = "select RID, Date, FieldworkerComments, RadiologistResponse "
-						+ "from ultrasound.Records "
-						+ "where PID = "
-						+ Integer.toString(currPatientId)
-						+ " "
-						+ "order by Date desc";
-				rs = statement.executeQuery(query);
+				String query = "select RID, Date, FieldworkerComments, RadiologistResponse "
+							 + "from ultrasound.Records "
+							 + "where " + dbColumnToFilter + " = " + value + " "
+							 + "order by Date desc";
+				
+				ResultSet rs = statement.executeQuery(query);
 
 				while (rs.next() && (numPatientRecords < maxPatientRecords))
 				{
@@ -55,7 +60,7 @@ public class PatientHistory extends AbstractTableModel
 
 					// Record the data in the record table.
 					patientHistoryTable[numPatientRecords][0] = recordID;
-					patientHistoryTable[numPatientRecords][1] = currPatientId;
+					patientHistoryTable[numPatientRecords][1] = value;
 					patientHistoryTable[numPatientRecords][2] = date;
 					patientHistoryTable[numPatientRecords][3] = comments;
 					patientHistoryTable[numPatientRecords][4] = response;
@@ -78,7 +83,7 @@ public class PatientHistory extends AbstractTableModel
 
 	public int getColumnCount()
 	{
-		return columnNames.length;
+		return columnNames.size();
 	}
 
 	public int getRowCount()
@@ -88,7 +93,7 @@ public class PatientHistory extends AbstractTableModel
 
 	public String getColumnName(int col)
 	{
-		return columnNames[col];
+		return columnNames.elementAt(col);
 	}
 
 	public Object getValueAt(int row, int col)
