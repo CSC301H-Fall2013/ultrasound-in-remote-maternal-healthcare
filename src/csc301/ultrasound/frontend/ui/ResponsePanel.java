@@ -40,8 +40,6 @@ public class ResponsePanel extends JPanel
 	 */
 	public ResponsePanel(final User user, Connection connection) 
 	{
-		//BufferedImage image = null;
-		
 		if (connection == null)
 			return;
 		
@@ -49,21 +47,6 @@ public class ResponsePanel extends JPanel
 		this.connection = connection;
 		
 		initUI();
-		
-		//System.out.println("Connected!");
-		
-		//final Transmission t = new Transmission();
-		
-		/*image = t.getUltrasoundFromDB(RID, connection);
-		
-		if (image != null)
-		{
-			
-		}
-		else
-		{
-			System.err.println(String.format("Could not retreive ultrasound image from RID %d.", RID));
-		}*/
 	}
 	
 	private void initUI()

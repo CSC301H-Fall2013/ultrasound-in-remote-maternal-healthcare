@@ -1,24 +1,16 @@
 package csc301.ultrasound.frontend.ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JToolBar;
 import java.awt.GridBagLayout;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.Connection;
 
 import javax.swing.JTabbedPane;
 
-import csc301.ultrasound.model.UserInformation;
+import csc301.ultrasound.model.PatientInformation;
 
 import java.awt.GridBagConstraints;
 
@@ -26,44 +18,34 @@ import java.awt.GridBagConstraints;
  * Manager interface, it contains the tables for the information of all 
  * radiologists and fieldworkers.
  */
-public class Manager extends JFrame {
-
-	private JPanel contentPane;
-	private static Connection dbConnection;
-	private JTable fwTable;
-	private JTable rTable;
-	private UserInformation fwModel;
-	private UserInformation rModel;
+public class Manager extends JFrame 
+{
+	private static final long serialVersionUID = 1L;
 	
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Manager frame = new Manager(dbConnection);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JPanel contentPane = null;
+	private Connection dbConnection = null;
+	private JTable fwTable = null;
+	private JTable rTable = null;
+	private PatientInformation fwModel = null;
+	private PatientInformation rModel = null;
 
 	/**
 	 * Create the frame.
 	 */
-	public Manager(Connection dbConnection) {
+	public Manager(Connection dbConnection) 
+	{
 		this.dbConnection = dbConnection;
 		buildUI();
 		
+		updateMainTable();
 	}
-	public void buildUI(){
+	
+	public void buildUI()
+	{
 		setTitle("Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 480);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -112,17 +94,17 @@ public class Manager extends JFrame {
 		gbc_rTable.gridy = 0;
 		rPanel.add(rTable, gbc_rTable);
 		
-		this.setExtendedState( this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
-
+		this.setExtendedState( this.getExtendedState() | JFrame.MAXIMIZED_BOTH );
 	}
 	
 	private void updateMainTable()
 	{
 		if (dbConnection != null)
-			fwModel = new UserInformation(5, dbConnection);
-			rModel = new UserInformation(4, dbConnection);
+		{
+			fwModel = new PatientInformation(5, dbConnection);
+			rModel = new PatientInformation(4, dbConnection);
 			rTable.setModel(rModel);
 			fwTable.setModel(fwModel);
+		}
 	}
-
 }

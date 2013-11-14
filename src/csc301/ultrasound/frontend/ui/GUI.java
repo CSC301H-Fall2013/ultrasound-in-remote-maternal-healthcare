@@ -15,10 +15,6 @@ import javax.swing.event.ListSelectionListener;
 
 import csc301.ultrasound.model.*;
 
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-
 public class GUI extends JFrame
 {
 	private static final long serialVersionUID = 1L;
@@ -56,12 +52,6 @@ public class GUI extends JFrame
 	private void buildUI()
 	{
 		this.setTitle("URMH Client");
-		
-		/*
-		 * frmUrmhClient .setIconImage(Toolkit .getDefaultToolkit() .getImage(
-		 * GUI.class
-		 * .getResource("/img/41612_394588193886419_1849416814_q.jpg")));
-		 */
 		
 		this.setBounds(100, 100, 1093, 794);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,8 +96,7 @@ public class GUI extends JFrame
 
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
-		this.getContentPane().setLayout(
-				new MigLayout("", "[1057px,grow]", "[33px][grow]"));
+		this.getContentPane().setLayout(new MigLayout("", "[1057px,grow]", "[33px][grow]"));
 
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
@@ -132,10 +121,12 @@ public class GUI extends JFrame
 		});
 		
 		// Deactivate button if the authlevel of the user is not high enough.
-		if (user.getAuthlevel() != 1 && user.getAuthlevel() != 2 && user.getAuthlevel() != 3){
+		if (user.getAuthlevel() > 3)
+		{
 			System.out.println(user.getAuthlevel());
 			btnManagerPanel.setEnabled(false);
 		}
+		
 		toolBar.add(btnManagerPanel);
 
 		JSplitPane splitPane = new JSplitPane();
@@ -144,101 +135,56 @@ public class GUI extends JFrame
 		splitPane.setContinuousLayout(true);
 		this.getContentPane().add(splitPane, "cell 0 1,grow");
 
-		JPanel panel = new JPanel();
-		splitPane.setRightComponent(panel);
+		JPanel editPanel = new JPanel();
+		splitPane.setRightComponent(editPanel);
 
 		JSplitPane subSplitPlane = new JSplitPane();
-		subSplitPlane.setResizeWeight(0.65);
-		subSplitPlane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		subSplitPlane.setContinuousLayout(true);
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(
-				Alignment.LEADING).addComponent(subSplitPlane,
-				Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1044,
-				Short.MAX_VALUE));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(
-				Alignment.LEADING).addComponent(subSplitPlane,
-				Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 668,
-				Short.MAX_VALUE));
+		subSplitPlane.setResizeWeight(0.5);
+		subSplitPlane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		GroupLayout gl_panel = new GroupLayout(editPanel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(subSplitPlane, GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(subSplitPlane, GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE))
+		);
+		editPanel.setLayout(gl_panel);
 
-		JPanel panel_2 = new JPanel();
-		subSplitPlane.setRightComponent(panel_2);
-		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[] { 0, 0 };
-		gbl_panel_2.rowHeights = new int[] { 0, 0 };
-		gbl_panel_2.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel_2.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-		panel_2.setLayout(gbl_panel_2);
-
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
-		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
-		gbc_tabbedPane.gridx = 0;
-		gbc_tabbedPane.gridy = 0;
-		panel_2.add(tabbedPane, gbc_tabbedPane);
-
-		JPanel patientInfo = new JPanel();
-		tabbedPane.addTab("Patient Info", null, patientInfo, null);
-		GridBagLayout gbl_patientInfo = new GridBagLayout();
-		gbl_patientInfo.columnWidths = new int[] { 0, 0 };
-		gbl_patientInfo.rowHeights = new int[] { 0, 0 };
-		gbl_patientInfo.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_patientInfo.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-		patientInfo.setLayout(gbl_patientInfo);
+		// info section tabs
+		JTabbedPane infoTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		subSplitPlane.setBottomComponent(infoTabbedPane);
 
 		JScrollPane infoPane = new JScrollPane();
-		GridBagConstraints gbc_infoPane = new GridBagConstraints();
-		gbc_infoPane.fill = GridBagConstraints.BOTH;
-		gbc_infoPane.gridx = 0;
-		gbc_infoPane.gridy = 0;
-		patientInfo.add(infoPane, gbc_infoPane);
+		infoTabbedPane.addTab("Patient Info", null, infoPane, null);
 
 		infoTable = new JTable();
 		infoTable.setFillsViewportHeight(true);
 		infoPane.setViewportView(infoTable);
 
-		JPanel patientHist = new JPanel();
-		tabbedPane.addTab("Patient History", null, patientHist, null);
-		GridBagLayout gbl_patientHist = new GridBagLayout();
-		gbl_patientHist.columnWidths = new int[] { 0, 0 };
-		gbl_patientHist.rowHeights = new int[] { 0, 0 };
-		gbl_patientHist.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_patientHist.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-		patientHist.setLayout(gbl_patientHist);
-
 		JScrollPane histPane = new JScrollPane();
-		GridBagConstraints gbc_histPane = new GridBagConstraints();
-		gbc_histPane.fill = GridBagConstraints.BOTH;
-		gbc_histPane.gridx = 0;
-		gbc_histPane.gridy = 0;
-		patientHist.add(histPane, gbc_histPane);
+		infoTabbedPane.addTab("Patient History", null, histPane, null);
 
 		histTable = new JTable();
 		histTable.setFillsViewportHeight(true);
 		histPane.setViewportView(histTable);
-
-		JPanel tabPanel1 = new JPanel();
-		subSplitPlane.setLeftComponent(tabPanel1);
-		tabPanel1.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"), }, new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"), }));
 		
-		tabPanel1.setMinimumSize(new Dimension(100, 400));
+		// image section tabs
+		JTabbedPane imageTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		subSplitPlane.setTopComponent(imageTabbedPane);
 
-		tabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
-		tabPanel1.add(tabbedPane1, "2, 2, fill, fill");
-		
 		imagePanel = new ImagePanel(dbConnection);
-		tabbedPane1.addTab("View image", null, imagePanel, null);
-
 		responsePanel = new ResponsePanel(user, dbConnection);
-		tabbedPane1.addTab("Respond", null, responsePanel, null);
-
-		JPanel msgPnl = new JPanel();
-		tabbedPane1.addTab("Leave message", null, msgPnl, null);
-		panel.setLayout(gl_panel);
+		
+		imageTabbedPane.addTab("Review", null, imagePanel, null);
+		imageTabbedPane.addTab("Respond", null, responsePanel, null);
+		imageTabbedPane.addTab("Comment", null, null, null);
 
 		JPanel panel_1 = new JPanel();
 		splitPane.setLeftComponent(panel_1);
@@ -268,7 +214,7 @@ public class GUI extends JFrame
 				new MainListSelectionListener());
 		mainTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(mainTable);
-
+		
 		this.pack();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
