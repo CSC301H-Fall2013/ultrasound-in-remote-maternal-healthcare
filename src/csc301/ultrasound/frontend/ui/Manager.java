@@ -22,12 +22,19 @@ import csc301.ultrasound.model.UserInformation;
 
 import java.awt.GridBagConstraints;
 
+/**
+ * Manager interface, it contains the tables for the information of all 
+ * radiologists and fieldworkers.
+ */
 public class Manager extends JFrame {
 
 	private JPanel contentPane;
 	private static Connection dbConnection;
 	private JTable fwTable;
 	private JTable rTable;
+	private UserInformation fwModel;
+	private UserInformation rModel;
+	
 
 	/**
 	 * Launch the application.
@@ -104,6 +111,7 @@ public class Manager extends JFrame {
 		gbc_rTable.gridx = 0;
 		gbc_rTable.gridy = 0;
 		rPanel.add(rTable, gbc_rTable);
+		
 		this.setExtendedState( this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
 
 	}
@@ -111,8 +119,10 @@ public class Manager extends JFrame {
 	private void updateMainTable()
 	{
 		if (dbConnection != null)
-			fwTable.setModel(new UserInformation(5, dbConnection));
-			rTable.setModel(new UserInformation(4, dbConnection));
+			fwModel = new UserInformation(5, dbConnection);
+			rModel = new UserInformation(4, dbConnection);
+			rTable.setModel(rModel);
+			fwTable.setModel(fwModel);
 	}
 
 }

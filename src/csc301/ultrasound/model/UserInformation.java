@@ -13,11 +13,13 @@ public class UserInformation extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private static Object[][] data;
-	private static String[] columnNames = { "User ID", "User Name", "email", "Phone Number", "Location" };
+	private Object[][] data;
+	private String[] columnNames = { "User ID", "User Name", "email", "Phone Number", "Location" };
+	private int authLevel;
 	
 	public UserInformation(int authLevel, Connection dbConnection)
 	{
+		this.authLevel = authLevel;
 		// The number of user records added to the table.
 		int numUserRecords = 0;
 
@@ -37,7 +39,7 @@ public class UserInformation extends AbstractTableModel
 				query = "select id, username, email, phone, location "
 						+ "from ultrasound.users "
 						+ "where authlevel = " 
-						+ Integer.toString(authLevel)
+						+ Integer.toString(this.authLevel)
 						+ " "
 						+ "order by id desc ";
 				rs = statement.executeQuery(query);
