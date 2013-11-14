@@ -33,6 +33,7 @@ public class GUI extends JFrame
 	private JTable histTable = null;
 	
 	private ImagePanel viewPnl = null;
+	private JTabbedPane tabbedPane1 = null;
 
 	/**
 	 * Create the application.
@@ -121,9 +122,21 @@ public class GUI extends JFrame
 			}
 		});
 		toolBar.add(updateBtn);
-
-		JButton commitBtn = new JButton("Commit changes");
-		toolBar.add(commitBtn);
+		
+		JButton btnManagerPanel = new JButton("Manager Panel");
+		btnManagerPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Manager managerPanel = new Manager(dbConnection);
+				managerPanel.setVisible(true);
+			}
+		});
+		
+		// Deactivate button if the authlevel of the user is not high enough.
+		if (user.getAuthlevel() != 1 && user.getAuthlevel() != 2 && user.getAuthlevel() != 3){
+			System.out.println(user.getAuthlevel());
+			btnManagerPanel.setEnabled(false);
+		}
+		toolBar.add(btnManagerPanel);
 
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.2);
@@ -212,17 +225,12 @@ public class GUI extends JFrame
 		
 		tabPanel1.setMinimumSize(new Dimension(100, 400));
 
-		JTabbedPane tabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel1.add(tabbedPane1, "2, 2, fill, fill");
 		
 		viewPnl = new ImagePanel(dbConnection);
 		tabbedPane1.addTab("View image", null, viewPnl, null);
 
-		JPanel annotatePnl = new JPanel();
-		tabbedPane1.addTab("Annotate image", null, annotatePnl, null);
-
-		JPanel msgPnl = new JPanel();
-		tabbedPane1.addTab("Leave message", null, msgPnl, null);
 		panel.setLayout(gl_panel);
 
 		JPanel panel_1 = new JPanel();
@@ -296,6 +304,12 @@ public class GUI extends JFrame
 			infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
 			
 			viewPnl.setRID(currRID);
+			if (tabbedPane1.getTabCount() < 2){
+				ResponsePanel msgPnl = new ResponsePanel(currRID, user, dbConnection);
+				tabbedPane1.addTab("Response", null, msgPnl, null);
+			}
+			
+
 		}
 	}
 }
