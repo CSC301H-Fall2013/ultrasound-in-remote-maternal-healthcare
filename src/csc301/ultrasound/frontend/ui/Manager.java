@@ -75,7 +75,8 @@ public class Manager extends JFrame
 		gbc_fwTable.fill = GridBagConstraints.BOTH;
 		gbc_fwTable.gridx = 0;
 		gbc_fwTable.gridy = 0;
-		fwPanel.add(fwTable, gbc_fwTable);
+		fwTable.setFillsViewportHeight(true);
+		fwPanel.add(new JScrollPane(fwTable), gbc_fwTable);
 		
 		JPanel rPanel = new JPanel();
 		tabbedPane.addTab("Radiologists", null, rPanel, null);
@@ -87,13 +88,12 @@ public class Manager extends JFrame
 		rPanel.setLayout(gbl_rPanel);
 		
 		rTable = new JTable();
+		rTable.setFillsViewportHeight(true);
 		GridBagConstraints gbc_rTable = new GridBagConstraints();
 		gbc_rTable.fill = GridBagConstraints.BOTH;
 		gbc_rTable.gridx = 0;
 		gbc_rTable.gridy = 0;
-		rPanel.add(rTable, gbc_rTable);
-		
-		this.setExtendedState( this.getExtendedState() | JFrame.MAXIMIZED_BOTH );
+		rPanel.add(new JScrollPane(rTable), gbc_rTable);
 	}
 	
 	private void updateMainTable()

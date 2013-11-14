@@ -19,7 +19,7 @@ public class PatientHistory extends AbstractTableModel
 	public PatientHistory(int currPatientId, Connection dbConnection)
 	{
 		// The maximum number of records that can be displayed
-		int maxPatientRecords = 100;
+		int maxPatientRecords = Integer.MAX_VALUE;
 
 		// The number of patient records added to the table.
 		int numPatientRecords = 0;
