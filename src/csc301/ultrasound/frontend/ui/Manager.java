@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 
 import javax.swing.JTabbedPane;
@@ -42,7 +44,7 @@ public class Manager extends JFrame
 	public void buildUI()
 	{
 		setTitle("Manager");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 480);
 		
 		JPanel contentPane = new JPanel();
@@ -94,6 +96,7 @@ public class Manager extends JFrame
 		gbc_rTable.gridx = 0;
 		gbc_rTable.gridy = 0;
 		rPanel.add(new JScrollPane(rTable), gbc_rTable);
+		
 	}
 	
 	private void updateMainTable()
