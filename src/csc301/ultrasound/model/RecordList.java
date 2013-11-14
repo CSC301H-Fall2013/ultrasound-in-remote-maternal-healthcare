@@ -12,7 +12,7 @@ public class RecordList extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private static final int maxRecordRows = 20;
+	private static final int maxRecordRows = 100;
 
 	private Object[][] data = null;
 	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Status" };

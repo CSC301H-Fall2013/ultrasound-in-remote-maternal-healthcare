@@ -122,9 +122,21 @@ public class GUI extends JFrame
 			}
 		});
 		toolBar.add(updateBtn);
-
-		JButton commitBtn = new JButton("Commit changes");
-		toolBar.add(commitBtn);
+		
+		JButton btnManagerPanel = new JButton("Manager Panel");
+		btnManagerPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Manager managerPanel = new Manager(dbConnection);
+				managerPanel.setVisible(true);
+			}
+		});
+		
+		// Deactivate button if the authlevel of the user is not high enough.
+		if (user.getAuthlevel() != 1 && user.getAuthlevel() != 2 && user.getAuthlevel() != 3){
+			System.out.println(user.getAuthlevel());
+			btnManagerPanel.setEnabled(false);
+		}
+		toolBar.add(btnManagerPanel);
 
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.2);
@@ -214,38 +226,8 @@ public class GUI extends JFrame
 				RowSpec.decode("default:grow"), }));
 		
 		tabPanel1.setMinimumSize(new Dimension(100, 400));
-		
-		/*tabPanel1.addComponentListener(new ComponentListener()
-		{
-			@Override
-			public void componentResized(ComponentEvent e) 
-			{
-				//imagePanel.resize(e.getComponent().getSize());
-				imagePanel.setSize(e.getComponent().getSize());
-				//System.out.println("\n" + e.getComponent().getSize());            
-			}
-		@Override
-		public void componentHidden(ComponentEvent e)
-		{
-			// TODO Auto-generated method stub
-			
-		}
 
-		@Override
-		public void componentMoved(ComponentEvent e)
-		{
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void componentShown(ComponentEvent e)
-		{
-			// TODO Auto-generated method stub
-			
-		}});*/
-
-		JTabbedPane tabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel1.add(tabbedPane1, "2, 2, fill, fill");
 		
 		imagePanel = new ImagePanel(dbConnection);
