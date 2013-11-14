@@ -22,7 +22,6 @@ public class Manager extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel contentPane = null;
 	private Connection dbConnection = null;
 	private JTable fwTable = null;
 	private JTable rTable = null;
@@ -46,7 +45,7 @@ public class Manager extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 480);
 		
-		contentPane = new JPanel();
+		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow]", "[][grow]"));

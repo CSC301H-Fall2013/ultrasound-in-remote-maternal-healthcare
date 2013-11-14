@@ -13,8 +13,8 @@ public class PatientInformation extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private static Object[][] data = null;
-	private static String[] columnNames = { "Patient ID", "Name", "Birthday", "Country" };
+	private Object[][] data = null;
+	private String[] columnNames = { "Patient ID", "Name", "Birthday", "Country" };
 	
 	public PatientInformation(int currPatientId, Connection dbConnection)
 	{
