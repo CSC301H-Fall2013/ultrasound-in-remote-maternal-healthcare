@@ -6,8 +6,8 @@ import java.util.Date;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Create a two-dimensional table consisting of the patient information of
- * the patient with the given patientID.
+ * Create a two-dimensional table consisting of the users corresponding
+ * to the given authlevel.
  */
 public class UsersInformation extends AbstractTableModel
 {
