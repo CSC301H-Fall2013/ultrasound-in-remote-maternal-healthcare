@@ -51,7 +51,6 @@
 		        android:id="@+id/patient_age"
 	            android:layout_width="@dimen/metadata_textview_length"
 	            android:ems="10"
-	            android:inputType="number"
 	            android:padding="3dip" >
 
 	            <requestFocus />
