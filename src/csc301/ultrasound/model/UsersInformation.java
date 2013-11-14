@@ -9,17 +9,18 @@ import javax.swing.table.AbstractTableModel;
  * Create a two-dimensional table consisting of the patient information of
  * the patient with the given patientID.
  */
-public class PatientInformation extends AbstractTableModel
+public class UsersInformation extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
 	private Object[][] data = null;
-	private String[] columnNames = { "Patient ID", "Name", "Birthday", "Country" };
+	private String[] columnNames = { "User ID", "Username", "Email", "Last Login", "Phone", "Location" };
 	
-	public PatientInformation(int currPatientId, Connection dbConnection)
+	public UsersInformation(int authlevel, Connection dbConnection)
 	{
 		// Create a new table consisting of the patient's information.
-		Object[][] patientInfoTable = new Object[1][columnNames.length];
+		// Todo: Remove restriction on size.
+		Object[][] userInfoTable = new Object[100][columnNames.length];
 
 		if (dbConnection != null)
 		{
@@ -30,28 +31,36 @@ public class PatientInformation extends AbstractTableModel
 				ResultSet rs;
 
 				// Query the database for information about the patient.
-				query = "select FirstName, LastName, Birthdate, Country "
-						+ "from ultrasound.Patients " + "where PID = "
-						+ Integer.toString(currPatientId);
+				query = "select id, username, email, last_login, phone, location "
+					  + "from ultrasound.Users "
+					  + "where authlevel = " + Integer.toString(authlevel) + " and activated = 1 and banned = 0";
 				
 				rs = statement.executeQuery(query);
 
+				int rowCount = 0;
+				
 				while (rs.next())
 				{
 					// Extract data from the result set.
-					String firstName = rs.getString("FirstName");
-					String lastName = rs.getString("LastName");
-					Date birthday = rs.getDate("Birthdate");
-					String country = rs.getString("Country");
+					int    id        = rs.getInt("id");
+					String username  = rs.getString("username");
+					String email     = rs.getString("email");
+					Date   lastLogin = rs.getDate("last_login");
+					int    phone     = rs.getInt("phone");
+					String location  = rs.getString("location");
 
 					// Record the data in the record table.
-					patientInfoTable[0][0] = currPatientId;
-					patientInfoTable[0][1] = firstName + " " + lastName;
-					patientInfoTable[0][2] = birthday;
-					patientInfoTable[0][3] = country;
+					userInfoTable[rowCount][0] = id;
+					userInfoTable[rowCount][1] = username;
+					userInfoTable[rowCount][2] = email;
+					userInfoTable[rowCount][3] = lastLogin;
+					userInfoTable[rowCount][4] = phone;
+					userInfoTable[rowCount][5] = location;
+					
+					rowCount++;
 				}
 				
-				data = patientInfoTable;
+				data = userInfoTable;
 			} 
 			catch (SQLException se)
 			{

@@ -253,7 +253,7 @@ public class GUI extends JFrame
 			int currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
 			int currRID = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 0).toString());
 			
-			histTable.setModel(new PatientHistory(currPatientId, dbConnection));
+			histTable.setModel(new PatientHistory(currPatientId, "PID", "Patient ID", dbConnection));
 			infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
 			
 			imagePanel.setRID(currRID);
