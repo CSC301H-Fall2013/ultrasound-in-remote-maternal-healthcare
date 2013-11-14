@@ -167,7 +167,7 @@ public class AnnotationPanel extends JPanel
 		g2dAnnotation.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
         g2dAnnotation.drawLine((int)prevLoc.getX(), (int)prevLoc.getY() - colorButtonSize, 
         		               (int)currLoc.getX(), (int)currLoc.getY() - colorButtonSize);
-        System.out.println(annotationImage.getHeight() - this.getHeight());
+        
         repaint();
 	}
 	

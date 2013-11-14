@@ -250,14 +250,17 @@ public class GUI extends JFrame
 			
 			int[] listSelection = mainTable.getSelectedRows();
 			
-			int currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
-			int currRID = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 0).toString());
-			
-			histTable.setModel(new PatientHistory(currPatientId, "PID", "Patient ID", dbConnection));
-			infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
-			
-			imagePanel.setRID(currRID);
-			responsePanel.setRID(currRID);
+			if (listSelection.length > 0)
+			{
+				int currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
+				int currRID = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 0).toString());
+				
+				histTable.setModel(new PatientHistory(currPatientId, "PID", "Patient ID", dbConnection));
+				infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
+				
+				imagePanel.setRID(currRID);
+				responsePanel.setRID(currRID);
+			}
 		}
 	}
 }

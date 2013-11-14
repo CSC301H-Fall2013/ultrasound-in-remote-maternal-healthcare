@@ -15,7 +15,7 @@ public class RecordList extends AbstractTableModel
 	private static final int maxRecordRows = 100;
 
 	private Object[][] data = null;
-	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Status" };
+	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments"/*, "Status"*/ };	// TODO: Re-enable Status
 
 	public RecordList(Connection dbConnection)
 	{
@@ -82,8 +82,8 @@ public class RecordList extends AbstractTableModel
 					+ "where RadiologistResponse is null "
 					+ "order by Date desc";
 			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, recordTable, numRecords,
-					"No Responses");
+			numRecords = fillRecordTable(rs, recordTable, numRecords/*,
+					"No Responses"*/);
 
 			// Query the database for records that a user has already responded
 			// to,
@@ -94,8 +94,8 @@ public class RecordList extends AbstractTableModel
 					+ "where RadiologistResponse is not null "
 					+ "and FieldworkerSeen = 0 " + "order by Date desc";
 			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, recordTable, numRecords,
-					"Has Unseen Response");
+			numRecords = fillRecordTable(rs, recordTable, numRecords/*,
+					"Has Unseen Response"*/);
 
 			// Query the database for records that a user has already responded
 			// to,
@@ -106,8 +106,8 @@ public class RecordList extends AbstractTableModel
 					+ "where RadiologistResponse is not null "
 					+ "and FieldworkerSeen = 1 " + "order by Date desc";
 			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, recordTable, numRecords,
-					"Has Seen Response");
+			numRecords = fillRecordTable(rs, recordTable, numRecords/*,
+					"Has Seen Response"*/);
 
 			// Return the number of records added to the records table.
 			return numRecords;
@@ -125,7 +125,7 @@ public class RecordList extends AbstractTableModel
 	 * of each row in the table as the status string. Return the number of
 	 * records that have been added to the table.
 	 */
-	private int fillRecordTable(ResultSet rs, Object[][] recordTable, int numRecords, String status)
+	private int fillRecordTable(ResultSet rs, Object[][] recordTable, int numRecords/*, String status*/)
 	{
 		try
 		{
@@ -142,7 +142,7 @@ public class RecordList extends AbstractTableModel
 				recordTable[numRecords][1] = patientID;
 				recordTable[numRecords][2] = date;
 				recordTable[numRecords][3] = complaint;
-				recordTable[numRecords][4] = status;
+				//recordTable[numRecords][4] = status;
 
 				numRecords++;
 			}
