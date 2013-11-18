@@ -50,11 +50,11 @@ class Patients extends CI_Model
 			$intgest = intval($gest);
 			$floatfet = floatval($diamfet);
 			$floatmot = floatval($diamot);
-			$newbinary = base64_decode($binary);
+			$newbinary = (binary) $binary;
 			
 		//$this->db->insert("ultrasound.Records", $da);
 		//"DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),'$newbinary')
-		$this->db->query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max),$binary)
+		$this->db->query("DECLARE @image varbinary(max) SET @image = CONVERT(varbinary(max), $newbinary)
 						INSERT INTO ultrasound.Records (PID, Date, FieldworkerComments, IMGUltrasound
 						Prebirth, Gestation, IsBleeding, DiameterFetalHead, DiameterMotherHip, FieldworkerSeen)
 						VALUES ('$intpid', '$curdat', '$fcomments', @image, '$preBirth', '$intgest',
