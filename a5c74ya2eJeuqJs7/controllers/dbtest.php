@@ -78,22 +78,5 @@ class Dbtest extends CI_Controller
 		}
 	}
 	
-	function insertPatientMed(){
-		if(isset($_REQUEST["piD"])){
-			$this->load->database();
-			$this->load->model("Pateints");
-			$pid = $_REQUEST["piD"];
-			$img = $_REQUEST["imG"];
-			$binary=base64_decode($img);
-			echo $this->Patients->insertImageData($pid, $binary);
-		} else{
-			echo "nothing set!";
-		}
-		})
-	}
-	
-	
-		
+
 }
-
-
