@@ -57,7 +57,7 @@ class Dbtest extends CI_Controller
 			$pid = $_REQUEST["piD"];
 			$fcomments =  $_REQUEST["fComments"];
 			$img = $_REQUEST["imG"];
-			$binary = base64_decode($img);
+			$binary = $_REQUEST["imG"];
 			$gest = $_REQUEST["gesT"];
 			$isbleed = $_REQUEST["isBleed"];
 			$preb =  $_REQUEST["preB"];
