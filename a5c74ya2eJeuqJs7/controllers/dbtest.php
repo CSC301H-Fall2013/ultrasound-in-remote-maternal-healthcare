@@ -90,7 +90,7 @@ class Dbtest extends CI_Controller
     			$size = getimagesize($file_path);
     			/*** assign our variables ***/
     			$type = $size['mime'];
-    			$imgfp = fopen($file_path, 'rb');
+    			$imgfp = fopen($file_path, 'r');
     			$size = $size[3];
     			$name = $_FILES['uploaded_file']['name'];
     			$maxsize = 99999999;
@@ -109,7 +109,11 @@ class Dbtest extends CI_Controller
 
             		/*** bind the params ***/
             		$stmt->bindParam(1, $type);
-            		$stmt->bindParam(2, $imgfp, PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
+            		$stmt->bindParam(2,  
+                          $fileStream, 
+                          PDO::PARAM_LOB, 
+                          0, 
+                          PDO::SQLSRV_ENCODING_BINARY);
             		$stmt->bindParam(3, $size);
             		$stmt->bindParam(4, $name);
             		/*** execute the query ***/
