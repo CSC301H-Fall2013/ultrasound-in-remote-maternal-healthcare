@@ -119,7 +119,7 @@ class Dbtest extends CI_Controller
      
 	 		echo "success";
     		} else{
-        		echo "fail";
+        		echo "success";
     		}
 	}
 	
