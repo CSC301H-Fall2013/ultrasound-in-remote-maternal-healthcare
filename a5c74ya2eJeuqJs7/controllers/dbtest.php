@@ -80,48 +80,7 @@ class Dbtest extends CI_Controller
 		}
 	}
 	
-	function upload(){
-    	
-    		$file_path = "";
-    		$this->load->database();
-    		$file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
-    		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
-    			/***  get the image info. ***/
-    			$size = getimagesize($file_path);
-    			/*** assign our variables ***/
-    			$type = $size['mime'];
-    			$imgfp = fopen($file_path, 'rb');
-    			$size = $size[3];
-    			$name = $_FILES['uploaded_file']['name'];
-    			$maxsize = 99999999;
-    		
-    			//$stmt = "INSERT INTO testblob (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)";
-    			//$this->db->query($stmt, array($type, $imgfp, $size, $name));
-    		 	/*** connect to db ***/
-       			$dbh = new PDO("sqlsrv:host=localhost;dbname=ultrasound", 'ultrasound', 'csc301-erie');
-
-                	/*** set the error mode ***/
-        		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-
-            		/*** our sql query ***/
-            		$stmt = $dbh->prepare("INSERT INTO ultrasound.testimage (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)");
-
-            		/*** bind the params ***/
-            		$stmt->bindParam(1, $type);
-            		$stmt->bindParam(2, $imgfp, PDO::PARAM_LOB);
-            		$stmt->bindParam(3, $size);
-            		$stmt->bindParam(4, $name);
-            		/*** execute the query ***/
-        		$stmt->execute();
-    		
-      			//  $stmt->bindParam(2, $imgfp, PDO::PARAM_LOB);
-     
-	 		echo "success";
-    		} else{
-        		echo "fail";
-    		}
-	}
+	
 	
 
 }
