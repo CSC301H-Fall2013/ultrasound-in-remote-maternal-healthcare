@@ -105,13 +105,13 @@ class Dbtest extends CI_Controller
             
 
             		/*** our sql query ***/
-            		$stmt = $dbh->prepare("INSERT INTO ultrasound.testimage (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)");
+            		//$stmt = $dbh->prepare("INSERT INTO ultrasound.testimage (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)");
 
             		/*** bind the params ***/
-            		$stmt->bindParam(1, $type);
-            		$stmt->bindParam(2, $imgfp, PDO::PARAM_LOB);
-            		$stmt->bindParam(3, $size);
-            		$stmt->bindParam(4, $name);
+            		//$stmt->bindParam(1, $type);
+            		//$stmt->bindParam(2, $imgfp, PDO::PARAM_LOB);
+            		//$stmt->bindParam(3, $size);
+            		//$stmt->bindParam(4, $name);
             		/*** execute the query ***/
         		//$stmt->execute();
     		
