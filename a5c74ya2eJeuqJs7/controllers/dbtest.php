@@ -90,7 +90,7 @@ class Dbtest extends CI_Controller
     			$size = getimagesize($file_path);
     			/*** assign our variables ***/
     			$type = $size['mime'];
-    			$imgfp = fopen($file_path, 'r');
+    			$fileStream = fopen($file_path, 'r');
     			$size = $size[3];
     			$name = $_FILES['uploaded_file']['name'];
     			$maxsize = 99999999;
