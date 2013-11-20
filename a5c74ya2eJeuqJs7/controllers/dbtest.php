@@ -98,14 +98,14 @@ class Dbtest extends CI_Controller
     			//$stmt = "INSERT INTO testblob (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)";
     			//$this->db->query($stmt, array($type, $imgfp, $size, $name));
     		 	/*** connect to db ***/
-       			$dbh = new PDO("mysql:host=localhost;dbname=mydb", 'root', 'root');
+       			$dbh = new PDO("sqlsrv:host=localhost;dbname=ultrasound", 'ultrasound', 'csc301-erie');
 
                 	/*** set the error mode ***/
         		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
 
             		/*** our sql query ***/
-            		$stmt = $dbh->prepare("INSERT INTO testblob (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)");
+            		$stmt = $dbh->prepare("INSERT INTO ultrasound.testimage (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)");
 
             		/*** bind the params ***/
             		$stmt->bindParam(1, $type);
