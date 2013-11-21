@@ -87,8 +87,9 @@ class Dbtest extends CI_Controller
     		$file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
     		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
     			/***  get the image info. ***/
-    			$size = getimagesize($file_path);
-    			$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 2);
+    			
+    			$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 40);
+    			$size = getimagesize($compressed);
     			/*** assign our variables ***/
     			$type = $size['mime'];
     			$fileStream = fopen($compressed, 'r');
