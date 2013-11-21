@@ -119,7 +119,7 @@ class Dbtest extends CI_Controller
             		$stmt->bindParam(3, $size);
             		$stmt->bindParam(4, $name);
             		/*** execute the query ***/
-        		$stmt->execute();
+        		//$stmt->execute();
     		
       			//  $stmt->bindParam(2, $imgfp, PDO::PARAM_LOB);
      
