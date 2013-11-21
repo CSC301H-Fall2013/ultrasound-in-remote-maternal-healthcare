@@ -88,9 +88,10 @@ class Dbtest extends CI_Controller
     		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
     			/***  get the image info. ***/
     			$size = getimagesize($file_path);
+    			$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 90);
     			/*** assign our variables ***/
     			$type = $size['mime'];
-    			$fileStream = fopen($file_path, 'r');
+    			$fileStream = fopen($compressed, 'r');
     			$size = $size[3];
     			$name = $_FILES['uploaded_file']['name'];
     			$maxsize = 99999999;
@@ -126,6 +127,17 @@ class Dbtest extends CI_Controller
         		echo "success";
     		}
 	}
+	
+	function compress($source, $destination, $quality) { 
+		$info = getimagesize($source); 
+			if ($info['mime'] == 'image/jpeg') 
+				$image = imagecreatefromjpeg($source); 
+			elseif ($info['mime'] == 'image/gif') 
+				$image = imagecreatefromgif($source); 
+			elseif ($info['mime'] == 'image/png') 
+				$image = imagecreatefrompng($source); 
+				imagejpeg($image, $destination, $quality); 
+				return $destination; }
 	
 	
 	
