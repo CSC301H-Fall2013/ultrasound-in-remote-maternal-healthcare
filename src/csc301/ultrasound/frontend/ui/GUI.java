@@ -67,7 +67,8 @@ public class GUI extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				quit();
+				dispose();			// destroy the current session
+				Frontend.login();	// create a new session
 			}
 		});
 		mnFile.add(mntmLogOut);

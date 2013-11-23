@@ -22,6 +22,7 @@ public class Frontend
 			{
 				User user = login.getUser();
 				
+				// make sure we actually obtained a valid User object
 				if (user != null)
 					launchMainUI(user);
 			}
