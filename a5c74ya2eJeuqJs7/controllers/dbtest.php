@@ -88,36 +88,36 @@ class Dbtest extends CI_Controller
     		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
     			/***  get the image info. ***/
     			
-    			//$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 90);
-    			$size = getimagesize($file_path);
+    			$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 60);
+    			//$size = getimagesize($compressed);
     			/*** assign our variables ***/
-    			$type = $size['mime'];
-    			$fileStream = fopen($file_path, 'r');
+    			/*$type = $size['mime'];
+    			$fileStream = fopen($compressed, 'r');
     			$size = $size[3];
     			$name = $_FILES['uploaded_file']['name'];
-    			$maxsize = 99999999;
+    			$maxsize = 99999999;*/
     		
     			//$stmt = "INSERT INTO testblob (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)";
     			//$this->db->query($stmt, array($type, $imgfp, $size, $name));
     		 	/*** connect to db ***/
-       			$dbh = new PDO("sqlsrv:Server=ze7duqnsz2.database.windows.net,1433;Database=ultrasound", 'ultrasound', 'csc301-erie');
+       			//$dbh = new PDO("sqlsrv:Server=ze7duqnsz2.database.windows.net,1433;Database=ultrasound", 'ultrasound', 'csc301-erie');
 
                 	/*** set the error mode ***/
-        		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        	//	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
 
             		/*** our sql query ***/
-            		$stmt = $dbh->prepare("INSERT INTO ultrasound.testimage (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)");
+            		//$stmt = $dbh->prepare("INSERT INTO ultrasound.testimage (image_type ,image, image_size, image_name) VALUES (? ,?, ?, ?)");
 
             		/*** bind the params ***/
-            		$stmt->bindParam(1, $type);
+            		/*$stmt->bindParam(1, $type);
             		$stmt->bindParam(2,  
                           $fileStream, 
                           PDO::PARAM_LOB, 
                           0, 
                           PDO::SQLSRV_ENCODING_BINARY);
             		$stmt->bindParam(3, $size);
-            		$stmt->bindParam(4, $name);
+            		$stmt->bindParam(4, $name);*/
             		/*** execute the query ***/
         		//$stmt->execute();
     		
