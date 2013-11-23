@@ -238,7 +238,11 @@ public class GUI extends JFrame
 	private void updateMainTable()
 	{
 		if (dbConnection != null)
+		{
 			mainTable.setModel(new RecordList(dbConnection));
+			mainTable.setAutoCreateRowSorter(true);
+			mainTable.getRowSorter().toggleSortOrder(4);
+		}
 	}
 
 	private class MainListSelectionListener implements ListSelectionListener
