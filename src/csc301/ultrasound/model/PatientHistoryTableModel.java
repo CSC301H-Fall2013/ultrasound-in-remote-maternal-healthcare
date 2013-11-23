@@ -10,14 +10,14 @@ import javax.swing.table.AbstractTableModel;
  * patient with the given patientID. The patient history consists of the
  * last numRecords number of records of the patient.
  */
-public class PatientHistory extends AbstractTableModel
+public class PatientHistoryTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
 	private static Object[][] data;
 	private Vector<String> columnNames = null;
 	
-	public PatientHistory(int value, String dbColumnToFilter, String niceName, Connection dbConnection)
+	public PatientHistoryTableModel(int value, String dbColumnToFilter, String niceName, Connection dbConnection)
 	{
 		columnNames = new Vector<String>();
 		columnNames.add("Record ID");

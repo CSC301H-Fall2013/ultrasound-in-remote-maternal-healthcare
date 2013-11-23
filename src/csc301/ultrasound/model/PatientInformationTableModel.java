@@ -9,14 +9,14 @@ import javax.swing.table.AbstractTableModel;
  * Create a two-dimensional table consisting of the patient information of
  * the patient with the given patientID.
  */
-public class PatientInformation extends AbstractTableModel
+public class PatientInformationTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
 	private Object[][] data = null;
 	private String[] columnNames = { "Patient ID", "Name", "Birthday", "Country" };
 	
-	public PatientInformation(int currPatientId, Connection dbConnection)
+	public PatientInformationTableModel(int currPatientId, Connection dbConnection)
 	{
 		// Create a new table consisting of the patient's information.
 		Object[][] patientInfoTable = new Object[1][columnNames.length];

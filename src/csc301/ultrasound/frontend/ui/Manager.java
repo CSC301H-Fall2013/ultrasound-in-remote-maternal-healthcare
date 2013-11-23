@@ -10,7 +10,8 @@ import java.sql.Connection;
 
 import javax.swing.JTabbedPane;
 
-import csc301.ultrasound.model.UsersInformation;
+import csc301.ultrasound.model.UserInformationTableModel;
+
 
 import java.awt.GridBagConstraints;
 
@@ -25,8 +26,8 @@ public class Manager extends JFrame
 	private Connection dbConnection = null;
 	private JTable fwTable = null;
 	private JTable rTable = null;
-	private UsersInformation fwModel = null;	// field worker
-	private UsersInformation rModel = null;		// radiologist
+	private UserInformationTableModel fwModel = null;	// field worker
+	private UserInformationTableModel rModel = null;		// radiologist
 
 	/**
 	 * Create the frame.
@@ -100,8 +101,8 @@ public class Manager extends JFrame
 	{
 		if (dbConnection != null)
 		{
-			fwModel = new UsersInformation(5, dbConnection);
-			rModel = new UsersInformation(4, dbConnection);
+			fwModel = new UserInformationTableModel(5, dbConnection);
+			rModel = new UserInformationTableModel(4, dbConnection);
 			rTable.setModel(rModel);
 			fwTable.setModel(fwModel);
 		}

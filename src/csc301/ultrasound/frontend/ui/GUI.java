@@ -239,7 +239,7 @@ public class GUI extends JFrame
 	{
 		if (dbConnection != null)
 		{
-			mainTable.setModel(new RecordList(dbConnection));
+			mainTable.setModel(new RecordTableModel(dbConnection));
 			mainTable.setAutoCreateRowSorter(true);
 			mainTable.getRowSorter().toggleSortOrder(4);
 		}
@@ -259,8 +259,8 @@ public class GUI extends JFrame
 				int currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
 				int currRID = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 0).toString());
 				
-				histTable.setModel(new PatientHistory(currPatientId, "PID", "Patient ID", dbConnection));
-				infoTable.setModel(new PatientInformation(currPatientId, dbConnection));
+				histTable.setModel(new PatientHistoryTableModel(currPatientId, "PID", "Patient ID", dbConnection));
+				infoTable.setModel(new PatientInformationTableModel(currPatientId, dbConnection));
 				
 				imagePanel.setRID(currRID);
 				responsePanel.setRID(currRID);

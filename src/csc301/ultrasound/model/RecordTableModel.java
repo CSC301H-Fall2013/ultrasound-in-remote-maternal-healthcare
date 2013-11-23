@@ -9,20 +9,20 @@ import javax.swing.table.AbstractTableModel;
  * Create a two-dimensional table consisting of records, which is used to
  * add to the table model of of records of the patient.
  */
-public class RecordList extends AbstractTableModel
+public class RecordTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<RecordListEntry> data = null;
+	private ArrayList<RecordTableModelEntry> data = null;
 	
 	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Status" };
 
-	public RecordList(Connection dbConnection)
+	public RecordTableModel(Connection dbConnection)
 	{
 		if (dbConnection != null)
 		{
 			// Create a record table containing records that need attending to.
-			data = new ArrayList<RecordListEntry>();
+			data = new ArrayList<RecordTableModelEntry>();
 
 			// Fill in the record table and keep track of how many entries were added.
 			fillRecordTable(dbConnection);
@@ -130,7 +130,7 @@ public class RecordList extends AbstractTableModel
 				String    complaint = rs.getString("FieldworkerComments");
 
 				// Record the data in the record table.
-				data.add(new RecordListEntry(recordID, patientID, date, complaint, status));
+				data.add(new RecordTableModelEntry(recordID, patientID, date, complaint, status));
 
 				numRecords++;
 			}
@@ -144,7 +144,7 @@ public class RecordList extends AbstractTableModel
 		}
 	}
 	
-	class RecordListEntry
+	class RecordTableModelEntry
 	{
 		private int       recordID  = -1;
 		private int       patientID = -1;
@@ -152,7 +152,7 @@ public class RecordList extends AbstractTableModel
 		private String    complaint = null;
 		private String    status    = null;
 		
-		RecordListEntry(int recordID, int patientID, Timestamp date, String complaint, String status)
+		RecordTableModelEntry(int recordID, int patientID, Timestamp date, String complaint, String status)
 		{
 			this.recordID = recordID;
 			this.patientID = patientID;
