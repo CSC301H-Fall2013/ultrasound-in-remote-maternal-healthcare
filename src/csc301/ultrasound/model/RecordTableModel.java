@@ -13,7 +13,7 @@ public class RecordTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
-	/** The data that's displayed in the table. */
+	/** The data to be displayed in the table. */
 	private ArrayList<RecordTableModelEntry> data = null;
 	
 	/** The column names of the table. */

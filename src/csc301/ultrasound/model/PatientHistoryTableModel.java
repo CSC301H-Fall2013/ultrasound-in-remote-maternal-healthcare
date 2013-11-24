@@ -13,10 +13,21 @@ import javax.swing.table.AbstractTableModel;
 public class PatientHistoryTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
-	
+
+	/** The data to be displayed in the table. */
 	private static Object[][] data;
+	
+	/** The column names. */
 	private Vector<String> columnNames = null;
 	
+	/**
+	 * Instantiates a new patient history table model.
+	 *
+	 * @param value the value
+	 * @param dbColumnToFilter the db column to filter
+	 * @param niceName the nice name
+	 * @param dbConnection the db connection
+	 */
 	public PatientHistoryTableModel(int value, String dbColumnToFilter, String niceName, Connection dbConnection)
 	{
 		columnNames = new Vector<String>();
@@ -81,21 +92,33 @@ public class PatientHistoryTableModel extends AbstractTableModel
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
 	public int getColumnCount()
 	{
 		return columnNames.size();
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
 	public int getRowCount()
 	{
 		return data.length;
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
+	 */
 	public String getColumnName(int col)
 	{
 		return columnNames.elementAt(col);
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getValueAt(int, int)
+	 */
 	public Object getValueAt(int row, int col)
 	{
 		return data[row][col];

@@ -34,7 +34,6 @@ public class ResponsePanel extends JPanel
 	/**
 	 * Instantiates a new response panel.
 	 *
-	 * @param RID The record id.
 	 * @param user The user responding to this record.
 	 * @param connection The established connection.
 	 */

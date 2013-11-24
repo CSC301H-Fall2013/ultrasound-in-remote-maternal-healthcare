@@ -13,9 +13,18 @@ public class PatientInformationTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
+	/** The data to be displayed in the table. */
 	private Object[][] data = null;
+	
+	/** The column names of the table. */
 	private String[] columnNames = { "Patient ID", "Name", "Birthday", "Country" };
 	
+	/**
+	 * Instantiates a new patient information table model.
+	 *
+	 * @param currPatientId The patient id to display.
+	 * @param dbConnection An established connection to the database.
+	 */
 	public PatientInformationTableModel(int currPatientId, Connection dbConnection)
 	{
 		// Create a new table consisting of the patient's information.
@@ -26,15 +35,13 @@ public class PatientInformationTableModel extends AbstractTableModel
 			try
 			{
 				Statement statement = dbConnection.createStatement();
-				String query;
-				ResultSet rs;
 
 				// Query the database for information about the patient.
-				query = "select FirstName, LastName, Birthdate, Country "
-						+ "from ultrasound.Patients " + "where PID = "
-						+ Integer.toString(currPatientId);
+				String query = "select FirstName, LastName, Birthdate, Country "
+						     + "from ultrasound.Patients " 
+						     + "where PID = " + Integer.toString(currPatientId);
 				
-				rs = statement.executeQuery(query);
+				ResultSet rs = statement.executeQuery(query);
 
 				while (rs.next())
 				{
@@ -62,21 +69,33 @@ public class PatientInformationTableModel extends AbstractTableModel
 			System.out.println("Connection failure.");
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
 	public int getColumnCount()
 	{
 		return columnNames.length;
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
 	public int getRowCount()
 	{
 		return data.length;
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
+	 */
 	public String getColumnName(int col)
 	{
 		return columnNames[col];
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getValueAt(int, int)
+	 */
 	public Object getValueAt(int row, int col)
 	{
 		return data[row][col];
