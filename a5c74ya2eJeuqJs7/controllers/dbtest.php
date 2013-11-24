@@ -123,7 +123,8 @@ class Dbtest extends CI_Controller
     		
       			//  $stmt->bindParam(2, $imgfp, PDO::PARAM_LOB);
      
-	 	}	echo "success";
+	 		echo "success";
+    		}
     		  else{
         		echo "success";
     		}
