@@ -13,10 +13,17 @@ public class RecordTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
+	/** The data that's displayed in the table. */
 	private ArrayList<RecordTableModelEntry> data = null;
 	
+	/** The column names of the table. */
 	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Status" };
 
+	/**
+	 * Instantiates a new record table model.
+	 *
+	 * @param dbConnection An established connection to the database.
+	 */
 	public RecordTableModel(Connection dbConnection)
 	{
 		if (dbConnection != null)
@@ -25,27 +32,40 @@ public class RecordTableModel extends AbstractTableModel
 			data = new ArrayList<RecordTableModelEntry>();
 
 			// Fill in the record table and keep track of how many entries were added.
-			fillRecordTable(dbConnection);
+			populateRecordTable(dbConnection);
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
 	public int getColumnCount()
 	{
 		return columnNames.length;
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
 	public int getRowCount()
 	{
 		return data.size();
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
+	 */
 	public String getColumnName(int col)
 	{
 		return columnNames[col];
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getValueAt(int, int)
+	 */
 	public Object getValueAt(int row, int col)
 	{
+		// we overrode this method to utilze ArrayLists over static arrays
 		switch (col)
 		{
 			case 0:  return data.get(row).getRecordID();
@@ -58,92 +78,74 @@ public class RecordTableModel extends AbstractTableModel
 	}
 	
 	/**
-	 * Fill the given record table with new records. Return the number of
-	 * records added to the table.
+	 * Populate the record table with new records.
+	 *
+	 * @param dbConnection An established connection to the database.
 	 */
-	private int fillRecordTable(Connection connection)
+	private void populateRecordTable(Connection connection)
 	{
-		// Keep track of how many records have been added to the table.
-		int numRecords = 0;
-
 		try
 		{
 			Statement statement = connection.createStatement();
-			String query;
-			ResultSet rs;
-
-			// Query the database for records that have not yet been responded
-			// to. Fill the record table with these records.
-			query = "select RID, PID, Date, FieldworkerComments "
-				  + "from ultrasound.Records "
-				  + "where RadiologistResponse is null "
-				  + "order by Date desc";
-			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, numRecords, "No Response");
-
-			// Query the database for records that a user has already responded
-			// to, but the fieldworker has not yet received the response.
-			// Fill the record table with these records.
-			query = "select RID, PID, Date, FieldworkerComments "
-				  + "from ultrasound.Records "
-				  + "where RadiologistResponse is not null and FieldworkerSeen = 0 " 
-				  + "order by Date desc";
-			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, numRecords, "Responded");
-
-			// Query the database for records that a user has already responded
-			// to, and the fieldworker has received the response.
-			// Fill the record table with these records.
-			query = "select RID, PID, Date, FieldworkerComments "
-				  + "from ultrasound.Records "
-				  + "where RadiologistResponse is not null and FieldworkerSeen = 1 " 
-				  + "order by Date desc";
-			rs = statement.executeQuery(query);
-			numRecords = fillRecordTable(rs, numRecords, "Received");
-
-			// Return the number of records added to the records table.
-			return numRecords;
+			
+			String query = "select RID, PID, Date, FieldworkerComments, RadiologistResponse, FieldworkerSeen "
+					     + "from ultrasound.Records "
+					     + "order by Date desc";
+			
+			ResultSet rs = statement.executeQuery(query);
+			
+			insertResultSet(rs);
 		} 
 		catch (SQLException se)
 		{
-			System.err.println("SQL Exception.<Message>: " + se.getMessage());
-			return numRecords;
+			se.printStackTrace();
 		}
 	}
 
 	/**
-	 * Fill the given record table with the contents of the result set, starting
-	 * at the row indicated by the given record number, setting the last value
-	 * of each row in the table as the status string. Return the number of
-	 * records that have been added to the table.
+	 * Inserts the values from the supplied ResultSet into the table.
+	 *
+	 * @param rs The result set from a query.
 	 */
-	private int fillRecordTable(ResultSet rs, int numRecords, String status)
+	private void insertResultSet(ResultSet rs)
 	{
 		try
 		{
 			while (rs.next())
 			{
 				// Extract data from the result set.
-				int       recordID  = rs.getInt("RID");
-				int       patientID = rs.getInt("PID");
-				Timestamp date      = rs.getTimestamp("Date");
-				String    comments = rs.getString("FieldworkerComments");
-
+				int       recordID    = rs.getInt("RID");
+				int       patientID   = rs.getInt("PID");
+				Timestamp date        = rs.getTimestamp("Date");
+				String    comments    = rs.getString("FieldworkerComments");
+				String    radResponse = rs.getString("RadiologistResponse");
+				int       fwSeen      = rs.getInt("FieldworkerSeen");
+				
+				String status = null;
+				
+				if (radResponse != null)
+				{
+					if (fwSeen == 0)
+						status = "Responded";
+					else if (fwSeen == 1)
+						status = "Received";
+				}
+				else
+					status = "No response";
+				
 				// Record the data in the record table.
 				data.add(new RecordTableModelEntry(recordID, patientID, date, comments, status));
-
-				numRecords++;
 			}
-			
-			return numRecords;
 		} 
 		catch (SQLException se)
 		{
-			System.err.println("SQL Exception.<Message>: " + se.getMessage());
-			return numRecords;
+			se.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Container class for each row of the table.
+	 */
 	class RecordTableModelEntry
 	{
 		private int       recordID  = -1;
@@ -152,6 +154,15 @@ public class RecordTableModel extends AbstractTableModel
 		private String    comments  = null;
 		private String    status    = null;
 		
+		/**
+		 * Instantiates a new record table model entry.
+		 *
+		 * @param recordID The record id
+		 * @param patientID The patient id
+		 * @param date The date
+		 * @param comments The comments
+		 * @param status The status
+		 */
 		RecordTableModelEntry(int recordID, int patientID, Timestamp date, String comments, String status)
 		{
 			this.recordID = recordID;
@@ -161,10 +172,54 @@ public class RecordTableModel extends AbstractTableModel
 			this.status = status;
 		}
 		
-		public int       getRecordID()  { return recordID; }
-		public int       getPatientID() { return patientID; }
-		public Timestamp getDate()      { return date; }
-		public String    getComments()  { return comments; }
-		public String    getStatus()    { return status; }
+		/**
+		 * Returns the record id.
+		 *
+		 * @return The record id
+		 */
+		public int getRecordID()
+		{ 
+			return recordID; 
+		}
+		
+		/**
+		 * Returns the patient id.
+		 *
+		 * @return The patient id
+		 */
+		public int getPatientID() 
+		{ 
+			return patientID; 
+		}
+		
+		/**
+		 * Returns the date.
+		 *
+		 * @return the date
+		 */
+		public Timestamp getDate()
+		{ 
+			return date; 
+		}
+		
+		/**
+		 * Returns the comments.
+		 *
+		 * @return the comments
+		 */
+		public String getComments()
+		{ 
+			return comments; 
+		}
+		
+		/**
+		 * Returns the status.
+		 *
+		 * @return the status
+		 */
+		public String getStatus()
+		{ 
+			return status; 
+		}
 	}
 }
