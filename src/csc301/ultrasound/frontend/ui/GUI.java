@@ -123,10 +123,7 @@ public class GUI extends JFrame
 		
 		// Deactivate button if the authlevel of the user is not high enough.
 		if (user.getAuthlevel() > 3)
-		{
-			System.out.println(user.getAuthlevel());
 			btnManagerPanel.setEnabled(false);
-		}
 		
 		toolBar.add(btnManagerPanel);
 

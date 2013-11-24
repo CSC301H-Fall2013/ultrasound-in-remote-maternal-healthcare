@@ -51,7 +51,7 @@ public class RecordTableModel extends AbstractTableModel
 			case 0:  return data.get(row).getRecordID();
 			case 1:  return data.get(row).getPatientID();
 			case 2:  return data.get(row).getDate();
-			case 3:  return data.get(row).getComplaint();
+			case 3:  return data.get(row).getComments();
 			case 4:  return data.get(row).getStatus();
 			default: return null;
 		}
@@ -127,10 +127,10 @@ public class RecordTableModel extends AbstractTableModel
 				int       recordID  = rs.getInt("RID");
 				int       patientID = rs.getInt("PID");
 				Timestamp date      = rs.getTimestamp("Date");
-				String    complaint = rs.getString("FieldworkerComments");
+				String    comments = rs.getString("FieldworkerComments");
 
 				// Record the data in the record table.
-				data.add(new RecordTableModelEntry(recordID, patientID, date, complaint, status));
+				data.add(new RecordTableModelEntry(recordID, patientID, date, comments, status));
 
 				numRecords++;
 			}
@@ -149,22 +149,22 @@ public class RecordTableModel extends AbstractTableModel
 		private int       recordID  = -1;
 		private int       patientID = -1;
 		private Timestamp date      = null;
-		private String    complaint = null;
+		private String    comments  = null;
 		private String    status    = null;
 		
-		RecordTableModelEntry(int recordID, int patientID, Timestamp date, String complaint, String status)
+		RecordTableModelEntry(int recordID, int patientID, Timestamp date, String comments, String status)
 		{
 			this.recordID = recordID;
 			this.patientID = patientID;
 			this.date = date;
-			this.complaint = complaint;
+			this.comments = comments;
 			this.status = status;
 		}
 		
 		public int       getRecordID()  { return recordID; }
 		public int       getPatientID() { return patientID; }
 		public Timestamp getDate()      { return date; }
-		public String    getComplaint() { return complaint; }
+		public String    getComments()  { return comments; }
 		public String    getStatus()    { return status; }
 	}
 }

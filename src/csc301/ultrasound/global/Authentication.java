@@ -25,7 +25,7 @@ public class Authentication
 	 *
 	 * @param email The email address of the registered user.
 	 * @param password The password of the registered user.
-	 * @return A populated instance of csc301.ultrasound.model.User
+	 * @return A populated instance of csc301.ultrasound.mode	l.User
 	 */
 	public User authenticate(String email, String password)
 	{
