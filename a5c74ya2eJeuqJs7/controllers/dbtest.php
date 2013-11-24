@@ -85,10 +85,10 @@ class Dbtest extends CI_Controller
     		$file_path = "";
     		$this->load->database();
     		$file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
-    		//if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
+    		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
     			/***  get the image info. ***/
     			
-    			//$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 60);
+    			$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 60);
     			//$size = getimagesize($compressed);
     			/*** assign our variables ***/
     			/*$type = $size['mime'];
@@ -123,10 +123,10 @@ class Dbtest extends CI_Controller
     		
       			//  $stmt->bindParam(2, $imgfp, PDO::PARAM_LOB);
      
-	 	//	echo "success";
-    		//} else{
-        	//	echo "success";
-    	//	}
+	 		echo "success";
+    		  else{
+        		echo "success";
+    		}
 	}
 	
 	function compress($source, $destination, $quality) { 
