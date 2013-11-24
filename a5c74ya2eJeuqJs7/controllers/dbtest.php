@@ -82,7 +82,7 @@ class Dbtest extends CI_Controller
 	
 	function upload(){
     	
-    		$file_path = "";
+    		$file_path = "patients/";
     		$this->load->database();
     		$file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
     		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
