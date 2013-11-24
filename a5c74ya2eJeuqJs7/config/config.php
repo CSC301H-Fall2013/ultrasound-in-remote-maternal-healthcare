@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://ultrasound.azurewebsites.net/';
+$config['base_url']	= 'https://ultrasound.azurewebsites.net/';
 
 /*
 |--------------------------------------------------------------------------
