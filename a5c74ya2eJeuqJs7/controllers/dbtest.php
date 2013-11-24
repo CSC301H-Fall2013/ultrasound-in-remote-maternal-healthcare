@@ -130,6 +130,23 @@ class Dbtest extends CI_Controller
     		}
 	}
 	
+	function uploader(){
+    	
+    		$file_path = "annotated/";
+    		
+    		$file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
+    		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
+    			/***  get the image info. ***/
+    			
+    			$compressed = $this->compress($file_path, basename( $_FILES['uploaded_file']['name']), 60);
+    		
+	 		echo "success";
+    		}
+    		  else{
+        		echo "fail";
+    		}
+	}
+	
 	function compress($source, $destination, $quality) { 
 		$info = getimagesize($source); 
 			if ($info['mime'] == 'image/jpeg') 
