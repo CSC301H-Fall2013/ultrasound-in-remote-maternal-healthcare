@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Create a two-dimensional table consisting of records, which is used to
- * add to the table model of of records of the patient.
+ * Create a two-dimensional table consisting of the record information of all
+ * records in the database.
  */
 public class RecordTableModel extends AbstractTableModel
 {

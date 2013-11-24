@@ -1,24 +1,23 @@
 package csc301.ultrasound.model;
 
 import java.sql.*;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Create a two-dimensional table consisting of the patient history of the
- * patient with the given patientID. The patient history consists of the
- * last numRecords number of records of the patient.
+ * Creates a two-dimensional table consisting of the patient history of the
+ * patient with the given patientID.
  */
 public class PatientHistoryTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 
 	/** The data to be displayed in the table. */
-	private static Object[][] data;
+	private ArrayList<PatientHistoryTableModelEntry> data = null;
 	
 	/** The column names. */
-	private Vector<String> columnNames = null;
+	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Response" };
 	
 	/**
 	 * Instantiates a new patient history table model.
@@ -28,67 +27,37 @@ public class PatientHistoryTableModel extends AbstractTableModel
 	 * @param niceName the nice name
 	 * @param dbConnection the db connection
 	 */
-	public PatientHistoryTableModel(int value, String dbColumnToFilter, String niceName, Connection dbConnection)
+	public PatientHistoryTableModel(int patientID, Connection dbConnection)
 	{
-		columnNames = new Vector<String>();
-		columnNames.add("Record ID");
-		columnNames.add(niceName);
-		columnNames.add("Submission Time");
-		columnNames.add("Comments");
-		columnNames.add("Response");
+		data = new ArrayList<PatientHistoryTableModelEntry>();
 		
-		// The maximum number of records that can be displayed
-		// TODO: Remove restriction by using LinkedLists instead
-		int maxPatientRecords = 100;
-
-		// The number of patient records added to the table.
-		int numPatientRecords = 0;
-
-		// Create a new table consisting of the patient's information.
-		Object[][] patientHistoryTable = new Object[maxPatientRecords][columnNames.size()];
-		
-		if (dbConnection != null)
+		try
 		{
-			try
+			Statement statement = dbConnection.createStatement();
+
+			// Query the database for previous records of the patient.
+			String query = "select RID, Date, FieldworkerComments, RadiologistResponse "
+						 + "from ultrasound.Records "
+						 + "where PID = " + patientID + " "
+						 + "order by Date desc";
+			
+			ResultSet rs = statement.executeQuery(query);
+
+			while (rs.next())
 			{
-				Statement statement = dbConnection.createStatement();
+				// Extract data from the result set.
+				int recordID = rs.getInt("RID");
+				Timestamp date = rs.getTimestamp("Date");
+				String comments = rs.getString("FieldworkerComments");
+				String response = rs.getString("RadiologistResponse");
 
-				// Query the database for previous records of the patient.
-				String query = "select RID, Date, FieldworkerComments, RadiologistResponse "
-							 + "from ultrasound.Records "
-							 + "where " + dbColumnToFilter + " = " + value + " "
-							 + "order by Date desc";
-				
-				ResultSet rs = statement.executeQuery(query);
-
-				while (rs.next() && (numPatientRecords < maxPatientRecords))
-				{
-					// Extract data from the result set.
-					int recordID = rs.getInt("RID");
-					Timestamp date = rs.getTimestamp("Date");
-					String comments = rs.getString("FieldworkerComments");
-					String response = rs.getString("RadiologistResponse");
-
-					// Record the data in the record table.
-					patientHistoryTable[numPatientRecords][0] = recordID;
-					patientHistoryTable[numPatientRecords][1] = value;
-					patientHistoryTable[numPatientRecords][2] = date;
-					patientHistoryTable[numPatientRecords][3] = comments;
-					patientHistoryTable[numPatientRecords][4] = response;
-
-					numPatientRecords++;
-				}
-
-				data = patientHistoryTable;
-			} 
-			catch (SQLException se)
-			{
-				se.printStackTrace();
+				// Record the data in the record table.
+				data.add(new PatientHistoryTableModelEntry(recordID, patientID, date, comments, response));
 			}
 		} 
-		else
+		catch (SQLException se)
 		{
-			System.out.println("Connection failure.");
+			se.printStackTrace();
 		}
 	}
 
@@ -97,7 +66,7 @@ public class PatientHistoryTableModel extends AbstractTableModel
 	 */
 	public int getColumnCount()
 	{
-		return columnNames.size();
+		return columnNames.length;
 	}
 
 	/* (non-Javadoc)
@@ -105,7 +74,7 @@ public class PatientHistoryTableModel extends AbstractTableModel
 	 */
 	public int getRowCount()
 	{
-		return data.length;
+		return data.size();
 	}
 
 	/* (non-Javadoc)
@@ -113,7 +82,7 @@ public class PatientHistoryTableModel extends AbstractTableModel
 	 */
 	public String getColumnName(int col)
 	{
-		return columnNames.elementAt(col);
+		return columnNames[col];
 	}
 
 	/* (non-Javadoc)
@@ -121,6 +90,95 @@ public class PatientHistoryTableModel extends AbstractTableModel
 	 */
 	public Object getValueAt(int row, int col)
 	{
-		return data[row][col];
+		// we overrode this method to utilze ArrayLists over static arrays
+		switch (col)
+		{
+			case 0:  return data.get(row).getRecordID();
+			case 1:  return data.get(row).getPatientID();
+			case 2:  return data.get(row).getDate();
+			case 3:  return data.get(row).getComments();
+			case 4:  return data.get(row).getResponse();
+			default: return null;
+		}
+	}
+	
+	/**
+	 * Container class for each row of the table.
+	 */
+	class PatientHistoryTableModelEntry
+	{
+		private int       recordID  = -1;
+		private int       patientID = -1;
+		private Timestamp date      = null;
+		private String    comments  = null;
+		private String    response  = null;
+		
+		/**
+		 * Instantiates a new record table model entry.
+		 *
+		 * @param recordID The record id
+		 * @param patientID The patient id
+		 * @param date The date
+		 * @param comments The comments
+		 * @param response The response
+		 */
+		PatientHistoryTableModelEntry(int recordID, int patientID, Timestamp date, String comments, String response)
+		{
+			this.recordID = recordID;
+			this.patientID = patientID;
+			this.date = date;
+			this.comments = comments;
+			this.response = response;
+		}
+		
+		/**
+		 * Returns the record id.
+		 *
+		 * @return The record id
+		 */
+		public int getRecordID()
+		{ 
+			return recordID; 
+		}
+		
+		/**
+		 * Returns the patient id.
+		 *
+		 * @return The patient id
+		 */
+		public int getPatientID() 
+		{ 
+			return patientID; 
+		}
+		
+		/**
+		 * Returns the date.
+		 *
+		 * @return The date
+		 */
+		public Timestamp getDate()
+		{ 
+			return date; 
+		}
+		
+		/**
+		 * Returns the comments.
+		 *
+		 * @return The comments
+		 */
+		public String getComments()
+		{ 
+			return comments; 
+		}
+		
+		/**
+		 * Returns the response.
+		 *
+		 * @return The response
+		 */
+		public String getResponse()
+		{ 
+			return response; 
+		}
 	}
 }

@@ -254,10 +254,10 @@ public class GUI extends JFrame
 			
 			if (listSelection.length > 0)
 			{
-				int currPatientId = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 1).toString());
-				int currRID = Integer.parseInt(mainTable.getModel().getValueAt(listSelection[0], 0).toString());
+				int currPatientId = Integer.parseInt(mainTable.getValueAt(listSelection[0], 1).toString());
+				int currRID = Integer.parseInt(mainTable.getValueAt(listSelection[0], 0).toString());
 				
-				histTable.setModel(new PatientHistoryTableModel(currPatientId, "PID", "Patient ID", dbConnection));
+				histTable.setModel(new PatientHistoryTableModel(currPatientId, dbConnection));
 				infoTable.setModel(new PatientInformationTableModel(currPatientId, dbConnection));
 				
 				imagePanel.setRID(currRID);
