@@ -5,12 +5,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.sql.Connection;
 
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
-
-import csc301.ultrasound.global.ImageDownloader;
 
 /**
  * A panel used to annotate an image.
@@ -39,8 +36,6 @@ public class AnnotationPanel extends JPanel
 	
 	/** The size of the color button */
 	private static final int colorButtonSize = 20;
-	
-	private Connection dbConnection = null;
 
 	private int RID = -1;
 	
@@ -49,13 +44,8 @@ public class AnnotationPanel extends JPanel
 	 *
 	 * @param dbConnection The established connection.
 	 */
-	public AnnotationPanel(Connection dbConnection)
+	public AnnotationPanel()
 	{
-		if (dbConnection == null)
-			return;
-		
-		this.dbConnection = dbConnection;
-		
 		initUI();
 	}
 	
@@ -184,11 +174,12 @@ public class AnnotationPanel extends JPanel
         g2d.drawImage(annotationImage, 0, colorButtonSize, this.getWidth(), this.getHeight() - colorButtonSize, null);
 	}
 	
-	public void setRID(int RID)
+	public void update(int newRID, BufferedImage newImage)
 	{
-		this.RID = RID;
+		RID = newRID;
 		
-		image = new ImageDownloader(dbConnection).downloadUltrasound(RID);
+		image = newImage;
+		//image = new ImageDownloader(dbConnection).downloadUltrasound(RID);
 		
 		// create an image to draw into
 		annotationImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);

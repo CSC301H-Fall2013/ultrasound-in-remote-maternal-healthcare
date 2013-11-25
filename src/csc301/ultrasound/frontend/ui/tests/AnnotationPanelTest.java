@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import csc301.ultrasound.frontend.ui.AnnotationPanel;
 import csc301.ultrasound.frontend.ui.GUI;
+import csc301.ultrasound.global.ImageDownloader;
 import csc301.ultrasound.global.Transmission;
 
 /**
@@ -67,7 +68,7 @@ public class AnnotationPanelTest
 			Transmission t = new Transmission();
 			Connection connection = t.connectToDB();
 			
-			AnnotationPanel ap = new AnnotationPanel(connection);
+			AnnotationPanel ap = new AnnotationPanel();
 			
 			// attach the panel
 			frame.setContentPane(ap);
@@ -78,7 +79,7 @@ public class AnnotationPanelTest
 			
 			frame.setVisible(true);
 			
-			ap.setRID(15);
+			ap.update(15, new ImageDownloader(connection).downloadUltrasound(15));
 			
 			Point p = new Point();
 			

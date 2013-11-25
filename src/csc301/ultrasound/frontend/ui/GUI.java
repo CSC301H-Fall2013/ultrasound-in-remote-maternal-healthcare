@@ -3,6 +3,7 @@ package csc301.ultrasound.frontend.ui;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -13,6 +14,7 @@ import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import csc301.ultrasound.global.ImageDownloader;
 import csc301.ultrasound.model.*;
 
 public class GUI extends JFrame
@@ -177,7 +179,7 @@ public class GUI extends JFrame
 		JTabbedPane imageTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		subSplitPlane.setTopComponent(imageTabbedPane);
 
-		imagePanel = new ImagePanel(dbConnection);
+		imagePanel = new ImagePanel();
 		responsePanel = new ResponsePanel(user, dbConnection);
 		
 		imageTabbedPane.addTab("Review", null, imagePanel, null);
@@ -260,8 +262,10 @@ public class GUI extends JFrame
 				histTable.setModel(new PatientHistoryTableModel(currPatientId, dbConnection));
 				infoTable.setModel(new PatientInformationTableModel(currPatientId, dbConnection));
 				
-				imagePanel.setRID(currRID);
-				responsePanel.setRID(currRID);
+				BufferedImage newImage = new ImageDownloader(dbConnection).downloadUltrasound(currRID);
+				
+				imagePanel.update(currRID, newImage);
+				responsePanel.update(currRID, newImage);
 			}
 		}
 	}

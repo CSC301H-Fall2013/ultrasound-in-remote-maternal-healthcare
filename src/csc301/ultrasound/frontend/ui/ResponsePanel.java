@@ -57,7 +57,7 @@ public class ResponsePanel extends JPanel
 		gridBagLayout.rowWeights    = new double[]{1.0, 0.0};
 		setLayout(gridBagLayout);
 		
-		annotationPanel = new AnnotationPanel(connection);
+		annotationPanel = new AnnotationPanel();
 		
 		GridBagConstraints gbc_annotationPanel = new GridBagConstraints();
 		gbc_annotationPanel.fill   = GridBagConstraints.BOTH;
@@ -130,10 +130,10 @@ public class ResponsePanel extends JPanel
 			JOptionPane.showMessageDialog(null, String.format("An error occured while storing the response to record %d.", RID), "Error!", JOptionPane.ERROR_MESSAGE);
 	}
 	
-	public void setRID(int RID)
+	public void update(int newRID, BufferedImage newImage)
 	{
-		this.RID = RID;
-		annotationPanel.setRID(RID);
+		RID = newRID;
+		annotationPanel.update(newRID, newImage);
 	}
 	
 	/**
