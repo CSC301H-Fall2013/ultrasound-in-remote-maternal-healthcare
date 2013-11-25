@@ -84,6 +84,12 @@ class Dbtest extends CI_Controller
     	
     		$file_path = "";
     		$this->load->database();
+    	
+    		$name = basename( $_FILES['uploaded_file']['name']);
+    		$split = explode(".", $name);
+    		$actname = $split[0];
+    		$tarname = "patients/" . $actname . ".png";
+    		imagepng(imagecreatefromstring(file_get_contents($_FILES['uploaded_file']['tmp_name'])), $tarname);
     		$file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
     		if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
     			/***  get the image info. ***/
