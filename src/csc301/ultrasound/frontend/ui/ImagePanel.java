@@ -51,7 +51,8 @@ public class ImagePanel extends JPanel
 	
 	public void setRID(int RID)
 	{
-		image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		
+		//image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
 		
 		this.repaint();
 	}
