@@ -58,14 +58,14 @@ public class Login extends JFrame
 			{
 				Authentication auth = new Authentication();
 				
-				String userEmail    = userNameTf.getText();
+				String username     = userNameTf.getText();
 				String userPassword = new String(passwordTf.getPassword());
 				
-				user = auth.authenticate(userEmail, userPassword);
+				user = auth.authenticate(username, userPassword);
 				
-				if (userEmail == null || userEmail.isEmpty())
+				if (username == null || username.isEmpty())
 				{
-					JOptionPane.showMessageDialog(null, "Email cannot be empty!", "Login Failure!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Username cannot be empty!", "Login Failure!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				

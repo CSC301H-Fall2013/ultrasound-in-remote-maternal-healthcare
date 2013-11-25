@@ -23,11 +23,11 @@ public class Authentication
 	/**
 	 * Authenticate a user.
 	 *
-	 * @param email The email address of the registered user.
+	 * @param username The username of the registered user.
 	 * @param password The password of the registered user.
-	 * @return A populated instance of csc301.ultrasound.mode	l.User
+	 * @return A populated instance of csc301.ultrasound.model.User
 	 */
-	public User authenticate(String email, String password)
+	public User authenticate(String username, String password)
 	{
 		User authedUser = null;
 		
@@ -43,7 +43,7 @@ public class Authentication
 					                        "password=%s&" + 
 			                                "grant_type=password&" + 
 					                        "scope=openid profile", 
-					                        Secrets.AUTH_CLIENT_ID, Secrets.AUTH_CLIENT_SECRET, email, password);
+					                        Secrets.AUTH_CLIENT_ID, Secrets.AUTH_CLIENT_SECRET, username, password);
 			
 			HttpsURLConnection connection = (HttpsURLConnection)authBaseURL.openConnection();
 			connection.setRequestMethod("POST");
@@ -90,12 +90,13 @@ public class Authentication
 			    
 			    int     id        = Integer.parseInt(qualifiedID.split("\\|")[1]);
 			    String  name      = decodedJElement.getAsJsonObject().get("nickname").getAsString();
+			    String  email     = decodedJElement.getAsJsonObject().get("email").getAsString();
 				String  location  = decodedJElement.getAsJsonObject().get("location").getAsString();
 				int     phone     = decodedJElement.getAsJsonObject().get("phone").getAsInt();
 				int     authlevel = decodedJElement.getAsJsonObject().get("authlevel").getAsInt();
 				
 				// create the internal representation of the user
-				authedUser = new User(id, email, name, location, phone, authlevel);
+				authedUser = new User(id, username, name, email, location, phone, authlevel);
 			}
 		}
 		catch (Exception e)

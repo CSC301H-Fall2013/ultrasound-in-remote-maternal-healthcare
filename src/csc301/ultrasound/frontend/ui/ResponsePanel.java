@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.sql.*;
 import java.awt.*;
 
-import csc301.ultrasound.global.Transmission;
+import csc301.ultrasound.global.ImageUploader;
 import csc301.ultrasound.model.User;
 
 import java.awt.event.ActionListener;
@@ -51,19 +51,19 @@ public class ResponsePanel extends JPanel
 	private void initUI()
 	{
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{361};
-		gridBagLayout.rowHeights = new int[] {300, responseHeight};
+		gridBagLayout.columnWidths  = new int[]{361};
+		gridBagLayout.rowHeights    = new int[] {300, responseHeight};
 		gridBagLayout.columnWeights = new double[]{1.0};
-		gridBagLayout.rowWeights = new double[]{1.0, 0.0};
+		gridBagLayout.rowWeights    = new double[]{1.0, 0.0};
 		setLayout(gridBagLayout);
 		
 		annotationPanel = new AnnotationPanel(connection);
 		
 		GridBagConstraints gbc_annotationPanel = new GridBagConstraints();
-		gbc_annotationPanel.fill = GridBagConstraints.BOTH;
+		gbc_annotationPanel.fill   = GridBagConstraints.BOTH;
 		gbc_annotationPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_annotationPanel.gridx = 0;
-		gbc_annotationPanel.gridy = 0;
+		gbc_annotationPanel.gridx  = 0;
+		gbc_annotationPanel.gridy  = 0;
 		this.add(annotationPanel, gbc_annotationPanel);
 		
 		JPanel commentPanel = new JPanel();
@@ -111,9 +111,9 @@ public class ResponsePanel extends JPanel
 			// make sure all of the constraints on the table are satisfied on the above query
 			if (statement.getUpdateCount() > 0)
 			{
-				int nRowsUpdated = new Transmission().compressAndUploadAnnotationImgToDB(RID, annotations, connection);
+				ImageUploader uploader = new ImageUploader(connection);
+				int nRowsUpdated = uploader.uploadFile(annotations, RID, user);
 				
-				// make sure we actually inserted an image
 				if (nRowsUpdated > 0)
 				{
 					setSubmitted(true);
@@ -145,7 +145,7 @@ public class ResponsePanel extends JPanel
 	{
 		return submitted;
 	}
-
+	
 	/**
 	 * Sets whether the response was submitted to the database correctly.
 	 *

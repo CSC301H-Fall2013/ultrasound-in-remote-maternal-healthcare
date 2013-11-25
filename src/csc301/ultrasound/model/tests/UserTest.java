@@ -14,12 +14,13 @@ public class UserTest
 {
 	private static User user = null;
 	
-	private static int     userID        = 1234;
-	private static String  userEmail     = "foo@bar.com";
-	private static String  userName      = "Foo Bar";
-	private static String  userLocation  = "Bundy";
-	private static int     userPhone     = 1234567890;
-	private static int     userAuthlevel = 0;
+	private static int    userID        = 1234;
+	private static String username      = "foobar";
+	private static String userName      = "Foo Bar";
+	private static String userEmail     = "foo@email.com";
+	private static String userLocation  = "Bundy";
+	private static int    userPhone     = 1234567890;
+	private static int    userAuthlevel = 0;
 	
 	/**
 	 * Any initialization needed before the tests begin.
@@ -27,7 +28,7 @@ public class UserTest
 	@BeforeClass
 	public static void testSetup() 
 	{
-		user = new User(userID, userEmail, userName, userLocation, userPhone, userAuthlevel);
+		user = new User(userID, username, userName, userEmail, userLocation, userPhone, userAuthlevel);
 	}
 
 	/**
@@ -47,11 +48,11 @@ public class UserTest
 	}
 	
 	@Test
-	public void testUserGetEmail() 
+	public void testUserGetUsername() 
 	{
-		System.out.println("Running testUserGetEmail()...");
+		System.out.println("Running testUserGetUsername()...");
 		
-		assertEquals(user.getEmail(), userEmail);
+		assertEquals(user.getUsername(), username);
 	}
 	
 	@Test
@@ -60,6 +61,14 @@ public class UserTest
 		System.out.println("Running testUserGetName()...");
 		
 		assertEquals(user.getName(), userName);
+	}
+	
+	@Test
+	public void testUserGetEmail()
+	{
+		System.out.println("Running testUserGetEmail()...");
+		
+		assertEquals(user.getEmail(), userEmail);
 	}
 	
 	@Test
