@@ -6,7 +6,7 @@ import java.sql.Connection;
 
 import javax.swing.JPanel;
 
-import csc301.ultrasound.global.Transmission;
+import csc301.ultrasound.global.ImageDownloader;
 
 public class ImagePanel extends JPanel
 {
@@ -51,8 +51,7 @@ public class ImagePanel extends JPanel
 	
 	public void setRID(int RID)
 	{
-		
-		//image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		image = new ImageDownloader(dbConnection).downloadUltrasound(RID);
 		
 		this.repaint();
 	}

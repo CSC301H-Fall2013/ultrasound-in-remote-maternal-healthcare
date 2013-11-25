@@ -1,16 +1,9 @@
 package csc301.ultrasound.global;
 
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
-
 import java.io.*;
-
 import java.util.zip.*;
-
 import java.sql.*;
 
-// TODO: Auto-generated Javadoc
 /**
  * Main class that handles transmitting data to and from the database.
  */
@@ -140,122 +133,6 @@ public class Transmission
 		}
 		
 		return true;
-	}
-	
-	/**
-	 * Retreives the ultrasound image from the database.
-	 *
-	 * @param RID The record id to update.
-	 * @param connection The established connection.
-	 * @return The ultrasound image.
-	 */
-	public BufferedImage getUltrasoundFromDB(int RID, Connection connection)
-	{
-		BufferedImage image = null;
-		
-		try
-		{
-			if (connection != null && !connection.isClosed())
-			{
-				String query = "SELECT ultrasound.Records.IMGUltrasound "
-						     + "FROM ultrasound.Records "
-						     + "WHERE ultrasound.Records.RID = ?;";
-				
-				PreparedStatement statement = connection.prepareStatement(query);
-				statement.setInt(1, RID);
-				
-				ResultSet rs = statement.executeQuery();
-				
-				if (rs.next() == false)
-					return null;		// no results
-				
-				byte compressedImageBytes[] = rs.getBytes(1);
-				
-				try
-				{
-					byte imageBytes[] = new Transmission().decompress(compressedImageBytes);
-				
-					image = ImageIO.read(new ByteArrayInputStream(imageBytes));
-				} 
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		} 
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-			
-			return null;
-		}
-		
-		return image;
-	}
-	
-	/**
-	 * Compress and upload an ultrasound image to the database.
-	 *
-	 * @param RID The record id to update.
-	 * @param image The ultrasound image.
-	 * @param connection The established connection.
-	 * @return The number of sucessfully updated rows. Should always be 1, 0, or -1 on error.
-	 */
-	public int compressAndUploadUltrasoundToDB(int RID, BufferedImage image, Connection connection)
-	{
-		return compressAndUploadImageToDB(RID, image, "IMGUltrasound", connection);
-	}
-
-	/**
-	 * Compress and upload an annotation image to the database.
-	 *
-	 * @param RID The record id to update.
-	 * @param image The annotation image.
-	 * @param connection The established connection.
-	 * @return The number of sucessfully updated rows. Should always be 1, 0, or -1 on error.
-	 */
-	public int compressAndUploadAnnotationImgToDB(int RID, BufferedImage image, Connection connection)
-	{
-		return compressAndUploadImageToDB(RID, image, "IMGAnnotation", connection);
-	}
-	
-	/**
-	 * Compress and upload an image to the database.
-	 *
-	 * @param RID The record id to update.
-	 * @param image The image to upload.
-	 * @param attribute The attribute in the Records table to update.
-	 * @param connection The established connection.
-	 * @return The number of sucessfully updated rows. Should always be 1, 0, or -1 on error.
-	 */
-	private int compressAndUploadImageToDB(int RID, BufferedImage image, String attribute, Connection connection)
-	{	
-		if (ridExists(RID, connection))
-		{
-			try
-			{
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				
-				ImageIO.write(image, "png", baos);
-				
-				baos.flush();
-			
-				byte compressed[] = compress(baos.toByteArray());
-				
-				PreparedStatement statement = connection.prepareStatement(String.format("UPDATE ultrasound.Records SET %s = ? WHERE RID = ?", attribute));
-				statement.setBytes(1, compressed);
-				statement.setInt(2, RID);
-				statement.executeUpdate();
-				
-				return statement.getUpdateCount();
-			} 
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		return -1;
 	}
 	
 	/**

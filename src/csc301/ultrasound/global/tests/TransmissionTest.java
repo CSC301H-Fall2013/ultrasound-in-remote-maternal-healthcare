@@ -1,11 +1,6 @@
 package csc301.ultrasound.global.tests;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
-
-import javax.imageio.ImageIO;
 
 import static org.junit.Assert.*;
 import org.junit.AfterClass;
@@ -114,44 +109,7 @@ public class TransmissionTest
 		
 		assertTrue(successful);
 	}
-	
-	/**
-	 * Test the method to get the ultrasound image from the database with a valid RID.
-	 */
-	@Test
-	public void testGetUltrasoundFromDBGoodRID()
-	{
-		System.out.println("Running testGetUltrasoundFromDBGoodRID()...");
-		
-		Transmission t = new Transmission();
-		
-		Connection connection = t.connectToDB();
-		
-		if (t.ridExists(15, connection) == false)
-			System.err.println("Error. The RID that this test relies on has been removed. Please specify a new one in TransmissionTest.java");
-		
-		BufferedImage image = t.getUltrasoundFromDB(15, connection);
-		
-		assertNotNull(image);
-	}
-	
-	/**
-	 * Test the method to get the ultrasound image from the database with an invalid RID.
-	 */
-	@Test
-	public void testGetUltrasoundFromDBBadRID()
-	{
-		System.out.println("Running testGetUltrasoundFromDBBadRID()...");
-		
-		Transmission t = new Transmission();
-		
-		Connection connection = t.connectToDB();
-		
-		BufferedImage image = t.getUltrasoundFromDB(-1, connection);
-		
-		assertNull(image);
-	}
-	
+
 	/**
 	 * Test the method to check if an RID exists or not with a valid RID.
 	 */
@@ -187,64 +145,5 @@ public class TransmissionTest
 		boolean exists = t.ridExists(-1, connection);
 		
 		assertFalse(exists);
-	}
-	
-	/**
-	 * Test the method to compress and upload an ultrasound to the database with a valid RID.
-	 */
-	@Test
-	public void testCompressAndUploadUltrasoundToDBGoodRID()
-	{
-		System.out.println("Running testCompressAndUploadUltrasoundToDBGoodRID()...");
-		
-		Transmission t = new Transmission();
-		
-		Connection connection = t.connectToDB();
-		
-		int nUpdates = -1;
-		
-		try
-		{
-			BufferedImage image = ImageIO.read(new File("/Users/johnmather/Desktop/ultrasound-in-remote-maternal-healthcare/resources/img/ultrasound.jpg"));
-			
-			if (t.ridExists(15, connection) == false)
-				System.err.println("Error. The RID that this test relies on has been removed. Please specify a new one in TransmissionTest.java");
-			
-			nUpdates = t.compressAndUploadUltrasoundToDB(15, image, connection);
-		} 
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
-		assertTrue(nUpdates == 1);
-	}
-	
-	/**
-	 * Test the method to compress and upload an ultrasound to the database with an invalid RID.
-	 */
-	@Test
-	public void testCompressAndUploadUltrasoundToDBBadRID()
-	{
-		System.out.println("Running testCompressAndUploadUltrasoundToDBBadRID()...");
-		
-		Transmission t = new Transmission();
-		
-		Connection connection = t.connectToDB();
-		
-		int nUpdates = -1;
-		
-		try
-		{
-			BufferedImage image = ImageIO.read(new File("/Users/johnmather/Desktop/ultrasound-in-remote-maternal-healthcare/resources/img/ultrasound.jpg"));
-
-			nUpdates = t.compressAndUploadUltrasoundToDB(-1, image, connection);
-		} 
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
-		assertTrue(nUpdates == -1);
 	}
 }

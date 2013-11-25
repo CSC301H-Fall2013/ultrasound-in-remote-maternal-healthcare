@@ -10,7 +10,7 @@ import java.sql.Connection;
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
-import csc301.ultrasound.global.Transmission;
+import csc301.ultrasound.global.ImageDownloader;
 
 /**
  * A panel used to annotate an image.
@@ -187,7 +187,8 @@ public class AnnotationPanel extends JPanel
 	public void setRID(int RID)
 	{
 		this.RID = RID;
-		image = new Transmission().getUltrasoundFromDB(RID, dbConnection);
+		
+		image = new ImageDownloader(dbConnection).downloadUltrasound(RID);
 		
 		// create an image to draw into
 		annotationImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
