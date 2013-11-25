@@ -100,25 +100,45 @@ public class ResponsePanel extends JPanel
 		
 		try 
 		{
-			//Update the database with the new response and annotation.
-			PreparedStatement statement = connection.prepareStatement("UPDATE ultrasound.Records SET RadiologistResponse = ?, RadiologistRespondedOn = ?, RespondedBy = ? WHERE RID = ?");
-			statement.setString(1, response.getText());
-			statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-			statement.setInt(3, user.getID());
-			statement.setInt(4, RID);
-			statement.executeUpdate();
+			// check to see if this record already has a response
+			PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS Responded FROM Ultrasound.Records WHERE RID = ? AND RespondedBy IS NOT NULL;");
+			statement.setInt(1, RID);
 			
-			// make sure all of the constraints on the table are satisfied on the above query
-			if (statement.getUpdateCount() > 0)
+			ResultSet rs = statement.executeQuery();
+			
+			if (!rs.next())
+				return;
+			
+			int responded = rs.getInt("Responded");
+			
+			// this record has no response
+			if (responded == 0)
 			{
-				ImageUploader uploader = new ImageUploader(connection);
-				int nRowsUpdated = uploader.uploadFile(annotations, RID, user);
+				// Update the database with the new response and annotation.
+				statement = connection.prepareStatement("UPDATE ultrasound.Records SET RadiologistResponse = ?, RadiologistRespondedOn = ?, RespondedBy = ? WHERE RID = ?");
+				statement.setString(1, response.getText());
+				statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+				statement.setInt(3, user.getID());
+				statement.setInt(4, RID);
+				statement.executeUpdate();
 				
-				if (nRowsUpdated > 0)
+				// make sure all of the constraints on the table are satisfied on the above query
+				if (statement.getUpdateCount() > 0)
 				{
-					setSubmitted(true);
-					JOptionPane.showMessageDialog(null, String.format("Response to record %d was stored successfully.", RID), "Success!", JOptionPane.INFORMATION_MESSAGE);
+					ImageUploader uploader = new ImageUploader(connection);
+					int nRowsUpdated = uploader.uploadFile(annotations, RID, user);
+					
+					if (nRowsUpdated > 0)
+					{
+						setSubmitted(true);
+						JOptionPane.showMessageDialog(null, String.format("Response to record %d was stored successfully.", RID), "Success!", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "This record already has a recorded response.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 		} 
 		catch (SQLException se)
