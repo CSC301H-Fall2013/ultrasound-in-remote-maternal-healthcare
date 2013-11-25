@@ -41,8 +41,6 @@ public class AnnotationPanel extends JPanel
 	
 	/**
 	 * Instantiates a new annotation panel.
-	 *
-	 * @param dbConnection The established connection.
 	 */
 	public AnnotationPanel()
 	{

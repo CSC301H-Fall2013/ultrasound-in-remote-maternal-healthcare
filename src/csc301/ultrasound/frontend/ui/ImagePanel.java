@@ -9,7 +9,7 @@ public class ImagePanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private Image      image        = null;
+	private Image image = null;
 	
 	public ImagePanel()
 	{
