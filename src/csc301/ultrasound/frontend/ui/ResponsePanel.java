@@ -11,6 +11,7 @@ import csc301.ultrasound.model.User;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * A panel used to respond to a record.
@@ -50,21 +51,6 @@ public class ResponsePanel extends JPanel
 	
 	private void initUI()
 	{
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths  = new int[]{361};
-		gridBagLayout.rowHeights    = new int[] {300, responseHeight};
-		gridBagLayout.columnWeights = new double[]{1.0};
-		gridBagLayout.rowWeights    = new double[]{1.0, 0.0};
-		setLayout(gridBagLayout);
-		
-		annotationPanel = new AnnotationPanel();
-		
-		GridBagConstraints gbc_annotationPanel = new GridBagConstraints();
-		gbc_annotationPanel.fill   = GridBagConstraints.BOTH;
-		gbc_annotationPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_annotationPanel.gridx  = 0;
-		gbc_annotationPanel.gridy  = 0;
-		this.add(annotationPanel, gbc_annotationPanel);
 		
 		JPanel commentPanel = new JPanel();
 		commentPanel.setBackground(Color.LIGHT_GRAY);
@@ -83,15 +69,40 @@ public class ResponsePanel extends JPanel
 				onSubmission();
 			}
 		});
+		setLayout(new MigLayout("", "[][129.00][453px]", "[225px][16px][25px][25px][16px][25px][25px][16px][25px][25px][16px][25px][25px][25px]"));
+		
+		annotationPanel = new AnnotationPanel();
+		this.add(annotationPanel, "cell 0 0 3 1,grow");
+		
+		JLabel label = new JLabel("Prebirth");
+		add(label, "cell 0 1,alignx center,aligny center");
+		
+		JRadioButton radioButton = new JRadioButton("True");
+		add(radioButton, "cell 1 1,alignx center,aligny center");
+		
+		JRadioButton radioButton_1 = new JRadioButton("False");
+		add(radioButton_1, "cell 2 1,alignx center,aligny center");
+		
+		JLabel label_1 = new JLabel("Gestation");
+		add(label_1, "cell 0 2,alignx center,aligny center");
+		
+		JRadioButton radioButton_2 = new JRadioButton("True");
+		add(radioButton_2, "cell 1 2,alignx center,aligny center");
+		
+		JRadioButton radioButton_3 = new JRadioButton("False");
+		add(radioButton_3, "cell 2 2,alignx center,aligny center");
+		
+		JLabel label_3 = new JLabel("Fetal head diameter");
+		add(label_3, "cell 0 3,alignx center,aligny center");
+		
+		JRadioButton radioButton_4 = new JRadioButton("True");
+		add(radioButton_4, "cell 1 3,alignx center,aligny center");
+		
+		JRadioButton radioButton_5 = new JRadioButton("False");
+		add(radioButton_5, "cell 2 3,alignx center,aligny center");
 		
 		commentPanel.add(submissionButton);
-		
-		GridBagConstraints gbc_commentPanel = new GridBagConstraints();
-		gbc_commentPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_commentPanel.fill = GridBagConstraints.BOTH;
-		gbc_commentPanel.gridx = 0;
-		gbc_commentPanel.gridy = 1;
-		this.add(commentPanel, gbc_commentPanel);
+		this.add(commentPanel, "cell 0 4 3 9,grow");
 	}
 	
 	private void onSubmission()

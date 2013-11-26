@@ -32,6 +32,7 @@ public class GUI extends JFrame
 	
 	private ImagePanel imagePanel = null;
 	private ResponsePanel responsePanel = null;
+	private MessagePanel messagePanel = null;
 
 	/**
 	 * Create the application.
@@ -181,10 +182,12 @@ public class GUI extends JFrame
 
 		imagePanel = new ImagePanel();
 		responsePanel = new ResponsePanel(user, dbConnection);
+		messagePanel = new MessagePanel(user,dbConnection);
+		
 		
 		imageTabbedPane.addTab("Review", null, imagePanel, null);
 		imageTabbedPane.addTab("Respond", null, responsePanel, null);
-		imageTabbedPane.addTab("Comment", null, null, null);
+		imageTabbedPane.addTab("Comment", null, messagePanel, null);
 
 		JPanel panel_1 = new JPanel();
 		splitPane.setLeftComponent(panel_1);
@@ -266,6 +269,7 @@ public class GUI extends JFrame
 				
 				imagePanel.update(currRID, newImage);
 				responsePanel.update(currRID, newImage);
+				messagePanel.update(currRID);
 			}
 		}
 	}
