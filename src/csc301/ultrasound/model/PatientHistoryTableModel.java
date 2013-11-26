@@ -23,7 +23,7 @@ public class PatientHistoryTableModel extends AbstractTableModel
 	 * Instantiates a new patient history table model.
 	 *
 	 * @param patientID The patient ID
-	 * @param dbConnection the db connection
+	 * @param dbConnection The db connection
 	 */
 	public PatientHistoryTableModel(int patientID, Connection dbConnection)
 	{

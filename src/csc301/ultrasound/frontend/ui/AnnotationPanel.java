@@ -177,7 +177,6 @@ public class AnnotationPanel extends JPanel
 		RID = newRID;
 		
 		image = newImage;
-		//image = new ImageDownloader(dbConnection).downloadUltrasound(RID);
 		
 		// create an image to draw into
 		annotationImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -185,7 +184,7 @@ public class AnnotationPanel extends JPanel
         g2dAnnotation.setColor(prevColor);
         
         g2dAnnotation.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2dAnnotation.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2dAnnotation.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		this.repaint();
 	}
