@@ -142,7 +142,10 @@ class Dbtest extends CI_Controller
     		$file_path = "annotated/";
     		
     		$file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
-    		imagepng(imagecreatefromstring(file_get_contents($_FILES['uploaded_file']['tmp_name'])), $file_path);
+            $image = imagecreatefromstring(file_get_contents($_FILES['uploaded_file']['tmp_name']));
+            imagealphablending($image, true); // setting alpha blending on
+            imagesavealpha($image, true);
+    		imagepng($image, $file_path);
     		//if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
     			/***  get the image info. ***/
     			
