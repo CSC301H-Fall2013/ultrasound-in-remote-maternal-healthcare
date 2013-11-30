@@ -239,6 +239,12 @@ public class AnnotationPanel extends JPanel
 	 */
 	public void update(int newRID, BufferedImage newImage)
 	{
+		if (RID < 0)
+			return;
+		
+		if (newImage == null)
+			return;
+		
 		RID = newRID;
 		
 		image = newImage;
