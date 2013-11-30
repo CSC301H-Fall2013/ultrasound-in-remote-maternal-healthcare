@@ -27,10 +27,10 @@ public class User
 	public User(int id, String username, String name, String email, String location, int phone, int authlevel) 
 	{
 		this.id        = id;
-		this.username  = username;
-		this.name      = name;
-		this.email     = email;
-		this.location  = location;
+		this.username  = username.trim();
+		this.name      = name.trim();
+		this.email     = email.trim();
+		this.location  = location.trim();
 		this.phone     = phone;
 		this.authlevel = authlevel;
 	}

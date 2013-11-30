@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 import csc301.ultrasound.frontend.ui.Util;
+import csc301.ultrasound.global.MathUtil;
 
 /**
  * A panel used to annotate an image.
@@ -41,6 +42,11 @@ public class AnnotationPanel extends JPanel
 
 	/** The RID. */
 	private int RID = -1;
+	
+	private int scaleWidth = -1;
+	private int scaleHeight = -1;
+	private int scaleX = -1;
+	private int scaleY = -1;
 	
 	/**
 	 * Instantiates a new annotation panel.
@@ -151,12 +157,34 @@ public class AnnotationPanel extends JPanel
 	 */
 	private void updateCanvas()
 	{
+		int lineThickness = (int)Math.ceil(2.0f * (image.getWidth(null) / (float)scaleWidth));
+		
 		g2dAnnotation.setPaint(prevColor);
-		g2dAnnotation.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
-        g2dAnnotation.drawLine((int)prevLoc.getX(), (int)prevLoc.getY() - colorButtonSize, 
-        		               (int)currLoc.getX(), (int)currLoc.getY() - colorButtonSize);
+		g2dAnnotation.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
         
+		Point coordFullCurrLoc = getCoordCompToFull(currLoc);
+		Point coordFullPrevLoc = getCoordCompToFull(prevLoc);
+		
+		g2dAnnotation.drawLine(coordFullCurrLoc.x, coordFullCurrLoc.y, coordFullPrevLoc.x, coordFullPrevLoc.y);
+		
         repaint();
+	}
+	
+	private Point getCoordCompToFull(Point2D loc)
+	{
+		return getCoordScaledToFull(getCoordCompToScaled(loc));
+	}
+	
+	private Point getCoordCompToScaled(Point2D loc)
+	{
+		return new Point((int)MathUtil.clamp(loc.getX() - scaleX,                   0, scaleWidth),
+						 (int)MathUtil.clamp(loc.getY() - scaleY - colorButtonSize, 0, scaleHeight));
+	}
+	
+	private Point getCoordScaledToFull(Point loc)
+	{
+		return new Point((int)MathUtil.map(loc.getX(), 0, scaleWidth,  0, image.getWidth(null)),
+						 (int)MathUtil.map(loc.getY(), 0, scaleHeight, 0, image.getHeight(null)));
 	}
 	
 	/* (non-Javadoc)
@@ -167,19 +195,22 @@ public class AnnotationPanel extends JPanel
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         
-        float scaleFactor = (float)Math.min(1.0f, Util.getScaleFactorToFit(new Dimension(image.getWidth(null), image.getHeight(null)), 
-        															       new Dimension(this.getWidth(),      this.getHeight() - colorButtonSize)));
-        
-        // determine the parameters to fit the image into the given space, preserving the aspect ratio.
-        int scaleWidth  = (int)Math.round(image.getWidth(null)  * scaleFactor);
-        int scaleHeight = (int)Math.round(image.getHeight(null) * scaleFactor);
-
-        int x = ((this.getWidth() - 1)  - scaleWidth)  / 2;
-        int y = ((this.getHeight() - 1) - scaleHeight) / 2;
-     
-        // draw both images on top of one another. Since annotationImage is RGBA, it will overlay.
-        g2d.drawImage(image,           x, y + colorButtonSize, scaleWidth, scaleHeight, null);
-        g2d.drawImage(annotationImage, x, y + colorButtonSize, scaleWidth, scaleHeight, null);
+        if (image != null)
+        {
+	        float scaleFactor = (float)Math.min(1.0f, Util.getScaleFactorToFit(new Dimension(image.getWidth(null), image.getHeight(null)), 
+	        															       new Dimension(this.getWidth(),      this.getHeight() - colorButtonSize)));
+	        
+	        // determine the parameters to fit the image into the given space, preserving the aspect ratio.
+	        scaleWidth  = (int)Math.round(image.getWidth(null)  * scaleFactor);
+	        scaleHeight = (int)Math.round(image.getHeight(null) * scaleFactor);
+	
+	        scaleX = ((this.getWidth()  - 1) - scaleWidth)  / 2;
+	        scaleY = ((this.getHeight() - 1) - scaleHeight) / 2;
+	     
+	        // draw both images on top of one another. Since annotationImage is RGBA, it will overlay.
+	        g2d.drawImage(image,           scaleX, scaleY + colorButtonSize, scaleWidth, scaleHeight, null);
+	        g2d.drawImage(annotationImage, scaleX, scaleY + colorButtonSize, scaleWidth, scaleHeight, null);
+        }
 	}
 	
 	/**

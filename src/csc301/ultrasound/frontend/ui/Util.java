@@ -6,7 +6,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 /**
- * Contains utility methods related to UIs.
+ * Contains UI related utility methods.
  */
 public class Util
 {
