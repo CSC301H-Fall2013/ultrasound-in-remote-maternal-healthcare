@@ -170,17 +170,35 @@ public class AnnotationPanel extends JPanel
         repaint();
 	}
 	
+	/**
+	 * Converts the supplied component space location to full-image space.
+	 *
+	 * @param loc The component space location.
+	 * @return The full-image space location.
+	 */
 	private Point getCoordCompToFull(Point2D loc)
 	{
 		return getCoordScaledToFull(getCoordCompToScaled(loc));
 	}
 	
+	/**
+	 * Converts the supplied component space location to scaled-image space.
+	 *
+	 * @param loc The component space location.
+	 * @return The scaled-image space location.
+	 */
 	private Point getCoordCompToScaled(Point2D loc)
 	{
 		return new Point((int)MathUtil.clamp(loc.getX() - scaleX,                   0, scaleWidth),
 						 (int)MathUtil.clamp(loc.getY() - scaleY - colorButtonSize, 0, scaleHeight));
 	}
 	
+	/**
+	 * Converts the supplied scaled-image space location to full-image space.
+	 *
+	 * @param loc The scaled-image space location.
+	 * @return The full-image space location.
+	 */
 	private Point getCoordScaledToFull(Point loc)
 	{
 		return new Point((int)MathUtil.map(loc.getX(), 0, scaleWidth,  0, image.getWidth(null)),
