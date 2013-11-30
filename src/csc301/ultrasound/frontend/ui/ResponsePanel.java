@@ -98,7 +98,7 @@ public class ResponsePanel extends JPanel
 	{
 		BufferedImage annotations = annotationPanel.getAnnotations();
 		
-		try 
+		try
 		{
 			// check to see if this record already has a response
 			PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS Responded FROM Ultrasound.Records WHERE RID = ? AND RespondedBy IS NOT NULL;");

@@ -31,8 +31,6 @@ public class MessagePanel extends JPanel
 	
 	private ArrayList<String[]> data = new ArrayList<String[]>();
 	
-	
-	
 	/**
 	 * Instantiates a new response panel.
 	 *
@@ -105,7 +103,6 @@ public class MessagePanel extends JPanel
 			statement.setString(3, response.getText());
 			statement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 			
-			
 			statement.executeUpdate();
 			
 			// make sure all of the constraints on the table are satisfied on the above query
@@ -114,6 +111,8 @@ public class MessagePanel extends JPanel
 					setSubmitted(true);
 					messages.setText("");
 					update(RID);
+					
+					response.setText("");
 			}
 		} 
 		catch (SQLException se)
@@ -129,16 +128,19 @@ public class MessagePanel extends JPanel
 	{
 		RID = newRID;
 		getMessage(connection);
-		if(data != null){
+		
+		if (data != null)
+		{
 			messages.setText("");
-			for(String[] i : data){
+			
+			for (String[] i : data)
 				messages.append(i[0] + " on " +i[2] + " : \n" + i[1] + "\n \n");
-			}
-		} else {messages.setText("No messages.");}
+		} 
+		else
+			messages.setText("No messages.");
+		
 		// Clear data.
 		data = new ArrayList<String[]>();
-		
-		
 	}
 	
 	/**
@@ -169,8 +171,7 @@ public class MessagePanel extends JPanel
 			
 			String query = "select username, message, date "
 					     + "from ultrasound.Message, ultrasound.users "
-					     + "where RID = " + Integer.toString(RID) 
-					     + " and UID = id "
+					     + "where RID = " + Integer.toString(RID) + " and UID = id "
 					     + "order by Date ";
 			
 			ResultSet rs = statement.executeQuery(query);
@@ -186,9 +187,7 @@ public class MessagePanel extends JPanel
 				// Record the data in the arraylist.
 				data.add(msgInfo);
 				msgInfo = new String[3];
-				
 			}
-
 		} 
 		catch (SQLException se)
 		{

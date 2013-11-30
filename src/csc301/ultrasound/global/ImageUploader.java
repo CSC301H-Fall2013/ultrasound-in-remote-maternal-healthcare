@@ -3,8 +3,6 @@ package csc301.ultrasound.global;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-//import java.io.File;
-// dimport java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
