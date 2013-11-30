@@ -1,7 +1,5 @@
 package csc301.ultrasound.frontend.ui;
 
-import java.awt.Toolkit;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -13,10 +11,14 @@ import java.awt.event.ActionEvent;
 import csc301.ultrasound.model.User;
 import csc301.ultrasound.global.Authentication;
 
+/**
+ * Creates a window where a user can authenticate themselves.
+ */
 public class Login extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	
+	/** The authenticated user */
 	private User user = null;
 
 	/**
@@ -107,13 +109,16 @@ public class Login extends JFrame
 
 		this.pack();
 		
-		// center the window
-		this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (this.getSize().width / 2), 
-				         (Toolkit.getDefaultToolkit().getScreenSize().height / 2) - (this.getSize().height / 2));
+		Util.centerWindow(this);
 		
 		this.setVisible(true);
 	}
 
+	/**
+	 * Returns the authenticated user.
+	 *
+	 * @return The authenticated user.
+	 */
 	public User getUser()
 	{
 		return user;

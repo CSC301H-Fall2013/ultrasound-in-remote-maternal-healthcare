@@ -23,9 +23,7 @@ public class GUI extends JFrame
 	
 	private User user = null;
 	private Connection dbConnection = null;
-
-	// The maximum number of record rows to be displayed
-	// on the interface at one time.
+	
 	private JTable mainTable = null;
 	private JTable infoTable = null;
 	private JTable histTable = null;
@@ -85,21 +83,7 @@ public class GUI extends JFrame
 			}
 		});
 		mnFile.add(mntmExit);
-
-		JMenu mnView = new JMenu("View");
-		menuBar.add(mnView);
-
-		JMenu mnTools = new JMenu("Tools");
-		menuBar.add(mnTools);
-
-		JMenu mnWindow = new JMenu("Window");
-		menuBar.add(mnWindow);
-
-		JMenu mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
-
-		JMenuItem mntmAbout = new JMenuItem("About");
-		mnHelp.add(mntmAbout);
+		
 		this.getContentPane().setLayout(new MigLayout("", "[1057px,grow]", "[33px][grow]"));
 
 		JToolBar toolBar = new JToolBar();
@@ -117,9 +101,11 @@ public class GUI extends JFrame
 		toolBar.add(updateBtn);
 		
 		JButton btnManagerPanel = new JButton("Manager Panel");
-		btnManagerPanel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Manager managerPanel = new Manager(dbConnection);
+		btnManagerPanel.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				UserPanel managerPanel = new UserPanel(dbConnection);
 				managerPanel.setVisible(true);
 			}
 		});
@@ -180,14 +166,13 @@ public class GUI extends JFrame
 		JTabbedPane imageTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		subSplitPlane.setTopComponent(imageTabbedPane);
 
-		imagePanel = new ImagePanel();
+		imagePanel    = new ImagePanel();
 		responsePanel = new ResponsePanel(user, dbConnection);
-		messagePanel = new MessagePanel(user,dbConnection);
+		messagePanel  = new MessagePanel(user,dbConnection);
 		
-		
-		imageTabbedPane.addTab("Review", null, imagePanel, null);
+		imageTabbedPane.addTab("Review",  null, imagePanel,    null);
 		imageTabbedPane.addTab("Respond", null, responsePanel, null);
-		imageTabbedPane.addTab("Comment", null, messagePanel, null);
+		imageTabbedPane.addTab("Comment", null, messagePanel,  null);
 
 		JPanel panel_1 = new JPanel();
 		splitPane.setLeftComponent(panel_1);
@@ -213,8 +198,7 @@ public class GUI extends JFrame
 		mainTable.setFillsViewportHeight(true);
 		mainTable.setRowSelectionAllowed(true);
 		mainTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-		mainTable.getSelectionModel().addListSelectionListener(
-				new MainListSelectionListener());
+		mainTable.getSelectionModel().addListSelectionListener(new MainListSelectionListener());
 		mainTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(mainTable);
 		
@@ -222,6 +206,9 @@ public class GUI extends JFrame
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
 	
+	/**
+	 * Quit the application.
+	 */
 	private void quit()
 	{
 		this.dispose();
@@ -238,6 +225,9 @@ public class GUI extends JFrame
 		System.exit(0);
 	}
 
+	/**
+	 * Update main table with new records.
+	 */
 	private void updateMainTable()
 	{
 		if (dbConnection != null)
@@ -255,7 +245,7 @@ public class GUI extends JFrame
 			if (event.getValueIsAdjusting())
 				return;
 			
-			int[] listSelection = mainTable.getSelectedRows();
+			int listSelection[] = mainTable.getSelectedRows();
 			
 			if (listSelection.length > 0)
 			{

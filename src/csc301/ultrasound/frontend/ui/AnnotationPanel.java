@@ -36,9 +36,10 @@ public class AnnotationPanel extends JPanel
 	/** The annotation image. */
 	private BufferedImage annotationImage = null;
 	
-	/** The size of the color button */
+	/** The size of the color button. */
 	private static final int colorButtonSize = 20;
 
+	/** The RID. */
 	private int RID = -1;
 	
 	/**
@@ -49,6 +50,9 @@ public class AnnotationPanel extends JPanel
 		initUI();
 	}
 	
+	/**
+	 * Creates the UI.
+	 */
 	private void initUI()
 	{
 		this.setLayout(new BorderLayout(0, 0));
@@ -106,13 +110,7 @@ public class AnnotationPanel extends JPanel
 	}
 	
 	/**
-	 * The listener interface for receiving mouse events.
-	 * The class that is interested in processing a mouse
-	 * event implements this interface, and the object created
-	 * with that class is registered with a component using the
-	 * component's <code>addMouseListener<code> method. When
-	 * the mouse event occurs, that object's appropriate
-	 * method is invoked.
+	 * Logic for obtaining the mouse motions while drawing an annotation.
 	 *
 	 * @see MouseEvent
 	 */
@@ -149,7 +147,7 @@ public class AnnotationPanel extends JPanel
 	}
 	
 	/**
-	 * Update the canvas.
+	 * Update the drawing canvas.
 	 */
 	private void updateCanvas()
 	{
@@ -184,6 +182,12 @@ public class AnnotationPanel extends JPanel
         g2d.drawImage(annotationImage, x, y + colorButtonSize, scaleWidth, scaleHeight, null);
 	}
 	
+	/**
+	 * Update the panel with a new image and RID.
+	 *
+	 * @param newRID The new RID.
+	 * @param newImage The new image.
+	 */
 	public void update(int newRID, BufferedImage newImage)
 	{
 		RID = newRID;

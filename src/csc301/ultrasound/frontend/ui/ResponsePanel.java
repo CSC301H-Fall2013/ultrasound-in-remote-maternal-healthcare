@@ -35,7 +35,7 @@ public class ResponsePanel extends JPanel
 	 * Instantiates a new response panel.
 	 *
 	 * @param user The user responding to this record.
-	 * @param connection The established connection.
+	 * @param connection An established connection to the database.
 	 */
 	public ResponsePanel(final User user, Connection connection) 
 	{
@@ -48,6 +48,9 @@ public class ResponsePanel extends JPanel
 		initUI();
 	}
 	
+	/**
+	 * Creates the UI.
+	 */
 	private void initUI()
 	{
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -94,6 +97,9 @@ public class ResponsePanel extends JPanel
 		this.add(commentPanel, gbc_commentPanel);
 	}
 	
+	/**
+	 * Send the response and annotation image to the database.
+	 */
 	private void onSubmission()
 	{
 		BufferedImage annotations = annotationPanel.getAnnotations();
@@ -150,6 +156,12 @@ public class ResponsePanel extends JPanel
 			JOptionPane.showMessageDialog(null, String.format("An error occured while storing the response to record %d.", RID), "Error!", JOptionPane.ERROR_MESSAGE);
 	}
 	
+	/**
+	 * Update the panel to use a new RID and ultrasound image (of that RID).
+	 *
+	 * @param newRID The new RID.
+	 * @param newImage The new ultrasound image.
+	 */
 	public void update(int newRID, BufferedImage newImage)
 	{
 		RID = newRID;

@@ -19,8 +19,6 @@ public class MessagePanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private boolean submitted = false;
-	
 	private User user = null;
 	private Connection connection = null;
 	
@@ -32,10 +30,10 @@ public class MessagePanel extends JPanel
 	private ArrayList<String[]> data = new ArrayList<String[]>();
 	
 	/**
-	 * Instantiates a new response panel.
+	 * Instantiates a new message panel.
 	 *
-	 * @param user The user responding to this record.
-	 * @param connection The established connection.
+	 * @param user The current logged-in user.
+	 * @param connection An established connection to the database.
 	 */
 	public MessagePanel(final User user, Connection connection) 
 	{
@@ -48,9 +46,11 @@ public class MessagePanel extends JPanel
 		initUI();
 	}
 	
+	/**
+	 * Creates the UI.
+	 */
 	private void initUI()
-	{
-		
+	{	
 		JPanel commentPanel = new JPanel();
 		commentPanel.setBackground(Color.LIGHT_GRAY);
 		commentPanel.setLayout(new BoxLayout(commentPanel, BoxLayout.X_AXIS));
@@ -78,8 +78,10 @@ public class MessagePanel extends JPanel
 		add(scrollPane1, "cell 0 0 3 2,grow");
 		
 		JButton updateButton = new JButton("Update message");
-		updateButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		updateButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
 				messages.setText("");
 				update(RID);
 			}
@@ -90,14 +92,16 @@ public class MessagePanel extends JPanel
 		this.add(commentPanel, "cell 0 3 3 11,grow");
 	}
 	
+	/**
+	 * Submit message to the database.
+	 */
 	private void onSubmission()
 	{
 		try 
 		{
 			//Update the database with the new response and annotation.
-			PreparedStatement statement = connection.prepareStatement(
-					"INSERT INTO ultrasound.Message(RID, UID, Message, Date) VALUES(?,?,?,?);"
-					);
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO ultrasound.Message(RID, UID, Message, Date) VALUES(?,?,?,?);");
+			
 			statement.setInt(1, RID);
 			statement.setInt(2, user.getID());
 			statement.setString(3, response.getText());
@@ -108,33 +112,45 @@ public class MessagePanel extends JPanel
 			// make sure all of the constraints on the table are satisfied on the above query
 			if (statement.getUpdateCount() > 0)
 			{
-					setSubmitted(true);
-					messages.setText("");
-					update(RID);
-					
-					response.setText("");
+				messages.setText("");
+				response.setText("");
+				
+				getMessages();
+				displayMessages();
 			}
 		} 
 		catch (SQLException se)
         {
-            System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
+            System.err.println("SQL Exception. " + se.getMessage());
         }
-		
-		if (isSubmitted() == false)
-			JOptionPane.showMessageDialog(null, String.format("An error occured while storing the response to record %d.", RID), "Error!", JOptionPane.ERROR_MESSAGE);
 	}
 	
+	/**
+	 * Display the messages in "data". Make sure to call getMessages() first.
+	 */
+	private void displayMessages()
+	{
+		update(RID);
+	}
+	
+	/**
+	 * Update the panel to use a different RID.
+	 *
+	 * @param newRID The new RID.
+	 */
 	public void update(int newRID)
 	{
 		RID = newRID;
-		getMessage(connection);
+		
+		getMessages();
 		
 		if (data != null)
 		{
-			messages.setText("");
+			messages.setText("");	// clear current contents
 			
+			// write new contents
 			for (String[] i : data)
-				messages.append(i[0] + " on " +i[2] + " : \n" + i[1] + "\n \n");
+				messages.append(i[0] + " on " +i[2] + " : \n" + i[1] + "\n\n");
 		} 
 		else
 			messages.setText("No messages.");
@@ -144,26 +160,9 @@ public class MessagePanel extends JPanel
 	}
 	
 	/**
-	 * Checks to see if the response was submitted to the database correctly.
-	 *
-	 * @return True if submitted successfully. False otherwise
+	 * Pull messages from the database and save them into "data".
 	 */
-	public boolean isSubmitted() 
-	{
-		return submitted;
-	}
-	
-	/**
-	 * Sets whether the response was submitted to the database correctly.
-	 *
-	 * @param submitted Whether or not the response was submitted to the database correctly.
-	 */
-	private void setSubmitted(boolean submitted) 
-	{
-		this.submitted = submitted;
-	}
-	
-	private void getMessage(Connection connection)
+	private void getMessages()
 	{
 		try
 		{
@@ -171,22 +170,21 @@ public class MessagePanel extends JPanel
 			
 			String query = "select username, message, date "
 					     + "from ultrasound.Message, ultrasound.users "
-					     + "where RID = " + Integer.toString(RID) + " and UID = id "
-					     + "order by Date ";
+					     + "where RID = " + RID + " and UID = id "
+					     + "order by Date";
 			
 			ResultSet rs = statement.executeQuery(query);
-			String[] msgInfo = new String[3];
 
 			while (rs.next())
 			{
+				String[] msgInfo = new String[3];
+				
 				// Extract data from the result set.
 				msgInfo[0] = rs.getString("username");
 				msgInfo[1] = rs.getString("message");
 				msgInfo[2] = rs.getString("date");
 				
-				// Record the data in the arraylist.
 				data.add(msgInfo);
-				msgInfo = new String[3];
 			}
 		} 
 		catch (SQLException se)

@@ -5,17 +5,29 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+/**
+ * A panel that displays an image.
+ */
 public class ImagePanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
+	/** The image to display. */
 	private Image image = null;
 	
+	/**
+	 * Instantiates a new blank image panel.
+	 */
 	public ImagePanel()
 	{
 		initUI();
 	}
 	
+	/**
+	 * Instantiates a new image panel with an RID's ultrasound already displayed.
+	 *
+	 * @param RID the rID
+	 */
 	public ImagePanel(int RID)
 	{	
 		initUI();
@@ -23,11 +35,17 @@ public class ImagePanel extends JPanel
 		update(RID, null);
 	}
 	
+	/**
+	 * Creates the ui components.
+	 */
 	private void initUI()
 	{
 		this.setBackground(Color.BLACK);
 	}
 	
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
 	protected void paintComponent(Graphics g) 
 	{
         super.paintComponent(g);
@@ -48,6 +66,12 @@ public class ImagePanel extends JPanel
         }
     }
 	
+	/**
+	 * Update the panel with a new RID and image.
+	 *
+	 * @param newRID the new RID.
+	 * @param newImage the new image.
+	 */
 	public void update(int newRID, BufferedImage newImage)
 	{
 		image = newImage;
