@@ -232,7 +232,7 @@ public class GUI extends JFrame
 	{
 		if (dbConnection != null)
 		{
-			mainTable.setModel(new RecordTableModel(dbConnection));
+			mainTable.setModel(new RecordTableModel(user, dbConnection));
 			mainTable.setAutoCreateRowSorter(true);
 			mainTable.getRowSorter().toggleSortOrder(4);
 		}

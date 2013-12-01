@@ -12,6 +12,7 @@ import net.miginfocom.swing.MigLayout;
 import java.sql.Connection;
 
 import csc301.ultrasound.model.UserInformationTableModel;
+import csc301.ultrasound.global.Constants;
 
 /**
  * Creates a window for Managers and above to see the contact details of users
@@ -110,11 +111,11 @@ public class UserPanel extends JFrame
 	{
 		if (dbConnection != null)
 		{
-			UserInformationTableModel aModel  = new UserInformationTableModel(1, dbConnection);		// admin
-			UserInformationTableModel suModel = new UserInformationTableModel(2, dbConnection);		// superuser
-			UserInformationTableModel mModel  = new UserInformationTableModel(3, dbConnection);		// manager
-			UserInformationTableModel rModel  = new UserInformationTableModel(4, dbConnection);		// radiologist
-			UserInformationTableModel fwModel = new UserInformationTableModel(5, dbConnection);		// fieldworker
+			UserInformationTableModel aModel  = new UserInformationTableModel(Constants.AUTHLEVEL_ADMIN,       dbConnection);		// admin
+			UserInformationTableModel suModel = new UserInformationTableModel(Constants.AUTHLEVEL_SUPERUSER,   dbConnection);		// superuser
+			UserInformationTableModel mModel  = new UserInformationTableModel(Constants.AUTHLEVEL_MANAGER,     dbConnection);		// manager
+			UserInformationTableModel rModel  = new UserInformationTableModel(Constants.AUTHLEVEL_RADIOLOGIST, dbConnection);		// radiologist
+			UserInformationTableModel fwModel = new UserInformationTableModel(Constants.AUTHLEVEL_FIELDWORKER, dbConnection);		// fieldworker
 			
 			aTable.setModel(aModel);
 			suTable.setModel(suModel);

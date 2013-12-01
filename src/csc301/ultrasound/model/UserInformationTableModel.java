@@ -133,11 +133,11 @@ public class UserInformationTableModel extends AbstractTableModel
 		UserInformationTableModelEntry(int id, String username, String email, Date lastLogin, int phone, String location)
 		{
 			this.id = id;
-			this.username = username;
-			this.email = email;
+			this.username  = username;
+			this.email     = email;
 			this.lastLogin = lastLogin;
-			this.phone = phone;
-			this.location = location;
+			this.phone     = phone;
+			this.location  = location;
 		}
 		
 		/**

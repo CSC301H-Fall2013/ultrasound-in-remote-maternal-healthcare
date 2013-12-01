@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import csc301.ultrasound.global.Constants;
+
 /**
  * Create a two-dimensional table consisting of the record information of all
  * records in the database.
@@ -18,22 +20,29 @@ public class RecordTableModel extends AbstractTableModel
 	
 	/** The column names of the table. */
 	private String[] columnNames = { "Record ID", "Patient ID", "Submission Time", "Comments", "Status" };
+	
+	private Connection connection = null;
+	private User user = null;
 
 	/**
 	 * Instantiates a new record table model.
 	 *
+	 * @param user The current user.
 	 * @param dbConnection An established connection to the database.
 	 */
-	public RecordTableModel(Connection dbConnection)
+	public RecordTableModel(User user, Connection dbConnection)
 	{
-		if (dbConnection != null)
-		{
-			// Create a record table containing records that need attending to.
-			data = new ArrayList<RecordTableModelEntry>();
+		if (dbConnection == null)
+			return;
+		
+		this.connection = dbConnection;
+		this.user = user;
+		
+		// Create a record table containing records that need attending to.
+		data = new ArrayList<RecordTableModelEntry>();
 
-			// Fill in the record table and keep track of how many entries were added.
-			populateRecordTable(dbConnection);
-		}
+		// Fill in the record table and keep track of how many entries were added.
+		populateRecordTable();
 	}
 
 	/* (non-Javadoc)
@@ -82,13 +91,13 @@ public class RecordTableModel extends AbstractTableModel
 	 *
 	 * @param dbConnection An established connection to the database.
 	 */
-	private void populateRecordTable(Connection connection)
+	private void populateRecordTable()
 	{
 		try
 		{
 			Statement statement = connection.createStatement();
 			
-			String query = "select RID, PID, Date, FieldworkerComments, RadiologistResponse, FieldworkerSeen "
+			String query = "select RID, PID, Date, FieldworkerComments, RadiologistResponse, FieldworkerSeen, RespondedBy "
 					     + "from ultrasound.Records "
 					     + "order by Date desc";
 			
@@ -120,6 +129,7 @@ public class RecordTableModel extends AbstractTableModel
 				String    comments    = rs.getString("FieldworkerComments");
 				String    radResponse = rs.getString("RadiologistResponse");
 				int       fwSeen      = rs.getInt("FieldworkerSeen");
+				int       respondedBy = rs.getInt("RespondedBy");
 				
 				String status = null;
 				
@@ -133,8 +143,17 @@ public class RecordTableModel extends AbstractTableModel
 				else
 					status = "No response";
 				
-				// Record the data in the record table.
-				data.add(new RecordTableModelEntry(recordID, patientID, date, comments, status));
+				if (user.getAuthlevel() > Constants.AUTHLEVEL_MANAGER)	// Radiologist or Fieldworker
+				{
+					// Display data that has not be responded to, or was responded to by the current user.
+					if (radResponse == null || (radResponse != null && respondedBy == user.getID()))
+						data.add(new RecordTableModelEntry(recordID, patientID, date, comments, status));
+				}
+				else
+				{
+					// Display all data
+					data.add(new RecordTableModelEntry(recordID, patientID, date, comments, status));
+				}
 			}
 		} 
 		catch (SQLException se)
