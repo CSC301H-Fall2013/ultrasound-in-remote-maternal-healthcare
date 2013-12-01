@@ -118,14 +118,16 @@ public class TransmissionTest
 	{
 		System.out.println("Running testRidExistsGoodRID()...");
 		
+		int RID = 30106;
+		
 		Transmission t = new Transmission();
 		
 		Connection connection = t.connectToDB();
 		
-		if (t.ridExists(15, connection) == false)
+		if (t.ridExists(RID, connection) == false)
 			System.err.println("Error. The RID that this test relies on has been removed. Please specify a new one in TransmissionTest.java");
 		
-		boolean exists = t.ridExists(15, connection);
+		boolean exists = t.ridExists(RID, connection);
 		
 		assertTrue(exists);
 	}
