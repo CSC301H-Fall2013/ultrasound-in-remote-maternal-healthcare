@@ -27,46 +27,44 @@ public class PatientInformationTableModel extends AbstractTableModel
 	 */
 	public PatientInformationTableModel(int currPatientId, Connection dbConnection)
 	{
+		if (dbConnection == null)
+			return;
+		
 		// Create a new table consisting of the patient's information.
 		Object[][] patientInfoTable = new Object[1][columnNames.length];
 
-		if (dbConnection != null)
+		try
 		{
-			try
+			Statement statement = dbConnection.createStatement();
+
+			// Query the database for information about the patient.
+			String query = "select FirstName, LastName, Birthdate, Country "
+					     + "from ultrasound.Patients " 
+					     + "where PID = " + Integer.toString(currPatientId);
+			
+			ResultSet rs = statement.executeQuery(query);
+
+			while (rs.next())
 			{
-				Statement statement = dbConnection.createStatement();
+				// Extract data from the result set.
+				String firstName = rs.getString("FirstName");
+				String lastName = rs.getString("LastName");
+				Date birthday = rs.getDate("Birthdate");
+				String country = rs.getString("Country");
 
-				// Query the database for information about the patient.
-				String query = "select FirstName, LastName, Birthdate, Country "
-						     + "from ultrasound.Patients " 
-						     + "where PID = " + Integer.toString(currPatientId);
-				
-				ResultSet rs = statement.executeQuery(query);
-
-				while (rs.next())
-				{
-					// Extract data from the result set.
-					String firstName = rs.getString("FirstName");
-					String lastName = rs.getString("LastName");
-					Date birthday = rs.getDate("Birthdate");
-					String country = rs.getString("Country");
-
-					// Record the data in the record table.
-					patientInfoTable[0][0] = currPatientId;
-					patientInfoTable[0][1] = firstName + " " + lastName;
-					patientInfoTable[0][2] = birthday;
-					patientInfoTable[0][3] = country;
-				}
-				
-				data = patientInfoTable;
-			} 
-			catch (SQLException se)
-			{
-				se.printStackTrace();
+				// Record the data in the record table.
+				patientInfoTable[0][0] = currPatientId;
+				patientInfoTable[0][1] = firstName + " " + lastName;
+				patientInfoTable[0][2] = birthday;
+				patientInfoTable[0][3] = country;
 			}
+			
+			data = patientInfoTable;
 		} 
-		else
-			System.out.println("Connection failure.");
+		catch (SQLException se)
+		{
+			se.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)

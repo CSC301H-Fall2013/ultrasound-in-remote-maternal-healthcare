@@ -40,8 +40,7 @@ public class RecordTableModel extends AbstractTableModel
 		
 		// Create a record table containing records that need attending to.
 		data = new ArrayList<RecordTableModelEntry>();
-
-		// Fill in the record table and keep track of how many entries were added.
+		
 		populateRecordTable();
 	}
 
@@ -88,8 +87,6 @@ public class RecordTableModel extends AbstractTableModel
 	
 	/**
 	 * Populate the record table with new records.
-	 *
-	 * @param dbConnection An established connection to the database.
 	 */
 	private void populateRecordTable()
 	{

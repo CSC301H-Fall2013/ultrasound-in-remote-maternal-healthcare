@@ -24,13 +24,14 @@ public class GUI extends JFrame
 	private User user = null;
 	private Connection dbConnection = null;
 	
-	private JTable mainTable = null;
-	private JTable infoTable = null;
-	private JTable histTable = null;
+	private JTable mainTable = null;	// Main record table
+	private JTable infoTable = null;	// Patient info
+	private JTable histTable = null;	// Patient history
+	private JTable rdetTable = null;	// Record details
 	
-	private ImagePanel imagePanel = null;
+	private ImagePanel    imagePanel    = null;
 	private ResponsePanel responsePanel = null;
-	private MessagePanel messagePanel = null;
+	private MessagePanel  messagePanel  = null;
 
 	/**
 	 * Create the application.
@@ -161,6 +162,13 @@ public class GUI extends JFrame
 		histTable = new JTable();
 		histTable.setFillsViewportHeight(true);
 		histPane.setViewportView(histTable);
+
+		JScrollPane rdetPane = new JScrollPane();
+		infoTabbedPane.addTab("Record Details", null, rdetPane, null);
+
+		rdetTable = new JTable();
+		rdetTable.setFillsViewportHeight(true);
+		rdetPane.setViewportView(rdetTable);
 		
 		// image section tabs
 		JTabbedPane imageTabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -254,6 +262,7 @@ public class GUI extends JFrame
 				
 				histTable.setModel(new PatientHistoryTableModel(currPatientId, dbConnection));
 				infoTable.setModel(new PatientInformationTableModel(currPatientId, dbConnection));
+				rdetTable.setModel(new RecordDetailsTableModel(currRID, dbConnection));
 				
 				BufferedImage newImage = new ImageDownloader(dbConnection).downloadUltrasound(currRID);
 				
