@@ -11,7 +11,3 @@ Authors
  * Katie Lo - kqb
  * Asylai Sainova - Assylay
  * Peter Chen - c0chenli
-
-Clients
- * Klaus
- * Leanne

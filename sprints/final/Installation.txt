@@ -1,0 +1,4 @@
+Installation
+=================================
+
+Copy client.jar to a convenient location. Double click to launch the application. If an alert pops up asking if you'd like to add an exception to your firewall, accept. The application will not work if you deny it.
