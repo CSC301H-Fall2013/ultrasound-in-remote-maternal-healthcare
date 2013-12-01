@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 
 import csc301.ultrasound.model.User;
 import csc301.ultrasound.global.Authentication;
+import csc301.ultrasound.global.Constants;
 
 /**
  * Creates a window where a user can authenticate themselves.
@@ -83,11 +84,20 @@ public class Login extends JFrame
 					JOptionPane.showMessageDialog(null, "Incorrect username and/or password.", "Login Failure!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				else
+				else	// authenticated properly
 				{
-					//JOptionPane.showMessageDialog(null, String.format("Authenticated. Hello %s.", user.getName()), "Login Success!", JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-					return;
+					// prevent any authlevel greater than radiologists (fieldworkers) to access the system
+					if (user.getAuthlevel() > Constants.AUTHLEVEL_RADIOLOGIST)
+					{
+						JOptionPane.showMessageDialog(null, "You do not have the necessary permissions to access.", "Login Failure!", JOptionPane.ERROR_MESSAGE);
+						return;
+					}	
+					else	// log in
+					{
+						//JOptionPane.showMessageDialog(null, String.format("Authenticated. Hello %s.", user.getName()), "Login Success!", JOptionPane.INFORMATION_MESSAGE);
+						dispose();
+						return;
+					}
 				}
 			}
 		});

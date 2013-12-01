@@ -1,5 +1,8 @@
 package csc301.ultrasound.global;
 
+/**
+ * Container class for global constants.
+ */
 public class Constants
 {
 	public static int AUTHLEVEL_ADMIN       = 1;
