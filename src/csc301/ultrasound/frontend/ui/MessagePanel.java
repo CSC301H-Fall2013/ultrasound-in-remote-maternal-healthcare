@@ -142,6 +142,9 @@ public class MessagePanel extends JPanel
 	{
 		RID = newRID;
 		
+		// Clear data.
+		data = new ArrayList<String[]>();
+		
 		getMessages();
 		
 		if (data != null)
@@ -154,9 +157,6 @@ public class MessagePanel extends JPanel
 		} 
 		else
 			messages.setText("No messages.");
-		
-		// Clear data.
-		data = new ArrayList<String[]>();
 	}
 	
 	/**
