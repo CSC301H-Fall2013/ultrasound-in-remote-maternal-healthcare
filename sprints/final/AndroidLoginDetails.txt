@@ -1,0 +1,7 @@
+AndroidLoginDetails
+=================================
+
+For log in, you can use:
+	username = foobar, 
+	password = password.
+Then you can login and upload image and information to server.

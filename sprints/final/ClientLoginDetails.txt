@@ -1,0 +1,20 @@
+ClientLoginDetails
+=================================
+
+For log in, you can use:
+
+	username = admin,
+	password = password,
+as a superuser.
+	
+	
+	username = user2,
+	password = password,
+as a manager.
+
+
+	username = foobar,
+	password = password,
+as a radiologist.
+
+They have different authorization level.
