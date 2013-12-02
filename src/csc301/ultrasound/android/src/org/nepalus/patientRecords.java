@@ -15,8 +15,11 @@ import java.util.Hashtable;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -206,12 +209,24 @@ public class patientRecords extends Activity implements OnClickListener {
 			for(String a: elements){
 				System.out.println(a);
 			}
-			
+			if(!isNetworkAvailable()){
+				Toast.makeText(this, "No Network Connection Available!", Toast.LENGTH_SHORT).show();
+				return;
+			}
 			// Launch the intent.
 			startActivity(load);
 		}
 			
 		
 	}
+	/*
+	 * Determine whether mobile device is connected to internet.
+	 */
+	 public  boolean isNetworkAvailable() {
+	        ConnectivityManager connectivityManager 
+	              = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	    }
 
 }

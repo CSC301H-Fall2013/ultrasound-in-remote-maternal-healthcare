@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 	static final String Callback = "https://localhost/client";
     static final String Connection = "Username-Password-Authentication"; //any other connection
     Context mcontext;
+    static final String userId = "Def";
     public boolean result = false;
     
     

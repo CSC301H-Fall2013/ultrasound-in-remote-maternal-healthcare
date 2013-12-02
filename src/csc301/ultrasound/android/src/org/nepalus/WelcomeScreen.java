@@ -10,11 +10,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -68,6 +73,7 @@ public class WelcomeScreen extends Activity {
 	  * @param View: takes in view of the button that was tapped.
 	  */
 	public void onClick(View v){
+		if(isNetworkAvailable()){
 		System.out.println(lastID);
 		System.out.println(UltrasoundImageScreen.photoID);
 		
@@ -81,13 +87,27 @@ public class WelcomeScreen extends Activity {
 		System.out.println(UltrasoundImageScreen.photoID);
 		//UltrasoundImageScreen.photoID += 1;
 		// Initialize the new picture name for next click.
-		UltrasoundImageScreen.IMAGE_NAME = "p"+UltrasoundImageScreen.photoID.toString();
+		String user = LoginScreen.loginName;
 		
+		String date = new SimpleDateFormat("ddMMyyyyHHMMSS").format(new Date());
+		String stamp = user + date;
+		
+		
+
+		
+		UltrasoundImageScreen.IMAGE_NAME = stamp;
+		MetadataScreen.oldEntry = false;
+		MetadataScreen.First = "";
+		MetadataScreen.Last = "";
+		MetadataScreen.Birth = "";
 		// Signal to activate the camera
 		UltrasoundImageScreen.cam = true;
 		// Launch the Ultrasound Image capturing activity
 		Intent i = new Intent(area, UltrasoundImageScreen.class);
 		startActivity(i);
+		}else{
+			Toast.makeText(this, "No Network Connection Available!", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	
@@ -98,9 +118,13 @@ public class WelcomeScreen extends Activity {
 	  * @param View: takes in view of the button that was tapped.
 	  */
 	public void onClick1(View v){
+		if(!isNetworkAvailable()){
+			Toast.makeText(this, "No Network Connection Available!", Toast.LENGTH_SHORT).show();
+		}
 		//Laucn Pateint record activity
 		Intent i = new Intent(area, patientRecords.class);
 		startActivity(i);
+		
 		
 						
 					
@@ -131,6 +155,18 @@ public class WelcomeScreen extends Activity {
 		} else{
 			Toast.makeText(WelcomeScreen.this, "Patients Data Already Cleared!", Toast.LENGTH_SHORT).show();
 		}
+    	
+	}
+	
+	public void onClick7(View v){
+		if(isNetworkAvailable()){
+		Intent load  = new Intent(this, Search.class);
+		startActivity(load);
+		} else{
+			Toast.makeText(this, "No Network Connection Available!", Toast.LENGTH_SHORT).show();
+		}
+		
+		
     	
 	}
 	
@@ -193,4 +229,10 @@ public class WelcomeScreen extends Activity {
 		        Log.e("Exception", "File write failed: " + e.toString());
 		    } 
 		}
+	 public  boolean isNetworkAvailable() {
+	        ConnectivityManager connectivityManager 
+	              = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	    }
 }

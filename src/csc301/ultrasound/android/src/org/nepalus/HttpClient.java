@@ -131,6 +131,42 @@ import android.util.Log;
     }
     
 
+    public JSONArray SendHttpPostArray(String URL, List<BasicNameValuePair> nameValuePairs) {
+
+        	DefaultHttpClient httpclient = new DefaultHttpClient();
+        	HttpPost httppost = new HttpPost(URL);
+
+        	try {
+        	    // Add your dat
+        	    /*nameValuePairs.add(new BasicNameValuePair("id", "12345"));
+        	    nameValuePairs.add(new BasicNameValuePair("stringdata", "AndDev is Cool!"));*/
+        	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        	    // Execute HTTP Post Request
+        	    HttpResponse response = httpclient.execute(httppost);
+        	    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),"iso-8859-1"),8);
+        	    
+        	    StringBuilder content = new StringBuilder();
+        	    String line;
+        	    while (null != (line = reader.readLine())) {
+        	        content.append(line + "\n");
+        	    }
+        	    try {
+        	        JSONArray userObject = new JSONArray(content.toString());
+        	        return userObject;
+        	        
+        	    } catch(Exception ex){
+        	        //don't forget this
+        	    }
+
+        	} catch (ClientProtocolException e) {
+        	    // TODO Auto-generated catch block
+        	} catch (IOException e) {
+        	    // TODO Auto-generated catch block
+        	}
+			return null;
+    }
+    
 
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));

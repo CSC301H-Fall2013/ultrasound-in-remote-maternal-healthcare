@@ -3,11 +3,14 @@ package org.nepalus;
 import  com.microsoft.windowsazure.mobileservices.*;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -24,9 +27,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 
+
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+
+
 
 
 
@@ -35,11 +39,16 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Base64;
 import android.util.Log;
@@ -47,6 +56,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MetadataScreen extends Activity {
@@ -61,7 +71,18 @@ public class MetadataScreen extends Activity {
 	private EditText patientIdentification;
 	private EditText preBirth;
 	private MobileServiceClient mClient;
-	
+	private TextView messageText;
+    private Button uploadButton, btnselectpic;
+    private ImageView imageview;
+    private int serverResponseCode = 0;
+    private ProgressDialog dialog = null;
+       
+    private String upLoadServerUri = null;
+    private static String imagepath=null;
+	public static Boolean oldEntry = false;
+	public static String First = "";
+	public static String Last = "";
+	public static String Birth = "";
 	
 	
 	private class TransferTask extends AsyncTask<String, Void, String>{
@@ -84,49 +105,7 @@ public class MetadataScreen extends Activity {
 		
 	}
 	
-	/* Convert Bitmap to bytearray.
-	 * @b: bitmap to be translated to its bytearray form.*/
-	 
-	public byte[] bitmapToByteArray(Bitmap b)
-	{
-	    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-	    b.compress(Bitmap.CompressFormat.PNG, 100, stream);
-	    byte[] byteArray = stream.toByteArray();
-	    return byteArray;
-	}
 	
-	/**
-	 * Compress the provided byte array using ZLib. Note that it is not guaranteed that the
-	 * resultant byte array will be smaller than the original.
-	 *
-	 * @param toCompress The byte array to compress
-	 * @return The compressed byte array. null if an error occured.
-	 */
-	public byte[] compress(byte toCompress[])
-	{
-		try 
-		{
-			Deflater compressor = new Deflater(Deflater.BEST_COMPRESSION);
-			
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			DeflaterOutputStream compressedStream = new DeflaterOutputStream(stream, compressor);
-			
-			compressedStream.write(toCompress);
-			compressedStream.close();
-			
-			stream.flush();
-			
-			compressor.end();
-			
-			return stream.toByteArray();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
 	
 	//Class To represent Patients object to be added to remote database.
 	
@@ -179,7 +158,11 @@ public class MetadataScreen extends Activity {
     	fetalDiameter = (EditText) findViewById(R.id.fetal_head_diameter);
     	hipDiameter = (EditText) findViewById(R.id.mother_hip_diameter);
     	preBirth = (EditText) findViewById(R.id.pre_birth);
-        
+    	upLoadServerUri = "http://ultrasound.azurewebsites.net/index.php/dbtest/upload";
+        if(this.oldEntry){
+        	mPatientName.setText(this.First + " " + this.Last);
+        	mPatientAge.setText(this.Birth);
+        }
         
         
         // Get Image object from display
@@ -187,23 +170,17 @@ public class MetadataScreen extends Activity {
         // Set the image to be displayed in image box via image object.
         final Uri image = UltrasoundImageScreen.getOutputMediaFileUri(UltrasoundImageScreen.IMAGE_NAME);
         thumbnail.setImageURI(image);
-        try {
-			Bitmap bmp=BitmapFactory.decodeStream(getContentResolver().openInputStream(image));
-			//byte[] imgBytes = bitmapToByteArray(bmp);
-			//byte[] compressed = compress(imgBytes);
-			//String imgString = Base64.encodeToString(compressed, Base64.NO_WRAP);
-			//imgRecord.image = imgString;
-			
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
         
+   
         
         // Handle the on click event of finish button
         Button nextButton = (Button) findViewById(R.id.finish);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+            	if(!isNetworkAvailable()){
+        			new TransferTask().execute("No Network Connection Available!");
+        			return;
+        		}
             	//submit();
             	// Extract Patient information entered by user
             	
@@ -218,14 +195,20 @@ public class MetadataScreen extends Activity {
             	//* Initiaize Medical Details received from user's input at UI.
             	String name = mPatientName.getText().toString();
                 if(name.length() == 0){
-                	name = "NoName";
+                	new TransferTask().execute("Name Details Invalid!");
+            		return;
                
                 } else{
+                	try{
                 	String[] tokens =  name.split(" ");
                 	
                 	pat.FirstName = tokens[0];
                 	if(tokens.length > 1){
                 		pat.LastName = name.split(" ")[1];
+                	}
+                	} catch (Exception e){
+                		new TransferTask().execute("Name Details Invalid!");
+                		return;
                 	}
                 }
                 String gage = mPatientGestationAge.getText().toString();
@@ -238,12 +221,18 @@ public class MetadataScreen extends Activity {
                 String bday = "dd.mm.yy";
                 String page = mPatientAge.getText().toString();
                 if(page.length() == 0){
-                	page = "0";
+                	new TransferTask().execute("Birth Details Invalid!");
+            		return;
                 } else{
                 	pat.Birthdate = page;
+                	try{
                 	String[] tokens = page.split(" ");
                 	bday = tokens[0]+"."+tokens[1]+"."+tokens[2];
                 	System.out.println(pat.Birthdate);
+                	} catch (Exception e){
+                		new TransferTask().execute("Birth Details Invalid!");
+                		return;
+                	}
                 	
                 }
                 String comments = mComments.getText().toString();
@@ -286,19 +275,28 @@ public class MetadataScreen extends Activity {
             	// Write the new patient data to patient record file
             	File a = getFilesDir();
             	String path = a.getAbsolutePath();
-        		
+            	String dir = UltrasoundImageScreen.getMediaDir();
+            	MetadataScreen.imagepath = dir + File.separator + UltrasoundImageScreen.IMAGE_NAME + ".jpg";
+            	System.out.println("Printing out image path");
+            	System.out.println(MetadataScreen.imagepath);
+            	File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+      	        Environment.DIRECTORY_PICTURES), UltrasoundImageScreen.IMAGE_DIRECTORY);
         		
         		File b = new File(path +"/patientDataU.txt");
-        		if(b.exists()){
-        			writeToFile(data,"patientDataU.txt");
-        		} else{
-        			writeToFile2(data,"patientDataU.txt");
+        		if(!MetadataScreen.oldEntry){
+        			if(b.exists()){
+        				writeToFile(data,"patientDataU.txt");
+        			} else{
+        				writeToFile2(data,"patientDataU.txt");
+        			}
         		}
             	
+        		
+        	   
             	// Record the last Patient Id
             	writeToFile2(UltrasoundImageScreen.photoID.toString(),"Totalrecord.txt");
             	final HttpClient conn = new HttpClient();
-       
+            	
             	// Display Progress Dialog of uploading information.
             	final ProgressDialog dialog = ProgressDialog.show(MetadataScreen.this,"Uploading Data", "Please Wait...", true);
                 new Thread(new Runnable(){
@@ -309,10 +307,12 @@ public class MetadataScreen extends Activity {
                 			if((pat.FirstName.length() > 0) || (pat.LastName.length() > 0)){
                 				//Insert Patient Details into remote database Patients table
                 				System.out.println("About to insert Data to database!");
+                				
                 				List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
                 				nameValuePairs.add(new BasicNameValuePair("firstName", pat.FirstName));
                         	    nameValuePairs.add(new BasicNameValuePair("lastName", pat.LastName));
                         	    nameValuePairs.add(new BasicNameValuePair("date", pat.Birthdate));
+                        	   
                 				JSONObject output = conn.SendHttpPost("http://ultrasound.azurewebsites.net/index.php/dbtest/callPatientCheck", nameValuePairs);
                 				if(output != null){
                 					if(output.getInt("result")== -1){
@@ -330,21 +330,32 @@ public class MetadataScreen extends Activity {
                 								output = conn.SendHttpPost("http://ultrasound.azurewebsites.net/index.php/dbtest/callPatientCheck", nameValuePairs);
                 								List<BasicNameValuePair> nameValues = new ArrayList<BasicNameValuePair>();
                 								int pid = output.getInt("result");
-                								System.out.println(pid);
+                								message = "Uploading Image to Server!";
+                    							new TransferTask().execute(message);
+                								uploadFile(MetadataScreen.imagepath);
                 								
                 								//Prepare to insert medical data inside.
                 								nameValues.add(new BasicNameValuePair("piD", String.valueOf(pid)));
                                         	    nameValues.add(new BasicNameValuePair("fComments", imgRecord.FieldworkerComments));
-                                        	    nameValues.add(new BasicNameValuePair("imG", "101010101"));
+                                        	    String prefix = "./ultrasound/";
+                                        	    String basename = prefix +  UltrasoundImageScreen.IMAGE_NAME + ".png";
+                                        	    
+                                        	    System.out.println("Basename: " + basename);
+                                        	    nameValues.add(new BasicNameValuePair("imG", basename));
                                         	    nameValues.add(new BasicNameValuePair("gesT", String.valueOf(imgRecord.Gestation)));
                                         	    nameValues.add(new BasicNameValuePair("isBleed", String.valueOf(imgRecord.IsBleeding)));
                                         	    nameValues.add(new BasicNameValuePair("preB", String.valueOf(imgRecord.Prebirth)));
                                         	    nameValues.add(new BasicNameValuePair("diamFet", String.valueOf(imgRecord.DiameterFetalHead)));
                                         	    nameValues.add(new BasicNameValuePair("diaMot", String.valueOf(imgRecord.DiameterMotherHip)));
                                         	    nameValues.add(new BasicNameValuePair("fSeen", String.valueOf(0)));
-                                        	    
+                                        	    message = "Uploading medical data to database!";
+                    							new TransferTask().execute(message);
                                         	    //Insert Medical Data into Records.
                                         	    output = conn.SendHttpPost("http://ultrasound.azurewebsites.net/index.php/dbtest/insertPatientMed", nameValues);
+                                        	    
+                                        	    //Insert image into records.
+                                        	    
+                                        	    
                                         	    
                 							}
                 						}else{
@@ -353,8 +364,37 @@ public class MetadataScreen extends Activity {
     
                 						}
                 					} else {
-                						message = "Patient Already Present!";
-                						new TransferTask().execute(message);
+                						if(!MetadataScreen.oldEntry){
+                							message = "Patient Already Present!";
+                							new TransferTask().execute(message);
+                						} else{
+                							List<BasicNameValuePair> nameValues = new ArrayList<BasicNameValuePair>();
+                							message = "Uploading Image to Server!";
+                							new TransferTask().execute(message);
+                							int pid = output.getInt("result");
+            								uploadFile(MetadataScreen.imagepath);
+            								
+            								//Prepare to insert medical data inside.
+            								nameValues.add(new BasicNameValuePair("piD", String.valueOf(pid)));
+                                    	    nameValues.add(new BasicNameValuePair("fComments", imgRecord.FieldworkerComments));
+                                    	    String prefix = "./ultrasound/";
+                                    	    String basename = prefix +  UltrasoundImageScreen.IMAGE_NAME + ".png";
+                                    	    
+                                    	    System.out.println("Basename: " + basename);
+                                    	    nameValues.add(new BasicNameValuePair("imG", basename));
+                                    	    nameValues.add(new BasicNameValuePair("gesT", String.valueOf(imgRecord.Gestation)));
+                                    	    nameValues.add(new BasicNameValuePair("isBleed", String.valueOf(imgRecord.IsBleeding)));
+                                    	    nameValues.add(new BasicNameValuePair("preB", String.valueOf(imgRecord.Prebirth)));
+                                    	    nameValues.add(new BasicNameValuePair("diamFet", String.valueOf(imgRecord.DiameterFetalHead)));
+                                    	    nameValues.add(new BasicNameValuePair("diaMot", String.valueOf(imgRecord.DiameterMotherHip)));
+                                    	    nameValues.add(new BasicNameValuePair("fSeen", String.valueOf(0)));
+                                    	    
+                                    	    message = "Uploading medical data to database!";
+                							new TransferTask().execute(message);
+                                    	    //Insert Medical Data into Records.
+                                    	    output = conn.SendHttpPost("http://ultrasound.azurewebsites.net/index.php/dbtest/insertPatientMed", nameValues);
+                							
+                						}
                 					
                 					}
                 				} else {
@@ -372,33 +412,6 @@ public class MetadataScreen extends Activity {
                 			//Toast.makeText(MetadataScreen.this, "Data Sent Successfully!", Toast.LENGTH_SHORT).show();
                 			Log.d("alertD", "abt to show Dialog");
                 			
-                			
-                			
-                			/* CODE TO BE USED LATER. */
-                			// Display the mock of Response from Radiologist
-                			/*MetadataScreen.this.runOnUiThread(new Runnable(){
-                        		public void run(){
-                        			
-                                	
-                                	AlertDialog.Builder alDialog = new AlertDialog.Builder(mActivity);
-                                	alDialog.setTitle("Response From Radiologist");
-                                	alDialog
-                                		.setMessage("Child Condition is abnormal, Patient Needs to be Hospitalized Immediately.!")
-                                		.setPositiveButton("Okay!", new DialogInterface.OnClickListener() {
-                							
-                							@Override
-                							public void onClick(DialogInterface arg0, int arg1) {
-                								Toast.makeText(MetadataScreen.this, "Response Recorded!", Toast.LENGTH_SHORT).show();
-                								dialog.cancel();
-                								
-                								
-                							}
-                						});
-                                	AlertDialog alertD = alDialog.create();
-                                	alertD.show();
-                                	
-                        		}
-                        });*/
                 			
                 		} catch (Exception e){
                 			e.printStackTrace();
@@ -446,81 +459,142 @@ public class MetadataScreen extends Activity {
 	    } 
 	}
     
-    
-    /* Encode bitmap to base64 String. 
-     * @image: bitmap of image to be encoded to base64. */
-     
-    public static String encodeTobase64(Bitmap image)
-    {
-        Bitmap immagex=image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();  
-        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b,Base64.NO_WRAP);
-
-        Log.e("LOOK", imageEncoded);
-        return imageEncoded;
-    }
-    
-    /* Decode Base64 Stirng to Bitmap.
-     * @input: bas64 encoded input string.
+    /*
+     * Upload file to the server
+     * @param sourceFileUri: Path of the file to be uploaded.
      */
-    public static Bitmap decodeBase64(String input) 
-    {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length); 
-    }
-    
-    
-    /*Get ImageURI from its bitmap.
-     * @Context: current activity on UI
-     * @inImage: bitmap of image to be converted to Uri
-     */
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-      inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-      String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-      return Uri.parse(path);
-    }
-    
-    
-    //Below code is not required at the moment.
-   /* private void submit(){    	    	
-    	final String patientName = mPatientName.getText().toString();    	
-    	final String patientAge = mPatientAge.getText().toString();
-    	final String comments = mComments.getText().toString();
-    	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-    	final Bitmap photo;
-    	
-    	bitmapOptions.outMimeType = "image/png";
-    	
-    	try {
-	        URL aURL = new URL(UltrasoundImageScreen.getOutputMediaFileUri(UltrasoundImageScreen.IMAGE_NAME).toString());
-	        URLConnection conn = aURL.openConnection();
-	        conn.connect();
-	        InputStream is = conn.getInputStream();
-	        BufferedInputStream bis = new BufferedInputStream(is);
-	        photo = BitmapFactory.decodeStream(bis);
-	        bis.close();
-	        is.close();
+    public int uploadFile(String sourceFileUri) {
+   
+	  
+	  String fileName = sourceFileUri;
 
-	        new Thread(new Runnable() {
-	            public void run() {
-	            	try {
-	            		api.setURL("http://192.168.100.245:3000/send");
-						HttpResponse response = api.send(patientName, comments, photo, patientAge);
-						Log.d("API", "sent");											
-					} catch (ClientProtocolException e) {
-						Log.d("API", e.getMessage());						
-					} catch (IOException e) {
-						Log.d("API", e.getMessage());
-					}    
-	            }
-	          }).start();   
-    	}
-    	catch (IOException e) {
-    		Log.d("loadBitmap", e.getMessage());
-    	}
-    	
-    }*/
+	  HttpURLConnection conn = null;
+	  DataOutputStream dos = null;  
+	  String lineEnd = "\r\n";
+	  String twoHyphens = "--";
+	  String boundary = "*****";
+	  int bytesRead, bytesAvailable, bufferSize;
+	  byte[] buffer;
+	  int maxBufferSize = 1 * 1024 * 1024; 
+	  File sourceFile = new File(sourceFileUri); 
+   
+	  if (!sourceFile.isFile()) {
+ 	  
+       
+        
+        Log.e("uploadFile", "Source File not exist :"+imagepath);
+        
+        runOnUiThread(new Runnable() {
+            public void run() {
+         	   messageText.setText("Source File not exist :"+ imagepath);
+            }
+        }); 
+        
+        return 0;
+    
+   }
+   else
+   {
+        try { 
+     	   
+         	 // open a URL connection to the Servlet
+            FileInputStream fileInputStream = new FileInputStream(sourceFile);
+            URL url = new URL(upLoadServerUri);
+            
+            // Open a HTTP  connection to  the URL
+            conn = (HttpURLConnection) url.openConnection(); 
+            conn.setDoInput(true); // Allow Inputs
+            conn.setDoOutput(true); // Allow Outputs
+            conn.setUseCaches(false); // Don't use a Cached Copy
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            conn.setRequestProperty("uploaded_file", fileName);
+            
+            
+            dos = new DataOutputStream(conn.getOutputStream());
+  
+            dos.writeBytes(twoHyphens + boundary + lineEnd); 
+            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+         		                     + fileName + "\"" + lineEnd);
+            
+            dos.writeBytes(lineEnd);
+  
+            // create a buffer of  maximum size
+            bytesAvailable = fileInputStream.available(); 
+  
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+  
+            // read file and write it into form...
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
+              
+            while (bytesRead > 0) {
+         	   
+              dos.write(buffer, 0, bufferSize);
+              bytesAvailable = fileInputStream.available();
+              bufferSize = Math.min(bytesAvailable, maxBufferSize);
+              bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
+              
+             }
+  
+            // send multipart form data necesssary after file data...
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+  
+            // Responses from the server (code and message)
+            serverResponseCode = conn.getResponseCode();
+            String serverResponseMessage = conn.getResponseMessage();
+             
+            Log.i("uploadFile", "HTTP Response is : " 
+         		   + serverResponseMessage + ": " + serverResponseCode);
+            
+            if(serverResponseCode == 200){
+         	   
+                        
+            }    
+            
+            //close the streams //
+            fileInputStream.close();
+            dos.flush();
+            dos.close();
+             
+       } catch (MalformedURLException ex) {
+     	  
+         
+           ex.printStackTrace();
+          
+           
+           Log.e("Upload file to server", "error: " + ex.getMessage(), ex);  
+       } catch (Exception e) {
+     	  
+          
+           e.printStackTrace();
+           
+          
+           Log.e("Upload file to server Exception", "Exception : "  + e.getMessage(), e);  
+       }
+           
+       return serverResponseCode; 
+       
+    } // End else block 
+  }
+    
+    
+    /*
+     * Determine whether mobile device is connected to internet or not.
+     */
+	public  boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager 
+		= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+    
+    
+ 
+
+	
 }

@@ -40,5 +40,15 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/next"
         android:onClick="onClick2"/>
+    
+     <Button 
+        android:id="@+id/clearRecord"
+        android:textColor="@color/button_text_color"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Patient Record"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/next"
+        android:onClick="onClick7"/>
 
 </LinearLayout>

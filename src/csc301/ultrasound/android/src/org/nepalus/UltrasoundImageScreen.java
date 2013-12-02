@@ -99,4 +99,10 @@ public class UltrasoundImageScreen extends Activity {
 
 	    return mediaFile;
 	}
+	
+	public static String getMediaDir(){
+		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+	              Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY);
+		return mediaStorageDir.getAbsolutePath();
+	}
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/background" >
+	
+    
+	
+		    <ImageView 
+		        android:id="@+id/ultrasound12"
+		        
+			    android:layout_width="@dimen/thumbnail_width"
+			    android:layout_height="@dimen/thumbnail_height"
+				android:layout_gravity="center"
+				android:layout_marginBottom="4dp"
+				android:contentDescription="@string/metadata_image_preview_label" />
+	   
+	    </ScrollView>
+    
+

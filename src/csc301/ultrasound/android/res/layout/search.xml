@@ -12,11 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/layout1"
 		android:orientation="vertical" >
-			<TextView
-        		android:id="@+id/textmsg"
-        		android:layout_width="fill_parent"
-        		android:layout_height="fill_parent"
-        		android:text="hello" />
+			
 	
 	        <TextView
 	            android:text="@string/metadata_patient_name_label"
@@ -26,7 +22,7 @@
 	            android:layout_height = "wrap_content"
 	            android:padding="3dip" />
 	        <EditText
-		        android:id="@+id/patient_name2"
+		        android:id="@+id/search_name"
 	            android:inputType="text"
 	            android:padding="3dip"
 	            android:layout_height = "wrap_content"
@@ -44,22 +40,22 @@
 	            android:padding="3dip" />
 
 	        <EditText
-		        android:id="@+id/patient_age2"
+		        android:id="@+id/birth"
 	            android:layout_width="@dimen/metadata_textview_length"
 	            android:ems="10"
 	            android:layout_height = "wrap_content"
 	            android:layout_marginBottom="4dp"
 	            android:padding="3dip" >
-
 	            <requestFocus />
 	        </EditText>
 
 		    <Button
-		        android:id="@+id/finish3"
+		        android:id="@+id/finish9"
 		       
-		        android:text="Records"
+		        android:text="Search"
 	        	android:textColor="@color/button_text_color"
 		        android:layout_height="wrap_content"
+		        android:onClick="onClick5"
 		        android:layout_width="fill_parent"
    				android:background="@drawable/next" />
 	
